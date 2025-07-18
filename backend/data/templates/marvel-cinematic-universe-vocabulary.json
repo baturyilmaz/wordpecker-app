@@ -1,0 +1,91 @@
+{
+  "name": "Marvel Cinematic Universe Vocabulary",
+  "description": "English vocabulary words learned from Marvel movies",
+  "context": "Learn English words that viewers commonly encounter while watching Marvel Cinematic Universe movies. These words help build vocabulary through the superhero action context.",
+  "category": "Movies & Cinema",
+  "difficulty": "intermediate",
+  "tags": ["superheroes", "action", "adventure", "movies", "drama"],
+  "featured": true,
+  "words": [
+    {
+      "value": "responsibility",
+      "meaning": "the state of being accountable for something within one's power"
+    },
+    {
+      "value": "heroic",
+      "meaning": "having the characteristics of a hero; very brave"
+    },
+    {
+      "value": "sacrifice",
+      "meaning": "giving up something valued for the sake of something else"
+    },
+    {
+      "value": "justice",
+      "meaning": "just behavior or treatment; fairness"
+    },
+    {
+      "value": "protect",
+      "meaning": "to keep safe from harm or injury"
+    },
+    {
+      "value": "villain",
+      "meaning": "a character whose evil actions drive the plot of a story"
+    },
+    {
+      "value": "worthy",
+      "meaning": "having merit, importance, or value; deserving"
+    },
+    {
+      "value": "genius",
+      "meaning": "exceptional intellectual or creative power"
+    },
+    {
+      "value": "technology",
+      "meaning": "the application of scientific knowledge for practical purposes"
+    },
+    {
+      "value": "enhanced",
+      "meaning": "improved or augmented; made greater"
+    },
+    {
+      "value": "extraordinary",
+      "meaning": "very unusual or remarkable; exceptional"
+    },
+    {
+      "value": "assemble",
+      "meaning": "to gather together in one place for a common purpose"
+    },
+    {
+      "value": "unity",
+      "meaning": "the state of being united or joined as a whole"
+    },
+    {
+      "value": "strength",
+      "meaning": "the quality of being physically or mentally strong"
+    },
+    {
+      "value": "courage",
+      "meaning": "the ability to do something frightening or difficult"
+    },
+    {
+      "value": "legacy",
+      "meaning": "something left or handed down by a predecessor"
+    },
+    {
+      "value": "destiny",
+      "meaning": "events that will necessarily happen to someone in the future"
+    },
+    {
+      "value": "infinite",
+      "meaning": "limitless or endless in space, extent, or size"
+    },
+    {
+      "value": "universe",
+      "meaning": "all existing matter and space considered as a whole"
+    },
+    {
+      "value": "balance",
+      "meaning": "a condition in which different elements are equal"
+    }
+  ]
+}

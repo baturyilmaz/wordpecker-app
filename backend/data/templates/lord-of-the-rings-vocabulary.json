@@ -1,0 +1,91 @@
+{
+  "name": "Lord of the Rings Vocabulary",
+  "description": "English vocabulary words learned from Lord of the Rings",
+  "context": "Learn English words that readers commonly encounter while reading J.R.R. Tolkien's Lord of the Rings. These words help build vocabulary through the epic fantasy context.",
+  "category": "Books & Literature",
+  "difficulty": "advanced",
+  "tags": ["fantasy", "epic", "literature", "adventure", "medieval"],
+  "featured": true,
+  "words": [
+    {
+      "value": "perilous",
+      "meaning": "full of danger or risk; hazardous"
+    },
+    {
+      "value": "valiant",
+      "meaning": "showing courage and determination; brave"
+    },
+    {
+      "value": "burden",
+      "meaning": "a heavy load; something difficult to bear"
+    },
+    {
+      "value": "treachery",
+      "meaning": "betrayal of trust; deliberate deception"
+    },
+    {
+      "value": "valor",
+      "meaning": "great courage in the face of danger"
+    },
+    {
+      "value": "despair",
+      "meaning": "complete loss of hope"
+    },
+    {
+      "value": "mighty",
+      "meaning": "possessing great strength or power"
+    },
+    {
+      "value": "ancient",
+      "meaning": "belonging to the very distant past"
+    },
+    {
+      "value": "noble",
+      "meaning": "having fine personal qualities or high moral principles"
+    },
+    {
+      "value": "fellowship",
+      "meaning": "friendly association and companionship"
+    },
+    {
+      "value": "quest",
+      "meaning": "a long search for something important"
+    },
+    {
+      "value": "wisdom",
+      "meaning": "the quality of having experience and good judgment"
+    },
+    {
+      "value": "corruption",
+      "meaning": "dishonest or fraudulent conduct; moral decay"
+    },
+    {
+      "value": "temptation",
+      "meaning": "the desire to do something wrong or unwise"
+    },
+    {
+      "value": "providence",
+      "meaning": "protective care of God or nature as a spiritual power"
+    },
+    {
+      "value": "malice",
+      "meaning": "the intention to do evil or cause harm"
+    },
+    {
+      "value": "shadow",
+      "meaning": "darkness; a source of gloom or unhappiness"
+    },
+    {
+      "value": "faithful",
+      "meaning": "loyal, constant, and steadfast"
+    },
+    {
+      "value": "doom",
+      "meaning": "death, destruction, or terrible fate"
+    },
+    {
+      "value": "glory",
+      "meaning": "magnificence or great beauty; honor and praise"
+    }
+  ]
+}

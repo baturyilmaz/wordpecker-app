@@ -4,45 +4,42 @@ import {
   Text, 
   Flex, 
   Progress, 
-  Radio, 
-  RadioGroup, 
-  Stack, 
   HStack, 
   Badge, 
-  keyframes, 
   IconButton,
   useToast,
   Spinner,
-  Center
+  Center,
+  VStack,
+  Divider,
+  Card,
+  CardHeader,
+  CardBody,
+  Stat,
+  StatLabel,
+  StatNumber,
+  StatHelpText,
+  SimpleGrid,
+  Icon,
+  useColorModeValue
 } from '@chakra-ui/react';
 import { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Question, WordList } from '../types';
-import { ArrowBackIcon, CloseIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon, CloseIcon, CheckCircleIcon, InfoIcon, StarIcon } from '@chakra-ui/icons';
 import { apiService } from '../services/api';
+import { QuestionRenderer } from '../components/QuestionRenderer';
+import { SessionService } from '../services/sessionService';
+import { validateAnswer } from '../utils/answerValidation';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 }
 };
 
-const bounce = keyframes`
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-`;
-
-const sparkle = keyframes`
-  0% { transform: scale(1) rotate(0deg); }
-  25% { transform: scale(1.2) rotate(-5deg); }
-  50% { transform: scale(1) rotate(0deg); }
-  75% { transform: scale(1.2) rotate(5deg); }
-  100% { transform: scale(1) rotate(0deg); }
-`;
 
 const MotionBox = motion(Box);
-const MotionFlex = motion(Flex);
 
 export const Quiz = () => {
   const navigate = useNavigate();
@@ -57,11 +54,17 @@ export const Quiz = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [isAnswered, setIsAnswered] = useState(false);
-  const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
-  const [combo, setCombo] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [totalQuestions, setTotalQuestions] = useState(0);
+  const [sessionService, setSessionService] = useState<SessionService | null>(null);
+  const [sessionProgress, setSessionProgress] = useState<any>(null);
+  const [gameOver, setGameOver] = useState(false);
+  const [quizResults, setQuizResults] = useState<Array<{wordId: string, correct: boolean}>>([]);
+  const [isValidating, setIsValidating] = useState(false);
+  const [actualCorrectness, setActualCorrectness] = useState<boolean | null>(null);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [isUpdatingPoints, setIsUpdatingPoints] = useState(false);
 
   useEffect(() => {
     if (isMountedRef.current) return;
@@ -78,6 +81,9 @@ export const Quiz = () => {
         if (response && response.questions && response.total_questions) {
           setQuestions(response.questions);
           setTotalQuestions(response.total_questions);
+          const service = new SessionService(response.questions);
+          setSessionService(service);
+          setSessionProgress(service.getCurrentProgress());
           hasInitializedRef.current = true;
         } else {
           throw new Error('Invalid response from server');
@@ -99,15 +105,52 @@ export const Quiz = () => {
 
     initQuiz();
   }, [id, navigate, toast]);
+  
+  const updateLearnedPoints = async () => {
+    if (!id || quizResults.length === 0) {
+      navigate(`/lists/${id}`);
+      return;
+    }
+    
+    setIsUpdatingPoints(true);
+    try {
+      await apiService.updateLearnedPoints(id, quizResults);
+      toast({
+        title: 'Progress Saved!',
+        description: `Updated learning progress for ${quizResults.length} words`,
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+      });
+    } catch (error: any) {
+      console.error('Error updating learned points:', error);
+      toast({
+        title: 'Progress Save Failed',
+        description: 'Your quiz results were recorded but progress update failed',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setIsUpdatingPoints(false);
+      navigate(`/lists/${id}`);
+    }
+  };
 
   const loadMoreQuestions = async () => {
     if (!id || !questions.length) return false;
     
+    setIsLoading(true);
     try {
       const response = await apiService.getQuestions(id);
       
       if (response && response.questions && response.questions.length > 0) {
         setQuestions(prev => [...prev, ...response.questions]);
+        setIsCompleted(false);
+        setCurrentQuestion(questions.length);
+        setSelectedAnswer('');
+        setIsAnswered(false);
+        setActualCorrectness(null);
         return !response.completed;
       }
       return false;
@@ -121,44 +164,118 @@ export const Quiz = () => {
         isClosable: true,
       });
       return false;
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleAnswer = () => {
-    setIsAnswered(true);
+  const handleAnswer = async () => {
+    if (isValidating) return; // Prevent multiple submissions
+    
+    setIsValidating(true);
     const question = questions[currentQuestion];
-    if (selectedAnswer === question.correct_answer) {
-      setScore(prev => prev + (combo > 2 ? 150 : combo > 1 ? 120 : 100));
-      setCombo(prev => prev + 1);
-    } else {
-      setLives(prev => prev - 1);
-      setCombo(0);
+    
+    try {
+      let isValid = false;
+      
+      // Use async validation for all question types for consistency
+      isValid = await validateAnswer(selectedAnswer, question, list?.context);
+      
+      // Store the actual correctness for UI display
+      setActualCorrectness(isValid);
+      setIsAnswered(true);
+      
+      if (sessionService) {
+        // Use the actual validation result
+        sessionService.answerQuestion(selectedAnswer, question, isValid);
+        setSessionProgress(sessionService.getCurrentProgress());
+        
+        // Track quiz results for learnedPoint updates
+        setQuizResults(prev => [...prev, {
+          wordId: question.wordId || question.word,
+          correct: isValid
+        }]);
+        
+        if (!isValid) {
+          setLives(prev => {
+            const newLives = prev - 1;
+            if (newLives <= 0) {
+              setGameOver(true);
+            }
+            return newLives;
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error validating answer:', error);
+      // Fallback to session service validation
+      if (sessionService) {
+        const fallbackCorrect = sessionService.answerQuestion(selectedAnswer, question);
+        setActualCorrectness(fallbackCorrect);
+        setIsAnswered(true);
+        setSessionProgress(sessionService.getCurrentProgress());
+        
+        // Track quiz results for learnedPoint updates
+        setQuizResults(prev => [...prev, {
+          wordId: question.wordId || question.word,
+          correct: fallbackCorrect
+        }]);
+        
+        if (!fallbackCorrect) {
+          setLives(prev => {
+            const newLives = prev - 1;
+            if (newLives <= 0) {
+              setGameOver(true);
+            }
+            return newLives;
+          });
+        }
+      }
+    } finally {
+      setIsValidating(false);
     }
   };
 
   const handleNext = async () => {
-    if (lives === 0) {
-      navigate(`/lists/${id}`);
+    if (gameOver) {
+      setIsCompleted(true);
+      if (sessionService) {
+        sessionService.completeSession();
+      }
       return;
     }
     
     const isLastQuestion = currentQuestion === questions.length - 1;
     if (isLastQuestion && currentQuestion + 1 < totalQuestions) {
       // Load more questions before proceeding
+      setIsLoading(true);
       const hasMoreQuestions = await loadMoreQuestions();
       if (!hasMoreQuestions && currentQuestion + 1 >= questions.length) {
-        navigate(`/lists/${id}`);
+        setIsCompleted(true);
+        if (sessionService) {
+          sessionService.completeSession();
+        }
         return;
       }
     }
     
     if (currentQuestion + 1 >= totalQuestions) {
-      navigate(`/lists/${id}`);
-    } else {
-      setCurrentQuestion(prev => prev + 1);
-      setSelectedAnswer('');
-      setIsAnswered(false);
+      setIsCompleted(true);
+      if (sessionService) {
+        sessionService.completeSession();
+      }
+      return;
     }
+    
+    if (sessionService) {
+      sessionService.nextQuestion();
+      setSessionProgress(sessionService.getCurrentProgress());
+    }
+    
+    setCurrentQuestion(prev => prev + 1);
+    setSelectedAnswer('');
+    setIsAnswered(false);
+    setActualCorrectness(null); // Reset validation result
   };
 
   if (isLoading) {
@@ -182,6 +299,8 @@ export const Quiz = () => {
 
   const question = questions[currentQuestion];
   const progress = ((currentQuestion + 1) / totalQuestions) * 100;
+  const combo = sessionProgress?.stats.streak || 0;
+  const score = sessionProgress?.stats.score || 0;
 
   return (
     <MotionBox
@@ -221,7 +340,7 @@ export const Quiz = () => {
               colorScheme="purple" 
               p={2} 
               borderRadius="full"
-              animation={combo > 2 ? `${sparkle} 1s ease infinite` : undefined}
+              style={combo > 2 ? { animation: 'sparkle 1s ease infinite' } : undefined}
             >
               ⚡ Combo x{combo}
             </Badge>
@@ -229,7 +348,7 @@ export const Quiz = () => {
               colorScheme="yellow" 
               p={2} 
               borderRadius="full"
-              animation={score > 0 ? `${bounce} 1s ease infinite` : undefined}
+              style={score > 0 ? { animation: 'bounce 1s ease infinite' } : undefined}
             >
               🏆 Score: {score}
             </Badge>
@@ -238,7 +357,7 @@ export const Quiz = () => {
               p={2} 
               borderRadius="full"
             >
-              {"❤️".repeat(lives)}
+              {"❤️".repeat(Math.max(0, lives))}
             </Badge>
           </HStack>
         </Box>
@@ -275,68 +394,13 @@ export const Quiz = () => {
         px={{ base: 4, md: 8 }}
         py={6}
       >
-        <Text 
-          fontSize={{ base: 'xl', md: '2xl' }}
-          mb={6}
-          textAlign="center"
-          fontWeight="bold"
-          color="white"
-        >
-          {question.question}
-        </Text>
-
-        <RadioGroup 
-          value={selectedAnswer} 
-          onChange={setSelectedAnswer} 
-          isDisabled={isAnswered}
-        >
-          <Stack spacing={4}>
-            {question.options?.map((option) => (
-              <MotionFlex
-                key={option}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                w="100%"
-              >
-                <Radio
-                  value={option}
-                  size="lg"
-                  w="100%"
-                  p={4}
-                  borderWidth={2}
-                  borderRadius="lg"
-                  borderColor={
-                    isAnswered
-                      ? option === question.correct_answer
-                        ? "purple.500"
-                        : selectedAnswer === option
-                        ? "red.500"
-                        : "transparent"
-                      : "transparent"
-                  }
-                  bg={
-                    isAnswered
-                      ? option === question.correct_answer
-                        ? "purple.900"
-                        : selectedAnswer === option
-                        ? "red.900"
-                        : "slate.700"
-                      : "slate.700"
-                  }
-                  _hover={{
-                    bg: isAnswered ? undefined : "slate.600",
-                    transform: "translateX(8px)"
-                  }}
-                  transition="all 0.2s"
-                >
-                  <Text ml={2} fontSize={{ base: 'md', md: 'lg' }}>
-                    {option}
-                  </Text>
-                </Radio>
-              </MotionFlex>
-            ))}
-          </Stack>
-        </RadioGroup>
+        <QuestionRenderer
+          question={question}
+          selectedAnswer={selectedAnswer}
+          onAnswerChange={setSelectedAnswer}
+          isAnswered={isAnswered}
+          isCorrect={actualCorrectness}
+        />
 
         {isAnswered && (
           <MotionBox
@@ -344,37 +408,195 @@ export const Quiz = () => {
             animate={{ opacity: 1, y: 0 }}
             mt={6}
             p={4}
-            bg={selectedAnswer === question.correct_answer ? 'purple.900' : 'red.900'}
+            bg={actualCorrectness ? 'purple.900' : 'red.900'}
             borderRadius="lg"
             textAlign="center"
           >
             <Text color="white" fontSize={{ base: 'lg', md: 'xl' }} fontWeight="bold">
-              {selectedAnswer === question.correct_answer 
+              {actualCorrectness
                 ? `🎉 Correct! ${combo > 2 ? '⚡ Perfect combo!' : combo > 1 ? '⚡ Great combo!' : ''}`
                 : '❌ Incorrect. Try again!'}
             </Text>
+            
+            {(gameOver || currentQuestion + 1 >= totalQuestions) && sessionService && (
+              <VStack mt={4} spacing={2}>
+                <Divider />
+                <Text color="white" fontSize="lg" fontWeight="bold">
+                  {gameOver ? '💀 Game Over!' : '🎊 Quiz Complete!'}
+                </Text>
+                <HStack spacing={4}>
+                  <Text color="green.500">✅ Correct: {sessionProgress?.stats.correct}</Text>
+                  <Text color="red.300">❌ Incorrect: {sessionProgress?.stats.incorrect}</Text>
+                  <Text color="purple.300">🔥 Best Streak: {sessionProgress?.stats.maxStreak}</Text>
+                </HStack>
+                <Text color="yellow.300" fontSize="sm">
+                  {sessionService.getInsights().join(' ')}
+                </Text>
+              </VStack>
+            )}
           </MotionBox>
         )}
 
-        <Flex justify="center" mt={8}>
-          <Button
-            colorScheme={isAnswered ? 'purple' : 'blue'}
-            size="lg"
-            onClick={isAnswered ? handleNext : handleAnswer}
-            isDisabled={!selectedAnswer}
-            _hover={{
-              transform: 'translateY(-2px)',
-              shadow: 'lg'
-            }}
+        {/* Quiz Completion Card */}
+        {isCompleted && sessionService && (
+          <MotionBox
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            mt={6}
           >
-            {isAnswered 
-              ? lives === 0 
-                ? 'Game Over' 
-                : currentQuestion + 1 >= totalQuestions 
-                  ? 'Finish Quiz' 
-                  : 'Next Question'
-              : 'Check Answer'}
-          </Button>
+            <Card 
+              bg={useColorModeValue('white', 'gray.800')}
+              borderColor={useColorModeValue('purple.200', 'purple.600')}
+              borderWidth="2px"
+              shadow="xl"
+            >
+              <CardHeader pb={2}>
+                <HStack spacing={3} justify="center">
+                  <Icon as={CheckCircleIcon} color="purple.500" boxSize={8} />
+                  <Text fontSize="2xl" fontWeight="bold" color={useColorModeValue('gray.800', 'white')}>
+                    🎉 Quiz Complete!
+                  </Text>
+                </HStack>
+              </CardHeader>
+              <CardBody pt={2}>
+                <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} mb={4}>
+                  <Stat textAlign="center">
+                    <StatLabel color={useColorModeValue('gray.600', 'gray.400')}>
+                      <HStack justify="center" spacing={1}>
+                        <CheckCircleIcon color="green.500" />
+                        <Text>Correct</Text>
+                      </HStack>
+                    </StatLabel>
+                    <StatNumber color="green.500" fontSize="3xl">
+                      {sessionProgress?.stats.correct}
+                    </StatNumber>
+                    <StatHelpText color={useColorModeValue('gray.500', 'gray.400')}>
+                      Well done!
+                    </StatHelpText>
+                  </Stat>
+                  
+                  <Stat textAlign="center">
+                    <StatLabel color={useColorModeValue('gray.600', 'gray.400')}>
+                      <HStack justify="center" spacing={1}>
+                        <InfoIcon color="orange.500" />
+                        <Text>Incorrect</Text>
+                      </HStack>
+                    </StatLabel>
+                    <StatNumber color="orange.500" fontSize="3xl">
+                      {sessionProgress?.stats.incorrect}
+                    </StatNumber>
+                    <StatHelpText color={useColorModeValue('gray.500', 'gray.400')}>
+                      Learning opportunity
+                    </StatHelpText>
+                  </Stat>
+                  
+                  <Stat textAlign="center">
+                    <StatLabel color={useColorModeValue('gray.600', 'gray.400')}>
+                      <HStack justify="center" spacing={1}>
+                        <StarIcon color="purple.500" />
+                        <Text>Best Streak</Text>
+                      </HStack>
+                    </StatLabel>
+                    <StatNumber color="purple.500" fontSize="3xl">
+                      {sessionProgress?.stats.maxStreak}
+                    </StatNumber>
+                    <StatHelpText color={useColorModeValue('gray.500', 'gray.400')}>
+                      Amazing! 🔥
+                    </StatHelpText>
+                  </Stat>
+                </SimpleGrid>
+                
+                <Divider mb={4} />
+                
+                <VStack spacing={2}>
+                  <Text fontSize="lg" fontWeight="semibold" color={useColorModeValue('gray.700', 'gray.200')}>
+                    Performance Insights
+                  </Text>
+                  <HStack spacing={2} wrap="wrap" justify="center">
+                    {sessionService.getInsights().map((insight, index) => (
+                      <Badge key={index} colorScheme="purple" fontSize="sm" p={2} borderRadius="full">
+                        {insight}
+                      </Badge>
+                    ))}
+                  </HStack>
+                  
+                  <Text fontSize="sm" color={useColorModeValue('gray.600', 'gray.400')} textAlign="center" mt={2}>
+                    Final Score: <Text as="span" fontWeight="bold" color="purple.500">{sessionProgress?.stats.score} points</Text>
+                  </Text>
+                </VStack>
+              </CardBody>
+            </Card>
+          </MotionBox>
+        )}
+
+        <Flex justify="center" mt={8} gap={4}>
+          {!isAnswered ? (
+            <Button
+              variant="solid"
+              colorScheme="blue"
+              size="lg"
+              onClick={handleAnswer}
+              isDisabled={!selectedAnswer || isValidating}
+              isLoading={isValidating}
+              loadingText="Validating..."
+              _hover={{
+                transform: 'translateY(-2px)',
+                shadow: 'lg'
+              }}
+              transition="all 0.2s"
+            >
+              Check Answer
+            </Button>
+          ) : isCompleted ? (
+            <>
+              <Button
+                variant="outline"
+                colorScheme="purple"
+                size="lg"
+                onClick={updateLearnedPoints}
+                isLoading={isUpdatingPoints}
+                loadingText="Saving Progress..."
+                _hover={{
+                  transform: 'translateY(-2px)',
+                  shadow: 'lg'
+                }}
+                transition="all 0.2s"
+              >
+                Save & Finish
+              </Button>
+              <Button
+                variant="solid"
+                colorScheme="blue"
+                size="lg"
+                onClick={loadMoreQuestions}
+                isLoading={isLoading}
+                loadingText="Loading Questions..."
+                _hover={{
+                  transform: 'translateY(-2px)',
+                  shadow: 'lg'
+                }}
+                transition="all 0.2s"
+              >
+                Continue Quiz
+              </Button>
+            </>
+          ) : (
+            <Button
+              variant="solid"
+              colorScheme="purple"
+              size="lg"
+              onClick={handleNext}
+              isLoading={isLoading}
+              loadingText="Loading..."
+              _hover={{
+                transform: 'translateY(-2px)',
+                shadow: 'lg'
+              }}
+              transition="all 0.2s"
+            >
+              {currentQuestion + 1 >= totalQuestions ? 'Finish Quiz' : 'Next Question'}
+            </Button>
+          )}
         </Flex>
       </MotionBox>
     </MotionBox>

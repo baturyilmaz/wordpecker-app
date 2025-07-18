@@ -1,0 +1,151 @@
+{
+  "name": "Advanced Medical & Healthcare Terminology",
+  "description": "Comprehensive medical vocabulary for healthcare professionals, advanced anatomy, pathophysiology, and clinical practice.",
+  "context": "advanced medical practice, pathophysiology, clinical diagnosis, and healthcare systems",
+  "category": "Health",
+  "difficulty": "advanced",
+  "tags": ["medical", "healthcare", "pathophysiology", "clinical", "anatomy"],
+  "featured": false,
+  "words": [
+    {
+      "value": "pathophysiology",
+      "meaning": "the study of functional changes in the body associated with disease"
+    },
+    {
+      "value": "etiology",
+      "meaning": "the causation or origination of a disease or pathological condition"
+    },
+    {
+      "value": "prognosis",
+      "meaning": "the likely course and outcome of a disease or medical condition"
+    },
+    {
+      "value": "differential diagnosis",
+      "meaning": "systematic method to identify possible diseases that could account for symptoms"
+    },
+    {
+      "value": "contraindication",
+      "meaning": "specific situation in which a drug or procedure should not be used"
+    },
+    {
+      "value": "pharmacokinetics",
+      "meaning": "study of how the body absorbs, distributes, metabolizes, and excretes drugs"
+    },
+    {
+      "value": "pharmacodynamics",
+      "meaning": "study of biochemical and physiological effects of drugs on the body"
+    },
+    {
+      "value": "anesthesiology",
+      "meaning": "medical specialty concerned with pain relief and total care during surgery"
+    },
+    {
+      "value": "cardiopulmonary",
+      "meaning": "relating to both the heart and lungs and their coordinated function"
+    },
+    {
+      "value": "endocrinology",
+      "meaning": "branch of medicine dealing with disorders of the endocrine system"
+    },
+    {
+      "value": "gastroenterology",
+      "meaning": "branch of medicine focused on digestive system and its disorders"
+    },
+    {
+      "value": "hematology",
+      "meaning": "branch of medicine concerning blood, blood-forming organs, and blood diseases"
+    },
+    {
+      "value": "immunodeficiency",
+      "meaning": "state in which immune system's ability to fight disease is compromised"
+    },
+    {
+      "value": "nephrology",
+      "meaning": "specialty of medicine and pediatrics dealing with kidneys"
+    },
+    {
+      "value": "oncology",
+      "meaning": "branch of medicine dealing with prevention, diagnosis, and treatment of cancer"
+    },
+    {
+      "value": "orthopedics",
+      "meaning": "branch of medicine dealing with musculoskeletal system disorders"
+    },
+    {
+      "value": "pulmonology",
+      "meaning": "medical specialty dealing with diseases involving respiratory tract"
+    },
+    {
+      "value": "rheumatology",
+      "meaning": "medical specialty dealing with rheumatic diseases affecting joints and tissues"
+    },
+    {
+      "value": "dermatology",
+      "meaning": "branch of medicine dealing with skin, nails, hair, and related diseases"
+    },
+    {
+      "value": "neurology",
+      "meaning": "branch of medicine dealing with disorders of the nervous system"
+    },
+    {
+      "value": "psychiatry",
+      "meaning": "medical specialty devoted to diagnosis and treatment of mental disorders"
+    },
+    {
+      "value": "radiology",
+      "meaning": "medical discipline using medical imaging to diagnose and treat diseases"
+    },
+    {
+      "value": "epidemiology",
+      "meaning": "study of distribution and determinants of health-related events in populations"
+    },
+    {
+      "value": "prophylaxis",
+      "meaning": "action taken to prevent disease, especially by specified means or agents"
+    },
+    {
+      "value": "therapeutic",
+      "meaning": "relating to healing or curing disease; having healing properties"
+    },
+    {
+      "value": "palliative",
+      "meaning": "relieving pain or alleviating symptoms without dealing with underlying cause"
+    },
+    {
+      "value": "chronic",
+      "meaning": "persisting for long time or constantly recurring medical condition"
+    },
+    {
+      "value": "acute",
+      "meaning": "sudden onset or short course; requiring urgent medical attention"
+    },
+    {
+      "value": "benign",
+      "meaning": "not harmful in effect; specifically referring to non-cancerous tumors"
+    },
+    {
+      "value": "malignant",
+      "meaning": "very virulent or infectious; cancerous and spreading rapidly"
+    },
+    {
+      "value": "metastasis",
+      "meaning": "development of secondary malignant growths distant from primary cancer site"
+    },
+    {
+      "value": "remission",
+      "meaning": "temporary or permanent decrease or disappearance of disease signs"
+    },
+    {
+      "value": "rehabilitation",
+      "meaning": "process of helping patient recover maximum functional ability after illness"
+    },
+    {
+      "value": "immunization",
+      "meaning": "process by which person becomes protected against disease through vaccination"
+    },
+    {
+      "value": "homeostasis",
+      "meaning": "tendency of biological systems to maintain stable internal environment"
+    }
+  ]
+}

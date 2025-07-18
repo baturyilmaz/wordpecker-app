@@ -1,0 +1,131 @@
+{
+  "name": "Digital Communications & Social Media Strategy",
+  "description": "Advanced vocabulary for digital marketing, social media strategy, content creation, and online engagement analytics.",
+  "context": "digital marketing, social media strategy, content creation, and online analytics",
+  "category": "Technology",
+  "difficulty": "beginner",
+  "tags": ["social media", "digital marketing", "analytics", "engagement", "strategy"],
+  "featured": true,
+  "words": [
+    {
+      "value": "algorithm",
+      "meaning": "computational rules determining content visibility and user experience on platforms"
+    },
+    {
+      "value": "analytics",
+      "meaning": "systematic analysis of data to measure performance and user behavior"
+    },
+    {
+      "value": "engagement",
+      "meaning": "level of interaction between users and content through likes, comments, shares"
+    },
+    {
+      "value": "impressions",
+      "meaning": "total number of times content is displayed to users regardless of interaction"
+    },
+    {
+      "value": "reach",
+      "meaning": "number of unique users who have seen content during specific time period"
+    },
+    {
+      "value": "conversion",
+      "meaning": "process of turning social media followers into customers or desired actions"
+    },
+    {
+      "value": "influencer",
+      "meaning": "individual with significant social media following who can affect purchasing decisions"
+    },
+    {
+      "value": "hashtag",
+      "meaning": "metadata tag using # symbol to categorize content and increase discoverability"
+    },
+    {
+      "value": "viral",
+      "meaning": "content that spreads rapidly across internet through sharing and reposting"
+    },
+    {
+      "value": "trending",
+      "meaning": "topics or content currently popular and widely discussed on platforms"
+    },
+    {
+      "value": "demographic",
+      "meaning": "statistical data about characteristics of social media user populations"
+    },
+    {
+      "value": "psychographic",
+      "meaning": "study of personality, values, attitudes, interests, and lifestyle of users"
+    },
+    {
+      "value": "retargeting",
+      "meaning": "advertising strategy targeting users who previously interacted with brand"
+    },
+    {
+      "value": "optimization",
+      "meaning": "process of improving content and strategy for better performance results"
+    },
+    {
+      "value": "monetization",
+      "meaning": "process of generating revenue from social media presence and content"
+    },
+    {
+      "value": "aggregation",
+      "meaning": "collecting and combining content from multiple sources into single feed"
+    },
+    {
+      "value": "curation",
+      "meaning": "process of gathering, organizing, and presenting content around specific topics"
+    },
+    {
+      "value": "authenticity",
+      "meaning": "genuine, original, and trustworthy quality of content and brand messaging"
+    },
+    {
+      "value": "transparency",
+      "meaning": "openness and honesty in communications and business practices online"
+    },
+    {
+      "value": "segmentation",
+      "meaning": "dividing audience into distinct groups based on characteristics and behaviors"
+    },
+    {
+      "value": "personalization",
+      "meaning": "customizing content and experiences to individual user preferences and behavior"
+    },
+    {
+      "value": "automation",
+      "meaning": "using technology to perform social media tasks without manual intervention"
+    },
+    {
+      "value": "scheduling",
+      "meaning": "planning and automatically publishing content at predetermined optimal times"
+    },
+    {
+      "value": "moderation",
+      "meaning": "monitoring and managing user-generated content and community interactions"
+    },
+    {
+      "value": "amplification",
+      "meaning": "strategies to increase content reach and extend message to broader audiences"
+    },
+    {
+      "value": "attribution",
+      "meaning": "tracking which social media touchpoints contribute to conversions and sales"
+    },
+    {
+      "value": "sentiment",
+      "meaning": "emotional tone and attitude expressed in user comments and social mentions"
+    },
+    {
+      "value": "advocacy",
+      "meaning": "customers actively promoting and recommending brand through social platforms"
+    },
+    {
+      "value": "syndication",
+      "meaning": "distributing content across multiple platforms and channels simultaneously"
+    },
+    {
+      "value": "microtargeting",
+      "meaning": "highly specific advertising aimed at narrow, precisely defined audience segments"
+    }
+  ]
+}

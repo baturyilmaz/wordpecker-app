@@ -1,0 +1,71 @@
+{
+  "name": "Environmental Science & Sustainability",
+  "description": "Key vocabulary for environmental awareness, climate change, and sustainable development discussions.",
+  "context": "environmental science, sustainability, and climate awareness",
+  "category": "Science",
+  "difficulty": "intermediate",
+  "tags": ["environment", "sustainability", "climate", "ecology", "conservation"],
+  "featured": false,
+  "words": [
+    {
+      "value": "sustainability",
+      "meaning": "meeting present needs without compromising future generations"
+    },
+    {
+      "value": "biodiversity",
+      "meaning": "variety of life in ecosystems"
+    },
+    {
+      "value": "ecosystem",
+      "meaning": "community of living organisms and their environment"
+    },
+    {
+      "value": "renewable",
+      "meaning": "capable of being replaced by natural processes"
+    },
+    {
+      "value": "conservation",
+      "meaning": "protection and preservation of natural resources"
+    },
+    {
+      "value": "carbon footprint",
+      "meaning": "total greenhouse gas emissions caused by activities"
+    },
+    {
+      "value": "deforestation",
+      "meaning": "clearing of forests on a large scale"
+    },
+    {
+      "value": "greenhouse effect",
+      "meaning": "warming caused by atmospheric gases trapping heat"
+    },
+    {
+      "value": "photosynthesis",
+      "meaning": "process by which plants make food using sunlight"
+    },
+    {
+      "value": "pollution",
+      "meaning": "contamination of environment with harmful substances"
+    },
+    {
+      "value": "habitat",
+      "meaning": "natural home or environment of an organism"
+    },
+    {
+      "value": "fossil fuels",
+      "meaning": "natural fuels formed from ancient organic matter"
+    },
+    {
+      "value": "recycling",
+      "meaning": "converting waste into reusable material"
+    },
+    {
+      "value": "extinction",
+      "meaning": "complete disappearance of a species"
+    },
+    {
+      "value": "climate change",
+      "meaning": "long-term shifts in global weather patterns"
+    }
+  ]
+}

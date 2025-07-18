@@ -15,7 +15,6 @@ import {
   useToast,
   Text,
   Box,
-  keyframes,
   Tooltip,
   Flex,
   Icon
@@ -25,13 +24,6 @@ import { motion } from 'framer-motion';
 import { InfoIcon } from '@chakra-ui/icons';
 import { GiTreeBranch, GiTreeRoots } from 'react-icons/gi';
 
-const sparkle = keyframes`
-  0% { transform: scale(1) rotate(0deg); }
-  25% { transform: scale(1.2) rotate(-5deg); }
-  50% { transform: scale(1) rotate(0deg); }
-  75% { transform: scale(1.2) rotate(5deg); }
-  100% { transform: scale(1) rotate(0deg); }
-`;
 
 const MotionBox = motion(Box);
 
@@ -187,7 +179,7 @@ export const CreateListModal = ({ isOpen, onClose, onCreateList }: CreateListMod
               leftIcon={<Icon as={GiTreeRoots} boxSize={5} />}
               _hover={{
                 transform: 'translateY(-2px)',
-                animation: `${sparkle} 1s ease infinite`
+                animation: 'sparkle 1s ease infinite'
               }}
               transition="all 0.2s"
             >

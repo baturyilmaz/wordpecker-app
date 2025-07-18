@@ -3,7 +3,7 @@ import {
   Button, 
   Text, 
   Flex, 
-  keyframes, 
+ 
   IconButton, 
   useDisclosure, 
   Container, 
@@ -11,26 +11,33 @@ import {
   Icon,
   useToast,
   Spinner,
-  Center
+  Center,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Select,
+  FormControl,
+  FormLabel,
+  VStack
 } from '@chakra-ui/react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { Word, WordList } from '../types';
 import { ArrowBackIcon, DeleteIcon } from '@chakra-ui/icons';
-import { FaGraduationCap, FaGamepad, FaPlus } from 'react-icons/fa';
+import { FaGraduationCap, FaGamepad, FaPlus, FaBookOpen, FaMicrophone } from 'react-icons/fa';
 import { GiTreeBranch } from 'react-icons/gi';
 import { AddWordModal } from '../components/AddWordModal';
+import { ProgressIndicator, OverallProgress } from '../components/ProgressIndicator';
+// Voice agent modal component removed - now using dedicated page
 import { apiService } from '../services/api';
+import { UserPreferences } from '../types';
 
-// Animation keyframes
-const sparkle = keyframes`
-  0% { transform: scale(1) rotate(0deg); }
-  25% { transform: scale(1.1) rotate(-5deg); }
-  50% { transform: scale(1) rotate(0deg); }
-  75% { transform: scale(1.1) rotate(5deg); }
-  100% { transform: scale(1) rotate(0deg); }
-`;
+// Animation keyframes removed for build compatibility
 
 // Dynamic color generator
 const generateColor = (word: string) => {
@@ -42,6 +49,7 @@ const generateColor = (word: string) => {
 
 // Generate hover color (slightly lighter version)
 const generateHoverColor = (word: string) => {
+  if (!word) return `hsl(0, 70%, 30%)`;
   const hue = word.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % 360;
   return `hsl(${hue}, 70%, 30%)`;
 };
@@ -63,19 +71,33 @@ export const ListDetail = () => {
   const [words, setWords] = useState<Word[]>([]);
   const [selectedWord, setSelectedWord] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [lightReadingLevel, setLightReadingLevel] = useState<'beginner' | 'intermediate' | 'advanced'>('intermediate');
+  const [generatingReading, setGeneratingReading] = useState(false);
+  const [userPreferences, setUserPreferences] = useState<UserPreferences | null>(null);
+  
+  const { 
+    isOpen: isReadingModalOpen, 
+    onOpen: onReadingModalOpen, 
+    onClose: onReadingModalClose 
+  } = useDisclosure();
+
+  // Voice agent modal state removed - now using dedicated page
 
   useEffect(() => {
     const fetchListDetails = async () => {
       if (!id) return;
       
       try {
-        // Fetch list details
-        const listData = await apiService.getList(id);
+        // Fetch list details, words, and user preferences in parallel
+        const [listData, wordsData, preferencesData] = await Promise.all([
+          apiService.getList(id),
+          apiService.getWords(id),
+          apiService.getPreferences()
+        ]);
+        
         setList(listData);
-
-        // Fetch words
-        const wordsData = await apiService.getWords(id);
         setWords(wordsData);
+        setUserPreferences(preferencesData);
       } catch (error) {
         console.error('Error fetching list details:', error);
         toast({
@@ -163,6 +185,37 @@ export const ListDetail = () => {
     }
   };
 
+  const handleGenerateLightReading = async () => {
+    if (!id || words.length === 0) return;
+    
+    setGeneratingReading(true);
+    try {
+      const reading = await apiService.generateLightReading(id, lightReadingLevel);
+      
+      // Navigate to a new reading page with the generated content
+      navigate(`/reading/${id}`, { 
+        state: { 
+          reading, 
+          list, 
+          level: lightReadingLevel 
+        } 
+      });
+      
+      onReadingModalClose();
+    } catch (error) {
+      console.error('Error generating light reading:', error);
+      toast({
+        title: 'Error generating reading',
+        description: 'Please try again later',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setGeneratingReading(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <Center h="calc(100vh - 64px)">
@@ -223,7 +276,7 @@ export const ListDetail = () => {
               <Icon 
                 as={GiTreeBranch} 
                 color="green.400"
-                animation={`${sparkle} 3s ease infinite`}
+                style={{ animation: 'sparkle 3s ease infinite' }}
               />
               {list.name}
             </Heading>
@@ -243,6 +296,13 @@ export const ListDetail = () => {
           />
         </Flex>
 
+        {/* Overall Progress Section */}
+        {words.length > 0 && (
+          <Box mb={6}>
+            <OverallProgress words={words} size="md" />
+          </Box>
+        )}
+        
         <Flex 
           justify="space-between" 
           align="center" 
@@ -288,6 +348,47 @@ export const ListDetail = () => {
               Quiz
             </Button>
             <Button 
+              variant="ghost"
+              leftIcon={<FaBookOpen />}
+              colorScheme="purple"
+              _hover={{ 
+                transform: 'translateY(-2px)',
+              }}
+              transition="all 0.2s"
+              size="lg"
+              isDisabled={words.length === 0}
+              onClick={onReadingModalOpen}
+            >
+              Light Reading
+            </Button>
+            <Button 
+              variant="ghost"
+              leftIcon={<FaMicrophone />}
+              colorScheme="blue"
+              _hover={{ 
+                transform: 'translateY(-2px)',
+              }}
+              transition="all 0.2s"
+              size="lg"
+              isDisabled={words.length === 0}
+              onClick={() => navigate(`/voice-chat/${list!.id}`, { 
+                state: { 
+                  config: {
+                    listId: list!.id,
+                    listName: list!.name,
+                    listContext: list!.context,
+                    userLanguages: {
+                      baseLanguage: userPreferences?.baseLanguage || 'English',
+                      targetLanguage: userPreferences?.targetLanguage || 'English'
+                    }
+                  },
+                  listName: list!.name
+                } 
+              })}
+            >
+              Voice Chat
+            </Button>
+            <Button 
               variant="solid"
               colorScheme="green"
               leftIcon={<FaPlus />}
@@ -324,7 +425,7 @@ export const ListDetail = () => {
                 as={GiTreeBranch} 
                 boxSize={12} 
                 color="green.400" 
-                animation={`${sparkle} 3s ease infinite`}
+                style={{ animation: 'sparkle 3s ease infinite' }}
               />
               <Text color="gray.400" fontSize="lg" textAlign="center">
                 Your tree is empty! Add some words to help it grow. 🌱
@@ -360,7 +461,7 @@ export const ListDetail = () => {
                     type: "tween",
                     ease: "easeOut"
                   }}
-                  onClick={() => setSelectedWord(selectedWord === word.id ? null : word.id)}
+                  onClick={() => navigate(`/words/${word.id}`)}
                   p={4}
                   mb={2}
                   borderRadius="lg"
@@ -374,10 +475,21 @@ export const ListDetail = () => {
                         fontSize="xl" 
                         fontWeight="bold" 
                         color="white"
-                        mb={selectedWord === word.id ? 2 : 0}
+                        mb={2}
                       >
                         {word.value}
                       </Text>
+                      
+                      {/* Progress Indicator */}
+                      <Box mb={selectedWord === word.id ? 3 : 2}>
+                        <ProgressIndicator 
+                          learnedPoint={word.learnedPoint || 0} 
+                          size="sm" 
+                          showLabel={true}
+                          showBadge={true}
+                        />
+                      </Box>
+                      
                       {selectedWord === word.id && (
                         <Text 
                           color="gray.200" 
@@ -429,6 +541,67 @@ export const ListDetail = () => {
           onAddWord={handleAddWord}
           listName={list?.name || ''}
         />
+
+        {/* Light Reading Level Selection Modal */}
+        <Modal isOpen={isReadingModalOpen} onClose={onReadingModalClose} size="md">
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>
+              <Flex align="center" gap={2}>
+                <FaBookOpen color="purple" />
+                <Text color="purple.400">Generate Light Reading</Text>
+              </Flex>
+            </ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <VStack spacing={4} align="stretch">
+                <Text fontSize="sm" color="gray.400">
+                  Create a personalized reading passage using the words from "{list?.name}". 
+                  Choose your preferred difficulty level:
+                </Text>
+                
+                <FormControl>
+                  <FormLabel color="purple.300">Reading Level</FormLabel>
+                  <Select 
+                    value={lightReadingLevel} 
+                    onChange={(e) => setLightReadingLevel(e.target.value as 'beginner' | 'intermediate' | 'advanced')}
+                    bg="slate.700"
+                    borderColor="slate.600"
+                    _focus={{ borderColor: 'purple.400' }}
+                  >
+                    <option value="beginner">Beginner - Simple sentences and basic vocabulary</option>
+                    <option value="intermediate">Intermediate - Natural flow with moderate complexity</option>
+                    <option value="advanced">Advanced - Complex sentences and sophisticated language</option>
+                  </Select>
+                </FormControl>
+
+                <Box p={3} bg="purple.50" borderRadius="md" borderLeft="4px solid" borderColor="purple.400">
+                  <Text fontSize="sm" color="purple.700">
+                    💡 The reading will include {Math.min(12, words.length)} randomly selected words from your list 
+                    {words.length > 12 && ` (out of ${words.length} total)`} in a contextual story or article
+                    {list?.context && ` related to "${list.context}"`}.
+                  </Text>
+                </Box>
+              </VStack>
+            </ModalBody>
+            <ModalFooter>
+              <Button variant="ghost" mr={3} onClick={onReadingModalClose}>
+                Cancel
+              </Button>
+              <Button
+                colorScheme="purple"
+                onClick={handleGenerateLightReading}
+                isLoading={generatingReading}
+                loadingText="Creating Reading..."
+                leftIcon={<FaBookOpen />}
+              >
+                Generate Reading
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+
+        {/* Voice Agent Modal removed - now using dedicated page at /voice-chat/:listId */}
       </MotionBox>
     </Container>
   );

@@ -4,36 +4,42 @@ import {
   Text, 
   Flex, 
   Progress, 
-  Radio, 
-  RadioGroup, 
-  Stack, 
   Badge, 
-  keyframes, 
   IconButton,
   useToast,
   Spinner,
-  Center
+  Center,
+  VStack,
+  HStack,
+  Divider,
+  Card,
+  CardHeader,
+  CardBody,
+  Stat,
+  StatLabel,
+  StatNumber,
+  StatHelpText,
+  SimpleGrid,
+  Icon,
+  useColorModeValue
 } from '@chakra-ui/react';
 import { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Exercise, WordList } from '../types';
-import { ArrowBackIcon, CloseIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon, CloseIcon, CheckCircleIcon, InfoIcon, StarIcon } from '@chakra-ui/icons';
 import { apiService } from '../services/api';
+import { QuestionRenderer } from '../components/QuestionRenderer';
+import { SessionService } from '../services/sessionService';
+import { validateAnswer } from '../utils/answerValidation';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 }
 };
 
-const pulse = keyframes`
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-`;
 
 const MotionBox = motion(Box);
-const MotionFlex = motion(Flex);
 
 export const Learn = () => {
   const navigate = useNavigate();
@@ -48,9 +54,12 @@ export const Learn = () => {
   const [currentExercise, setCurrentExercise] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [isAnswered, setIsAnswered] = useState(false);
-  const [streak, setStreak] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [sessionService, setSessionService] = useState<SessionService | null>(null);
+  const [sessionProgress, setSessionProgress] = useState<any>(null);
+  const [isValidating, setIsValidating] = useState(false);
+  const [actualCorrectness, setActualCorrectness] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (isMountedRef.current) return;
@@ -66,6 +75,9 @@ export const Learn = () => {
         const response = await apiService.startLearning(id);
         if (response && response.exercises) {
           setExercises(response.exercises);
+          const service = new SessionService(response.exercises);
+          setSessionService(service);
+          setSessionProgress(service.getCurrentProgress());
           hasInitializedRef.current = true;
         } else {
           throw new Error('Invalid response from server');
@@ -96,7 +108,11 @@ export const Learn = () => {
       const response = await apiService.getExercises(id);
       
       if (response && response.exercises && response.exercises.length > 0) {
-        setExercises(prev => [...prev, ...response.exercises]);
+        const newExercises = [...exercises, ...response.exercises];
+        setExercises(newExercises);
+        // Create new session service with all exercises
+        const service = new SessionService(newExercises);
+        setSessionService(service);
         setCurrentExercise(exercises.length); // Start from the first new exercise
         setSelectedAnswer('');
         setIsAnswered(false);
@@ -119,13 +135,40 @@ export const Learn = () => {
     }
   };
 
-  const handleAnswer = () => {
-    setIsAnswered(true);
+  const handleAnswer = async () => {
+    if (isValidating) return; // Prevent multiple submissions
+    
+    setIsValidating(true);
     const exercise = exercises[currentExercise];
-    if (selectedAnswer === exercise.correct_answer) {
-      setStreak(prev => prev + 1);
-    } else {
-      setStreak(0);
+    
+    try {
+      let isValid = false;
+      
+      // Use async validation for all question types for consistency
+      isValid = await validateAnswer(selectedAnswer, exercise, list?.context);
+      
+      // Store the actual correctness for UI display
+      setActualCorrectness(isValid);
+      setIsAnswered(true);
+      
+      if (sessionService) {
+        // Use the actual validation result
+        sessionService.answerQuestion(selectedAnswer, exercise, isValid);
+        setSessionProgress(sessionService.getCurrentProgress());
+      }
+    } catch (error) {
+      console.error('Error validating answer:', error);
+      // Fallback to normal validation
+      const fallbackCorrect = selectedAnswer === exercise.correctAnswer;
+      setActualCorrectness(fallbackCorrect);
+      setIsAnswered(true);
+      
+      if (sessionService) {
+        sessionService.answerQuestion(selectedAnswer, exercise, fallbackCorrect);
+        setSessionProgress(sessionService.getCurrentProgress());
+      }
+    } finally {
+      setIsValidating(false);
     }
   };
 
@@ -134,18 +177,27 @@ export const Learn = () => {
     
     if (isLastExercise) {
       setIsCompleted(true);
+      if (sessionService) {
+        sessionService.completeSession();
+      }
       return;
+    }
+    
+    if (sessionService) {
+      sessionService.nextQuestion();
+      setSessionProgress(sessionService.getCurrentProgress());
     }
     
     setCurrentExercise(prev => prev + 1);
     setSelectedAnswer('');
     setIsAnswered(false);
+    setActualCorrectness(null); // Reset validation result
   };
 
   if (isLoading) {
     return (
       <Center h="calc(100vh - 64px)">
-        <Spinner size="xl" color="green.400" thickness="4px" />
+        <Spinner size="xl" color="green.500" thickness="4px" />
       </Center>
     );
   }
@@ -163,6 +215,8 @@ export const Learn = () => {
 
   const exercise = exercises[currentExercise];
   const progress = ((currentExercise + 1) / exercises.length) * 100;
+  const streak = sessionProgress?.stats.streak || 0;
+  const score = sessionProgress?.stats.score || 0;
 
   return (
     <MotionBox
@@ -207,12 +261,15 @@ export const Learn = () => {
               colorScheme="green" 
               p={2} 
               borderRadius="full"
-              animation={streak > 0 ? `${pulse} 1s ease infinite` : undefined}
+              style={streak > 0 ? { animation: 'pulse 1s ease infinite' } : undefined}
             >
               🔥 Streak: {streak}
             </Badge>
             <Badge colorScheme="blue" p={2} borderRadius="full">
               ✨ Progress: {Math.round(progress)}%
+            </Badge>
+            <Badge colorScheme="purple" p={2} borderRadius="full">
+              ⭐ Score: {score}
             </Badge>
           </Flex>
         </Box>
@@ -245,71 +302,17 @@ export const Learn = () => {
         animate="visible"
         boxShadow="2xl"
         borderWidth="1px"
-        borderColor="green.800"
+        borderColor="green.500"
         px={{ base: 4, md: 8 }}
         py={6}
       >
-        <Text 
-          fontSize={{ base: 'xl', md: '2xl' }}
-          mb={6}
-          textAlign="center"
-          fontWeight="bold"
-          bgGradient="linear(to-r, green.200, teal.200)"
-          bgClip="text"
-        >
-          {exercise.question}
-        </Text>
-
-        <RadioGroup 
-          value={selectedAnswer} 
-          onChange={setSelectedAnswer} 
-          isDisabled={isAnswered}
-        >
-          <Stack spacing={4}>
-            {exercise.options?.map((option) => (
-              <MotionFlex
-                key={option}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                w="100%"
-              >
-                <Radio
-                  value={option}
-                  size="lg"
-                  w="100%"
-                  p={4}
-                  borderWidth={2}
-                  borderRadius="lg"
-                  borderColor={
-                    isAnswered
-                      ? option === exercise.correct_answer
-                        ? "green.500"
-                        : selectedAnswer === option
-                        ? "red.500"
-                        : "transparent"
-                      : "transparent"
-                  }
-                  bg={
-                    isAnswered
-                      ? option === exercise.correct_answer
-                        ? "green.900"
-                        : selectedAnswer === option
-                        ? "red.900"
-                        : "slate.700"
-                      : "slate.700"
-                  }
-                  _hover={{
-                    bg: isAnswered ? undefined : "slate.600"
-                  }}
-                >
-                  <Text ml={2} fontSize={{ base: 'md', md: 'lg' }}>
-                    {option}
-                  </Text>
-                </Radio>
-              </MotionFlex>
-            ))}
-          </Stack>
-        </RadioGroup>
+        <QuestionRenderer
+          question={exercise}
+          selectedAnswer={selectedAnswer}
+          onAnswerChange={setSelectedAnswer}
+          isAnswered={isAnswered}
+          isCorrect={actualCorrectness}
+        />
 
         {isAnswered && (
           <MotionBox
@@ -317,20 +320,113 @@ export const Learn = () => {
             animate={{ opacity: 1, y: 0 }}
             mt={6}
             p={4}
-            bg={selectedAnswer === exercise.correct_answer ? 'green.900' : 'red.900'}
+            bg={actualCorrectness ? 'green.500' : '#FF4D4F'}
             borderRadius="lg"
             textAlign="center"
           >
             <Text color="white" fontSize={{ base: 'lg', md: 'xl' }} fontWeight="bold">
-              {selectedAnswer === exercise.correct_answer 
-                ? '🎉 Excellent!' 
-                : '💡 Keep Learning!'}
+              {actualCorrectness ? '🎉 Excellent!' : '💡 Keep Learning!'}
             </Text>
             <Text color="white" mt={2} fontSize={{ base: 'sm', md: 'md' }}>
-              {selectedAnswer === exercise.correct_answer 
-                ? streak > 1 ? `You're on fire! ${streak} correct in a row!` : 'Great job!'
-                : `The correct answer is: ${exercise.correct_answer}`}
+              {actualCorrectness 
+                ? sessionProgress?.stats?.streak > 1 ? `You're on fire! ${sessionProgress.stats.streak} correct in a row!` : 'Great job!'
+                : exercise.type === 'fill_blank' || exercise.type === 'matching' 
+                  ? 'Check the correct answer above'
+                  : `The correct answer is: ${exercise.correctAnswer}`}
             </Text>
+            
+          </MotionBox>
+        )}
+
+        {/* Session Completion Card */}
+        {isCompleted && sessionService && (
+          <MotionBox
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            mt={6}
+          >
+            <Card 
+              bg={useColorModeValue('white', 'gray.800')}
+              borderColor={useColorModeValue('green.200', 'green.600')}
+              borderWidth="2px"
+              shadow="xl"
+            >
+              <CardHeader pb={2}>
+                <HStack spacing={3} justify="center">
+                  <Icon as={CheckCircleIcon} color="green.500" boxSize={8} />
+                  <Text fontSize="2xl" fontWeight="bold" color={useColorModeValue('gray.800', 'white')}>
+                    🎉 Session Complete!
+                  </Text>
+                </HStack>
+              </CardHeader>
+              <CardBody pt={2}>
+                <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} mb={4}>
+                  <Stat textAlign="center">
+                    <StatLabel color={useColorModeValue('gray.600', 'gray.400')}>
+                      <HStack justify="center" spacing={1}>
+                        <CheckCircleIcon color="green.500" />
+                        <Text>Correct</Text>
+                      </HStack>
+                    </StatLabel>
+                    <StatNumber color="green.500" fontSize="3xl">
+                      {sessionProgress?.stats.correct}
+                    </StatNumber>
+                    <StatHelpText color={useColorModeValue('gray.500', 'gray.400')}>
+                      Great job!
+                    </StatHelpText>
+                  </Stat>
+                  
+                  <Stat textAlign="center">
+                    <StatLabel color={useColorModeValue('gray.600', 'gray.400')}>
+                      <HStack justify="center" spacing={1}>
+                        <InfoIcon color="orange.500" />
+                        <Text>Incorrect</Text>
+                      </HStack>
+                    </StatLabel>
+                    <StatNumber color="orange.500" fontSize="3xl">
+                      {sessionProgress?.stats.incorrect}
+                    </StatNumber>
+                    <StatHelpText color={useColorModeValue('gray.500', 'gray.400')}>
+                      Learning opportunity
+                    </StatHelpText>
+                  </Stat>
+                  
+                  <Stat textAlign="center">
+                    <StatLabel color={useColorModeValue('gray.600', 'gray.400')}>
+                      <HStack justify="center" spacing={1}>
+                        <StarIcon color="purple.500" />
+                        <Text>Best Streak</Text>
+                      </HStack>
+                    </StatLabel>
+                    <StatNumber color="purple.500" fontSize="3xl">
+                      {sessionProgress?.stats.maxStreak}
+                    </StatNumber>
+                    <StatHelpText color={useColorModeValue('gray.500', 'gray.400')}>
+                      On fire! 🔥
+                    </StatHelpText>
+                  </Stat>
+                </SimpleGrid>
+                
+                <Divider mb={4} />
+                
+                <VStack spacing={2}>
+                  <Text fontSize="lg" fontWeight="semibold" color={useColorModeValue('gray.700', 'gray.200')}>
+                    Performance Insights
+                  </Text>
+                  <HStack spacing={2} wrap="wrap" justify="center">
+                    {sessionService.getInsights().map((insight, index) => (
+                      <Badge key={index} colorScheme="blue" fontSize="sm" p={2} borderRadius="full">
+                        {insight}
+                      </Badge>
+                    ))}
+                  </HStack>
+                  
+                  <Text fontSize="sm" color={useColorModeValue('gray.600', 'gray.400')} textAlign="center" mt={2}>
+                    Final Score: <Text as="span" fontWeight="bold" color="blue.500">{sessionProgress?.stats.score} points</Text>
+                  </Text>
+                </VStack>
+              </CardBody>
+            </Card>
           </MotionBox>
         )}
 
@@ -341,7 +437,9 @@ export const Learn = () => {
               colorScheme="blue"
               size="lg"
               onClick={handleAnswer}
-              isDisabled={!selectedAnswer}
+              isDisabled={!selectedAnswer || isValidating}
+              isLoading={isValidating}
+              loadingText="Validating..."
               _hover={{
                 transform: 'translateY(-2px)',
                 shadow: 'lg'
@@ -392,7 +490,7 @@ export const Learn = () => {
               }}
               transition="all 0.2s"
             >
-              Next Exercise
+              {currentExercise === exercises.length - 1 ? 'Finish Session' : 'Next Exercise'}
             </Button>
           )}
         </Flex>

@@ -14,7 +14,6 @@ import {
   useToast,
   Text,
   Box,
-  keyframes,
   Flex,
   Icon
 } from '@chakra-ui/react';
@@ -22,13 +21,6 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaSearch } from 'react-icons/fa';
 
-const sparkle = keyframes`
-  0% { transform: scale(1) rotate(0deg); }
-  25% { transform: scale(1.1) rotate(-5deg); }
-  50% { transform: scale(1) rotate(0deg); }
-  75% { transform: scale(1.1) rotate(5deg); }
-  100% { transform: scale(1) rotate(0deg); }
-`;
 
 const MotionBox = motion(Box);
 
@@ -36,10 +28,10 @@ interface AddWordModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAddWord: (word: string) => Promise<void>;
-  listName: string;
+  listName?: string;
 }
 
-export const AddWordModal = ({ isOpen, onClose, onAddWord, listName }: AddWordModalProps) => {
+export const AddWordModal = ({ isOpen, onClose, onAddWord }: AddWordModalProps) => {
   const [word, setWord] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
@@ -102,7 +94,7 @@ export const AddWordModal = ({ isOpen, onClose, onAddWord, listName }: AddWordMo
                 as={FaSearch} 
                 boxSize={6} 
                 color="orange.400"
-                animation={`${sparkle} 2s ease infinite`}
+                style={{ animation: 'sparkle 2s ease infinite' }}
               />
               <Text 
                 bgGradient="linear(to-r, orange.400, brand.400)"
@@ -148,7 +140,7 @@ export const AddWordModal = ({ isOpen, onClose, onAddWord, listName }: AddWordMo
               leftIcon={<Icon as={FaSearch} boxSize={5} />}
               _hover={{
                 transform: 'translateY(-2px)',
-                animation: `${sparkle} 1s ease infinite`
+                animation: 'sparkle 1s ease infinite'
               }}
               transition="all 0.2s"
             >

@@ -35,6 +35,8 @@ services:
       - MONGODB_URL=mongodb://admin:password@mongodb:27017/wordpecker?authSource=admin
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OPENAI_BASE_URL=${OPENAI_BASE_URL:-https://api.openai.com/v1}
+      - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY}
+      - PEXELS_API_KEY=${PEXELS_API_KEY}
     ports:
       - "3000:3000"
     volumes:

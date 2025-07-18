@@ -1,0 +1,131 @@
+{
+  "name": "Sophisticated Daily Communication",
+  "description": "Elevated vocabulary for articulate conversation, nuanced expression, and eloquent daily discourse.",
+  "context": "sophisticated daily conversation, articulate expression, and nuanced communication",
+  "category": "General",
+  "difficulty": "beginner",
+  "tags": ["conversation", "articulate", "sophisticated", "eloquent", "nuanced"],
+  "featured": true,
+  "words": [
+    {
+      "value": "articulate",
+      "meaning": "having or showing the ability to speak fluently and coherently"
+    },
+    {
+      "value": "eloquent",
+      "meaning": "fluent or persuasive in speaking or writing; clearly expressing ideas"
+    },
+    {
+      "value": "discernment",
+      "meaning": "the ability to judge well; keen insight and good judgment"
+    },
+    {
+      "value": "perspicacious",
+      "meaning": "having keen insight; able to understand things clearly and quickly"
+    },
+    {
+      "value": "contemplative",
+      "meaning": "expressing or involving prolonged thought; reflective and meditative"
+    },
+    {
+      "value": "pragmatic",
+      "meaning": "dealing with things sensibly and realistically in a practical way"
+    },
+    {
+      "value": "serendipity",
+      "meaning": "the occurrence of events by chance in a happy or beneficial way"
+    },
+    {
+      "value": "ubiquitous",
+      "meaning": "present, appearing, or found everywhere; omnipresent"
+    },
+    {
+      "value": "ephemeral",
+      "meaning": "lasting for a very short time; transitory and fleeting"
+    },
+    {
+      "value": "vivacious",
+      "meaning": "attractively lively and animated; full of energy and enthusiasm"
+    },
+    {
+      "value": "melancholy",
+      "meaning": "a feeling of pensive sadness; thoughtful sorrow or pensiveness"
+    },
+    {
+      "value": "nostalgia",
+      "meaning": "a sentimental longing for the past; wistful affection for former times"
+    },
+    {
+      "value": "resilience",
+      "meaning": "the capacity to recover quickly from difficulties; mental toughness"
+    },
+    {
+      "value": "empathy",
+      "meaning": "the ability to understand and share the feelings of another person"
+    },
+    {
+      "value": "integrity",
+      "meaning": "the quality of being honest and having strong moral principles"
+    },
+    {
+      "value": "altruism",
+      "meaning": "disinterested and selfless concern for the well-being of others"
+    },
+    {
+      "value": "audacious",
+      "meaning": "showing willingness to take surprisingly bold risks; fearlessly daring"
+    },
+    {
+      "value": "charismatic",
+      "meaning": "exercising a compelling charm that inspires devotion in others"
+    },
+    {
+      "value": "gregarious",
+      "meaning": "fond of the company of others; sociable and outgoing"
+    },
+    {
+      "value": "introspective",
+      "meaning": "characterized by examination of one's own thoughts and feelings"
+    },
+    {
+      "value": "candid",
+      "meaning": "truthful and straightforward; frank and sincere in expression"
+    },
+    {
+      "value": "congenial",
+      "meaning": "pleasant because of a personality suited to one's taste; agreeable"
+    },
+    {
+      "value": "diplomatic",
+      "meaning": "having or showing skill in dealing with people tactfully"
+    },
+    {
+      "value": "fastidious",
+      "meaning": "very attentive to accuracy and detail; meticulous and demanding"
+    },
+    {
+      "value": "magnanimous",
+      "meaning": "generous in forgiving; noble and unselfish in behavior"
+    },
+    {
+      "value": "philanthropic",
+      "meaning": "seeking to promote the welfare of others through generous donations"
+    },
+    {
+      "value": "resourceful",
+      "meaning": "having the ability to find quick and clever ways to overcome difficulties"
+    },
+    {
+      "value": "sagacious",
+      "meaning": "having or showing keen mental discernment and good judgment"
+    },
+    {
+      "value": "versatile",
+      "meaning": "able to adapt or be adapted to many different functions or activities"
+    },
+    {
+      "value": "zealous",
+      "meaning": "showing great energy or passion in pursuit of a cause or objective"
+    }
+  ]
+}

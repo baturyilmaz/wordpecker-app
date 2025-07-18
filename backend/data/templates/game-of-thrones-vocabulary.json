@@ -1,0 +1,91 @@
+{
+  "name": "Game of Thrones Vocabulary",
+  "description": "English vocabulary words learned from Game of Thrones",
+  "context": "Learn English words that viewers commonly encounter while watching Game of Thrones. These words help build vocabulary through the dramatic context of political intrigue and fantasy.",
+  "category": "TV Shows & Series",
+  "difficulty": "advanced",
+  "tags": ["drama", "politics", "medieval", "fantasy", "television"],
+  "featured": true,
+  "words": [
+    {
+      "value": "betrayal",
+      "meaning": "the act of being disloyal or breaking trust"
+    },
+    {
+      "value": "throne",
+      "meaning": "a ceremonial chair for a monarch or person of authority"
+    },
+    {
+      "value": "alliance",
+      "meaning": "a union or association formed for mutual benefit"
+    },
+    {
+      "value": "vengeance",
+      "meaning": "punishment inflicted in retaliation for harm or wrong"
+    },
+    {
+      "value": "conquest",
+      "meaning": "the act of defeating and taking control by force"
+    },
+    {
+      "value": "exile",
+      "meaning": "being forced to live away from one's homeland"
+    },
+    {
+      "value": "tyranny",
+      "meaning": "cruel and oppressive government or rule"
+    },
+    {
+      "value": "noble",
+      "meaning": "belonging to aristocracy; having fine personal qualities"
+    },
+    {
+      "value": "bastard",
+      "meaning": "a person born of parents not married to each other"
+    },
+    {
+      "value": "honor",
+      "meaning": "high respect and moral integrity"
+    },
+    {
+      "value": "realm",
+      "meaning": "a kingdom or territory ruled by a monarch"
+    },
+    {
+      "value": "siege",
+      "meaning": "surrounding and attacking a fortified place"
+    },
+    {
+      "value": "cunning",
+      "meaning": "having skill in achieving goals by deceit"
+    },
+    {
+      "value": "brutal",
+      "meaning": "savagely violent and harsh"
+    },
+    {
+      "value": "dynasty",
+      "meaning": "a line of hereditary rulers of a country"
+    },
+    {
+      "value": "conspiracy",
+      "meaning": "a secret plan to do something harmful or illegal"
+    },
+    {
+      "value": "massacre",
+      "meaning": "the brutal killing of many people"
+    },
+    {
+      "value": "rightful",
+      "meaning": "having a legitimate claim to something"
+    },
+    {
+      "value": "formidable",
+      "meaning": "inspiring fear or respect through power or skill"
+    },
+    {
+      "value": "sovereign",
+      "meaning": "a supreme ruler, especially a monarch"
+    }
+  ]
+}

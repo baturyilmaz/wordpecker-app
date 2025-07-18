@@ -1,0 +1,151 @@
+{
+  "name": "Scholarly Research & Academic Discourse",
+  "description": "Advanced vocabulary for academic research, scholarly writing, epistemology, and intellectual discourse at graduate level.",
+  "context": "graduate-level academic research, philosophical discourse, and scholarly methodology",
+  "category": "Academic",
+  "difficulty": "advanced",
+  "tags": ["academic", "research", "epistemology", "methodology", "scholarship"],
+  "featured": true,
+  "words": [
+    {
+      "value": "epistemology",
+      "meaning": "the theory of knowledge, especially regarding its methods, validity, and scope"
+    },
+    {
+      "value": "hermeneutics",
+      "meaning": "the theory and methodology of interpretation, especially of scriptural and literary texts"
+    },
+    {
+      "value": "phenomenology",
+      "meaning": "the philosophical study of structures of experience and consciousness"
+    },
+    {
+      "value": "ontology",
+      "meaning": "the philosophical study of the nature of being, existence, or reality"
+    },
+    {
+      "value": "paradigm",
+      "meaning": "a distinct set of concepts or thought patterns, including theories and research methods"
+    },
+    {
+      "value": "dialectical",
+      "meaning": "relating to the logical discussion and resolution of ideas through reasoned argument"
+    },
+    {
+      "value": "empiricism",
+      "meaning": "the theory that all knowledge is derived from sense-experience and evidence"
+    },
+    {
+      "value": "positivism",
+      "meaning": "a philosophical system recognizing only positive facts and observable phenomena"
+    },
+    {
+      "value": "postmodernism",
+      "meaning": "a broad movement characterized by skepticism toward grand narratives and ideologies"
+    },
+    {
+      "value": "constructivism",
+      "meaning": "a theory that individuals construct their own understanding through experience"
+    },
+    {
+      "value": "meta-analysis",
+      "meaning": "a statistical analysis that combines results from multiple scientific studies"
+    },
+    {
+      "value": "longitudinal",
+      "meaning": "relating to research conducted over a long period to observe changes over time"
+    },
+    {
+      "value": "ethnography",
+      "meaning": "the systematic study of people and cultures through direct observation"
+    },
+    {
+      "value": "heuristic",
+      "meaning": "enabling a person to discover or learn something for themselves through experimentation"
+    },
+    {
+      "value": "juxtaposition",
+      "meaning": "the fact of two things being seen or placed close together with contrasting effect"
+    },
+    {
+      "value": "methodology",
+      "meaning": "a comprehensive system of methods and principles for conducting research"
+    },
+    {
+      "value": "bibliography",
+      "meaning": "a comprehensive list of sources consulted and cited in scholarly work"
+    },
+    {
+      "value": "citation",
+      "meaning": "a reference to a published or unpublished source used to support academic arguments"
+    },
+    {
+      "value": "dissertation",
+      "meaning": "a lengthy formal discourse presenting original research for an advanced degree"
+    },
+    {
+      "value": "hypothesis",
+      "meaning": "a proposed explanation made on the basis of limited evidence as a starting point"
+    },
+    {
+      "value": "peer review",
+      "meaning": "evaluation of scholarly work by others working in the same field"
+    },
+    {
+      "value": "plagiarism",
+      "meaning": "the unauthorized use or close imitation of another's language and thoughts"
+    },
+    {
+      "value": "qualitative",
+      "meaning": "relating to or measured by the quality of something rather than its quantity"
+    },
+    {
+      "value": "quantitative",
+      "meaning": "relating to or measured by quantity; dealing with phenomena expressible numerically"
+    },
+    {
+      "value": "thesis",
+      "meaning": "a statement or theory put forward as a premise to be maintained or proved"
+    },
+    {
+      "value": "abstract",
+      "meaning": "a brief summary of a research article, thesis, or review"
+    },
+    {
+      "value": "correlation",
+      "meaning": "a mutual relationship or connection between two or more variables"
+    },
+    {
+      "value": "empirical",
+      "meaning": "based on, concerned with, or verifiable by observation or experience"
+    },
+    {
+      "value": "validity",
+      "meaning": "the quality of being logically or factually sound; soundness or cogency"
+    },
+    {
+      "value": "reliability",
+      "meaning": "the quality of being trustworthy or performing consistently well in research"
+    },
+    {
+      "value": "synthesis",
+      "meaning": "the combination of ideas to form a theory or system of knowledge"
+    },
+    {
+      "value": "discourse",
+      "meaning": "written or spoken communication or debate about a particular topic"
+    },
+    {
+      "value": "ideology",
+      "meaning": "a system of ideas and ideals forming the basis of economic or political theory"
+    },
+    {
+      "value": "rhetoric",
+      "meaning": "the art of effective or persuasive speaking or writing in discourse"
+    },
+    {
+      "value": "semiotics",
+      "meaning": "the study of signs and symbols and their use or interpretation in communication"
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+{
+  "name": "Advanced Technology & Computational Intelligence",
+  "description": "Sophisticated terminology for cutting-edge technology, artificial intelligence, cybernetics, and computational science.",
+  "context": "advanced technology, artificial intelligence, cybernetics, and computational systems",
+  "category": "Technology",
+  "difficulty": "intermediate",
+  "tags": ["technology", "AI", "cybernetics", "computational", "futuristic"],
+  "featured": false,
+  "words": [
+    {
+      "value": "algorithm",
+      "meaning": "a finite sequence of well-defined instructions for solving computational problems"
+    },
+    {
+      "value": "heuristic",
+      "meaning": "a problem-solving approach that employs practical methods not guaranteed to be optimal"
+    },
+    {
+      "value": "neural network",
+      "meaning": "a computing system modeled on biological neural networks for pattern recognition"
+    },
+    {
+      "value": "machine learning",
+      "meaning": "a subset of AI that enables systems to learn and improve from experience automatically"
+    },
+    {
+      "value": "deep learning",
+      "meaning": "machine learning using artificial neural networks with multiple layers"
+    },
+    {
+      "value": "cybernetics",
+      "meaning": "the science of communication and control theory in machines and living beings"
+    },
+    {
+      "value": "quantum computing",
+      "meaning": "computation using quantum-mechanical phenomena like superposition and entanglement"
+    },
+    {
+      "value": "blockchain",
+      "meaning": "a decentralized, distributed ledger technology ensuring secure and transparent transactions"
+    },
+    {
+      "value": "cryptocurrency",
+      "meaning": "digital currency secured by cryptography and operating independently of central banks"
+    },
+    {
+      "value": "cryptography",
+      "meaning": "the practice of secure communication through encoding and decoding information"
+    },
+    {
+      "value": "biometrics",
+      "meaning": "automated recognition of individuals based on biological and behavioral characteristics"
+    },
+    {
+      "value": "nanotechnology",
+      "meaning": "manipulation of matter on atomic and molecular scale for advanced applications"
+    },
+    {
+      "value": "biotechnology",
+      "meaning": "technology based on biology, especially when used in agriculture and medicine"
+    },
+    {
+      "value": "augmented reality",
+      "meaning": "technology overlaying digital information onto the real-world environment"
+    },
+    {
+      "value": "virtual reality",
+      "meaning": "computer-generated simulation creating immersive three-dimensional environments"
+    },
+    {
+      "value": "automation",
+      "meaning": "technology enabling processes to operate without human intervention"
+    },
+    {
+      "value": "robotics",
+      "meaning": "interdisciplinary branch involving design, construction, and operation of robots"
+    },
+    {
+      "value": "cybersecurity",
+      "meaning": "protection of computer systems and networks from digital attacks and threats"
+    },
+    {
+      "value": "surveillance",
+      "meaning": "close observation and monitoring of people or activities using technology"
+    },
+    {
+      "value": "encryption",
+      "meaning": "process of converting information into a code to prevent unauthorized access"
+    },
+    {
+      "value": "decryption",
+      "meaning": "process of converting encrypted data back to its original readable form"
+    },
+    {
+      "value": "firewall",
+      "meaning": "network security system monitoring and controlling incoming and outgoing traffic"
+    },
+    {
+      "value": "malware",
+      "meaning": "malicious software designed to damage, disrupt, or gain unauthorized access"
+    },
+    {
+      "value": "phishing",
+      "meaning": "fraudulent attempt to obtain sensitive information by disguising as trustworthy entity"
+    },
+    {
+      "value": "ransomware",
+      "meaning": "malicious software that encrypts files and demands payment for decryption"
+    },
+    {
+      "value": "bandwidth",
+      "meaning": "maximum rate of data transfer across a network or communication channel"
+    },
+    {
+      "value": "latency",
+      "meaning": "delay between input and output in a system or network communication"
+    },
+    {
+      "value": "protocol",
+      "meaning": "set of rules governing communication between computer systems or networks"
+    },
+    {
+      "value": "interface",
+      "meaning": "point of interaction between computer systems, users, or software components"
+    },
+    {
+      "value": "architecture",
+      "meaning": "fundamental organization and design principles of computer systems or software"
+    },
+    {
+      "value": "scalability",
+      "meaning": "ability of a system to handle increased workload or expanded functionality"
+    },
+    {
+      "value": "redundancy",
+      "meaning": "duplication of critical components to increase reliability and prevent failure"
+    },
+    {
+      "value": "optimization",
+      "meaning": "process of making systems or algorithms as effective and efficient as possible"
+    },
+    {
+      "value": "virtualization",
+      "meaning": "creation of virtual versions of computing resources like servers or operating systems"
+    },
+    {
+      "value": "cloud computing",
+      "meaning": "delivery of computing services over the internet with on-demand resource access"
+    }
+  ]
+}

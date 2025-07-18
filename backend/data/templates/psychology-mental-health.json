@@ -1,0 +1,71 @@
+{
+  "name": "Psychology & Mental Health",
+  "description": "Important terms for understanding psychology, mental health, and human behavior concepts.",
+  "context": "psychology, mental health, and behavioral science",
+  "category": "Health",
+  "difficulty": "intermediate",
+  "tags": ["psychology", "mental health", "behavior", "therapy", "wellness"],
+  "featured": false,
+  "words": [
+    {
+      "value": "cognitive",
+      "meaning": "relating to mental processes of perception, memory, and reasoning"
+    },
+    {
+      "value": "therapy",
+      "meaning": "treatment intended to relieve or heal a disorder"
+    },
+    {
+      "value": "anxiety",
+      "meaning": "a feeling of worry, nervousness, or unease"
+    },
+    {
+      "value": "depression",
+      "meaning": "a mental condition characterized by persistent sadness"
+    },
+    {
+      "value": "resilience",
+      "meaning": "the ability to recover quickly from difficulties"
+    },
+    {
+      "value": "mindfulness",
+      "meaning": "the practice of purposeful awareness of the present moment"
+    },
+    {
+      "value": "empathy",
+      "meaning": "the ability to understand and share feelings of others"
+    },
+    {
+      "value": "trauma",
+      "meaning": "deeply distressing or disturbing experience"
+    },
+    {
+      "value": "psychiatry",
+      "meaning": "the study and treatment of mental illness"
+    },
+    {
+      "value": "personality",
+      "meaning": "combination of characteristics forming individual character"
+    },
+    {
+      "value": "motivation",
+      "meaning": "the reason for acting or behaving in a particular way"
+    },
+    {
+      "value": "behavior",
+      "meaning": "the way in which one acts or conducts oneself"
+    },
+    {
+      "value": "consciousness",
+      "meaning": "the state of being awake and aware of surroundings"
+    },
+    {
+      "value": "subconscious",
+      "meaning": "existing in the mind but not immediately available to consciousness"
+    },
+    {
+      "value": "perception",
+      "meaning": "the way in which something is regarded or interpreted"
+    }
+  ]
+}

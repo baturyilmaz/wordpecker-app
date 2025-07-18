@@ -7,7 +7,6 @@ import {
   Icon,
   Text,
   useDisclosure,
-  keyframes,
   VStack,
   Badge,
   SimpleGrid,
@@ -19,24 +18,14 @@ import { motion } from 'framer-motion';
 import { GiTreeBranch } from 'react-icons/gi';
 import { FaPlus, FaGamepad, FaBook, FaFeatherAlt, FaEye } from 'react-icons/fa';
 import { CreateListModal } from '../components/CreateListModal';
+import { ProgressIndicator } from '../components/ProgressIndicator';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { WordList } from '../types';
 import { apiService } from '../services/api';
+import { designTokens } from '../theme/design-system';
 
-const sparkle = keyframes`
-  0% { transform: scale(1) rotate(0deg); }
-  25% { transform: scale(1.1) rotate(-5deg); }
-  50% { transform: scale(1) rotate(0deg); }
-  75% { transform: scale(1.1) rotate(5deg); }
-  100% { transform: scale(1) rotate(0deg); }
-`;
-
-const float = keyframes`
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
-`;
+// Animation keyframes removed for build compatibility
 
 const container = {
   hidden: { opacity: 0 },
@@ -57,7 +46,6 @@ export const Lists = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const [lists, setLists] = useState<WordList[]>([]);
-  const [wordCounts, setWordCounts] = useState<{ [key: string]: number }>({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -66,15 +54,7 @@ export const Lists = () => {
         const listsData = await apiService.getLists();
         setLists(listsData);
         
-        // Fetch word counts for each list
-        const counts: { [key: string]: number } = {};
-        await Promise.all(
-          listsData.map(async (list) => {
-            const words = await apiService.getWords(list.id);
-            counts[list.id] = words.length;
-          })
-        );
-        setWordCounts(counts);
+        // Word counts and progress are now included in the API response
       } catch (error) {
         console.error('Error fetching lists:', error);
         toast({
@@ -96,7 +76,7 @@ export const Lists = () => {
     try {
       const newList = await apiService.createList({ name, description, context });
       setLists(prevLists => [newList, ...prevLists]);
-      setWordCounts(prev => ({ ...prev, [newList.id]: 0 }));
+      // Word count and progress are now included in the API response
       toast({
         title: 'List created successfully',
         status: 'success',
@@ -119,7 +99,7 @@ export const Lists = () => {
   if (isLoading) {
     return (
       <Center h="calc(100vh - 64px)">
-        <Spinner size="xl" color="green.400" thickness="4px" />
+        <Spinner size="xl" color="green.500" thickness="4px" />
       </Center>
     );
   }
@@ -137,8 +117,7 @@ export const Lists = () => {
             <Heading 
               as="h1" 
               size="2xl"
-              bgGradient="linear(to-r, green.400, brand.400)"
-              bgClip="text"
+              color="green.500"
               display="flex"
               alignItems="center"
               gap={3}
@@ -147,15 +126,15 @@ export const Lists = () => {
                 <Icon 
                   as={GiTreeBranch} 
                   boxSize={10} 
-                  color="green.400"
-                  animation={`${sparkle} 3s ease infinite`}
+                  color="green.500"
+                  style={{ animation: 'sparkle 3s ease infinite' }}
                 />
                 <Icon 
                   as={FaFeatherAlt} 
                   boxSize={8} 
                   color="orange.400"
                   transform="rotate(-45deg)"
-                  animation={`${sparkle} 2s ease infinite`}
+                  style={{ animation: 'sparkle 2s ease infinite' }}
                   ml={-4}
                   mt={-4}
                 />
@@ -173,7 +152,7 @@ export const Lists = () => {
             onClick={onOpen}
             _hover={{
               transform: 'translateY(-2px)',
-              animation: `${sparkle} 1s ease infinite`
+              animation: 'sparkle 1s ease infinite'
             }}
             transition="all 0.2s"
             w={{ base: 'full', md: 'auto' }}
@@ -191,7 +170,7 @@ export const Lists = () => {
           animate="show"
         >
           {lists.map((list) => {
-            const wordCount = wordCounts[list.id] || 0;
+            const wordCount = list.wordCount || 0;
             
             return (
               <Box
@@ -209,64 +188,108 @@ export const Lists = () => {
                   position="relative"
                   overflow="hidden"
                   borderWidth="1px"
-                  borderColor="green.800"
+                  borderColor={designTokens.cardVariants.userList.borderColor}
                   _hover={{
-                    borderColor: "green.600",
-                    shadow: "0 0 20px rgba(72, 187, 120, 0.3)"
+                    borderColor: designTokens.cardVariants.userList.hoverBorderColor,
+                    shadow: designTokens.cardVariants.userList.hoverShadow
                   }}
                   transition="all 0.3s"
-                  p={6}
+                  p={5}
                   borderRadius="xl"
+                  minH="320px"
                 >
-                  <Flex direction="column" h="full" gap={4}>
+                  <VStack spacing={4} h="full" align="stretch">
+                    {/* Header Section */}
                     <Box>
-                      <Flex align="center" gap={2} mb={3}>
-                        <Icon as={GiTreeBranch} color="green.400" boxSize={5} />
-                        <Text 
-                          fontWeight="bold"
-                          fontSize="xl"
-                          color="white"
-                          noOfLines={1}
-                        >
-                          {list.name}
-                        </Text>
+                      <Flex justify="space-between" align="flex-start" mb={3}>
+                        <Flex align="center" gap={2} flex={1} pr={3}>
+                          <Icon as={GiTreeBranch} color="green.500" boxSize={6} />
+                          <VStack align="flex-start" spacing={1} flex={1}>
+                            <Text 
+                              fontWeight="bold"
+                              fontSize="lg"
+                              color="white"
+                              noOfLines={1}
+                              lineHeight="1.2"
+                            >
+                              {list.name}
+                            </Text>
+                            <Text 
+                              color="gray.400" 
+                              fontSize="xs"
+                              noOfLines={1}
+                            >
+                              My Word Tree
+                            </Text>
+                          </VStack>
+                        </Flex>
+                        
+                        {/* Stats in top right */}
+                        <VStack spacing={1} align="flex-end" flexShrink={0} w="100px">
+                          <Badge 
+                            bg={wordCount > 0 ? designTokens.badgeColors.secondary : designTokens.badgeColors.neutral}
+                            color="white"
+                            variant="solid"
+                            fontSize="xs"
+                            px={2}
+                            py={1}
+                            w="full"
+                            textAlign="center"
+                          >
+                            {wordCount} words
+                          </Badge>
+                          {wordCount > 0 && list.masteredWords && list.masteredWords > 0 && (
+                            <Badge 
+                              bg={designTokens.badgeColors.primary}
+                              color="white"
+                              variant="solid"
+                              fontSize="xs"
+                              px={2}
+                              py={1}
+                              w="full"
+                              textAlign="center"
+                            >
+                              🎓 {list.masteredWords}
+                            </Badge>
+                          )}
+                        </VStack>
                       </Flex>
+                      
+                      {/* Description */}
                       <Text 
                         color="gray.400" 
-                        fontSize="md"
+                        fontSize="sm"
                         noOfLines={2}
+                        lineHeight="1.4"
+                        mb={3}
                       >
                         {list.description}
                       </Text>
                     </Box>
 
-                    <Box 
-                      position="absolute"
-                      top={4}
-                      right={4}
-                      animation={wordCount > 0 ? `${float} 3s ease-in-out infinite` : undefined}
-                    >
-                      <Badge 
-                        colorScheme={wordCount > 0 ? "green" : "gray"}
-                        p={2}
-                        borderRadius="full"
-                        fontSize="sm"
-                      >
-                        {wordCount} {wordCount === 1 ? 'word' : 'words'}
-                      </Badge>
+                    {/* Progress Section */}
+                    <Box flex={1}>
+                      {wordCount > 0 && (
+                        <ProgressIndicator 
+                          learnedPoint={list.averageProgress || 0} 
+                          size="sm" 
+                          showLabel={true}
+                          showBadge={false}
+                        />
+                      )}
                     </Box>
                     
-                    <Flex 
-                      mt="auto" 
-                      gap={2} 
-                      flexWrap="wrap"
-                      direction={{ base: 'column', sm: 'row' }}
-                    >
-                      <Link to={`/learn/${list.id}`} style={{ flex: 1 }}>
-                        <Button 
-                          w="full"
-                          variant="ghost"
-                          colorScheme="green"
+                    {/* Actions Footer */}
+                    <Box mt="auto" pt={3} borderTop="1px" borderColor="slate.700">
+                      <Flex 
+                        gap={2} 
+                        direction={{ base: 'column', sm: 'row' }}
+                      >
+                        <Link to={`/learn/${list.id}`} style={{ flex: 1 }}>
+                          <Button 
+                            w="full"
+                            variant="ghost"
+                            colorScheme="green"
                           leftIcon={<Icon as={FaBook} boxSize={5} />}
                           _hover={{
                             transform: 'translateY(-2px)',
@@ -311,9 +334,10 @@ export const Lists = () => {
                         >
                           View
                         </Button>
-                      </Link>
-                    </Flex>
-                  </Flex>
+                        </Link>
+                      </Flex>
+                    </Box>
+                  </VStack>
                 </Box>
               </Box>
             );

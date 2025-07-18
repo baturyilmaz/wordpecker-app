@@ -1,0 +1,71 @@
+{
+  "name": "Arts & Creative Expression",
+  "description": "Vocabulary for visual arts, music, literature, and creative pursuits.",
+  "context": "arts, creativity, music, literature, and artistic expression",
+  "category": "Arts",
+  "difficulty": "intermediate",
+  "tags": ["arts", "creativity", "music", "literature", "expression"],
+  "featured": false,
+  "words": [
+    {
+      "value": "aesthetic",
+      "meaning": "concerned with beauty or appreciation of beauty"
+    },
+    {
+      "value": "composition",
+      "meaning": "the arrangement of elements in a work of art"
+    },
+    {
+      "value": "perspective",
+      "meaning": "the technique of representing three-dimensional objects on a two-dimensional surface"
+    },
+    {
+      "value": "sculpture",
+      "meaning": "the art of making three-dimensional forms"
+    },
+    {
+      "value": "illustration",
+      "meaning": "a drawing or picture that explains or decorates"
+    },
+    {
+      "value": "melody",
+      "meaning": "a sequence of musical tones forming the main part of a song"
+    },
+    {
+      "value": "harmony",
+      "meaning": "the combination of simultaneously sounded musical notes"
+    },
+    {
+      "value": "rhythm",
+      "meaning": "a strong, regular, repeated pattern of movement or sound"
+    },
+    {
+      "value": "inspiration",
+      "meaning": "the process of being mentally stimulated to create"
+    },
+    {
+      "value": "imagination",
+      "meaning": "the faculty of forming new ideas or images"
+    },
+    {
+      "value": "exhibition",
+      "meaning": "a public display of works of art"
+    },
+    {
+      "value": "portfolio",
+      "meaning": "a collection of an artist's work"
+    },
+    {
+      "value": "masterpiece",
+      "meaning": "a work of outstanding artistry or skill"
+    },
+    {
+      "value": "critique",
+      "meaning": "a detailed analysis and assessment of artistic work"
+    },
+    {
+      "value": "genre",
+      "meaning": "a category of artistic composition characterized by style or content"
+    }
+  ]
+}

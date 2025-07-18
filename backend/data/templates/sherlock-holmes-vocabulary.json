@@ -1,0 +1,91 @@
+{
+  "name": "Sherlock Holmes Vocabulary",
+  "description": "English vocabulary words learned from Sherlock Holmes stories",
+  "context": "Learn English words that readers commonly encounter while reading Arthur Conan Doyle's Sherlock Holmes stories. These words help build vocabulary through Victorian mystery context.",
+  "category": "Books & Literature",
+  "difficulty": "advanced",
+  "tags": ["mystery", "detective", "victorian", "classic", "literature"],
+  "featured": true,
+  "words": [
+    {
+      "value": "deduction",
+      "meaning": "the process of reaching logical conclusions from given facts"
+    },
+    {
+      "value": "astute",
+      "meaning": "having sharp intelligence; clever and perceptive"
+    },
+    {
+      "value": "meticulous",
+      "meaning": "showing great attention to detail; very careful"
+    },
+    {
+      "value": "methodical",
+      "meaning": "done according to a systematic plan; orderly"
+    },
+    {
+      "value": "singular",
+      "meaning": "exceptionally good or great; remarkable"
+    },
+    {
+      "value": "peculiar",
+      "meaning": "strange or odd; unusual"
+    },
+    {
+      "value": "elementary",
+      "meaning": "relating to basic principles; simple"
+    },
+    {
+      "value": "elaborate",
+      "meaning": "involving many carefully arranged parts; detailed"
+    },
+    {
+      "value": "sinister",
+      "meaning": "giving the impression of evil or harm"
+    },
+    {
+      "value": "notorious",
+      "meaning": "famous for something bad; having a bad reputation"
+    },
+    {
+      "value": "cunning",
+      "meaning": "having skill in achieving goals by deceit"
+    },
+    {
+      "value": "malicious",
+      "meaning": "characterized by malice; intending harm"
+    },
+    {
+      "value": "ingenious",
+      "meaning": "clever, original, and inventive"
+    },
+    {
+      "value": "formidable",
+      "meaning": "inspiring fear or respect through power or skill"
+    },
+    {
+      "value": "diabolical",
+      "meaning": "belonging to or characteristic of the devil; evil"
+    },
+    {
+      "value": "perplexing",
+      "meaning": "completely baffling; very puzzling"
+    },
+    {
+      "value": "mysterious",
+      "meaning": "difficult to understand or explain; strange"
+    },
+    {
+      "value": "solution",
+      "meaning": "a means of solving a problem or dealing with a situation"
+    },
+    {
+      "value": "revelation",
+      "meaning": "a surprising disclosure of something previously unknown"
+    },
+    {
+      "value": "investigation",
+      "meaning": "the action of investigating; systematic inquiry"
+    }
+  ]
+}

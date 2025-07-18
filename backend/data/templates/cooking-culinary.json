@@ -1,0 +1,71 @@
+{
+  "name": "Cooking & Culinary Arts",
+  "description": "Essential culinary vocabulary for cooking techniques, kitchen equipment, and food preparation.",
+  "context": "cooking, culinary arts, and food preparation",
+  "category": "Lifestyle",
+  "difficulty": "beginner",
+  "tags": ["cooking", "culinary", "food", "kitchen", "recipes"],
+  "featured": false,
+  "words": [
+    {
+      "value": "cuisine",
+      "meaning": "a style or method of cooking characteristic of a region"
+    },
+    {
+      "value": "marinade",
+      "meaning": "a sauce in which food is soaked before cooking"
+    },
+    {
+      "value": "sauté",
+      "meaning": "to fry quickly in a little hot fat"
+    },
+    {
+      "value": "garnish",
+      "meaning": "to decorate or embellish food"
+    },
+    {
+      "value": "seasoning",
+      "meaning": "salt, herbs, or spices added to food to enhance flavor"
+    },
+    {
+      "value": "texture",
+      "meaning": "the feel, appearance, or consistency of food"
+    },
+    {
+      "value": "ingredient",
+      "meaning": "any of the foods used in preparing a dish"
+    },
+    {
+      "value": "recipe",
+      "meaning": "a set of instructions for preparing a dish"
+    },
+    {
+      "value": "utensil",
+      "meaning": "a tool used for cooking or eating"
+    },
+    {
+      "value": "portion",
+      "meaning": "an amount of food suitable for one person"
+    },
+    {
+      "value": "flavor",
+      "meaning": "the distinctive taste of food or drink"
+    },
+    {
+      "value": "appetizer",
+      "meaning": "a small dish of food served before the main meal"
+    },
+    {
+      "value": "delicacy",
+      "meaning": "a choice or expensive food item"
+    },
+    {
+      "value": "nutritious",
+      "meaning": "containing substances necessary for growth and health"
+    },
+    {
+      "value": "preparation",
+      "meaning": "the action of making food ready for cooking or eating"
+    }
+  ]
+}

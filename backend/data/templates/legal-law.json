@@ -1,0 +1,151 @@
+{
+  "name": "Legal Jurisprudence & Constitutional Law",
+  "description": "Advanced legal terminology for constitutional law, jurisprudence, legal theory, and sophisticated judicial proceedings.",
+  "context": "constitutional law, jurisprudence, legal theory, and advanced judicial proceedings",
+  "category": "Legal",
+  "difficulty": "advanced",
+  "tags": ["legal", "jurisprudence", "constitutional", "judicial", "law"],
+  "featured": false,
+  "words": [
+    {
+      "value": "jurisprudence",
+      "meaning": "theory or philosophy of law; legal science and judicial precedents"
+    },
+    {
+      "value": "jurisdiction",
+      "meaning": "official power to make legal decisions and judgments within specific territory"
+    },
+    {
+      "value": "precedent",
+      "meaning": "earlier event or action regarded as example or rule for future situations"
+    },
+    {
+      "value": "litigation",
+      "meaning": "process of taking legal action through courts to resolve disputes"
+    },
+    {
+      "value": "adjudication",
+      "meaning": "formal judgment or decision on disputed matter by court or tribunal"
+    },
+    {
+      "value": "arbitration",
+      "meaning": "settlement of dispute by impartial third party outside court system"
+    },
+    {
+      "value": "mediation",
+      "meaning": "intervention in dispute to help parties reach agreement or reconciliation"
+    },
+    {
+      "value": "subpoena",
+      "meaning": "writ ordering person to attend court as witness or produce documents"
+    },
+    {
+      "value": "injunction",
+      "meaning": "judicial order restraining person from beginning or continuing action"
+    },
+    {
+      "value": "habeas corpus",
+      "meaning": "requiring person under arrest to be brought before judge or court"
+    },
+    {
+      "value": "due process",
+      "meaning": "fair treatment through normal judicial system according to legal rules"
+    },
+    {
+      "value": "constitutional",
+      "meaning": "relating to established set of principles governing state or organization"
+    },
+    {
+      "value": "amendment",
+      "meaning": "change or addition designed to improve text or legislative bill"
+    },
+    {
+      "value": "statute",
+      "meaning": "written law passed by legislative body governing specific behavior"
+    },
+    {
+      "value": "ordinance",
+      "meaning": "piece of legislation enacted by municipal authority governing local area"
+    },
+    {
+      "value": "tort",
+      "meaning": "wrongful act leading to civil legal liability excluding breach of contract"
+    },
+    {
+      "value": "negligence",
+      "meaning": "failure to take proper care in doing something resulting in damage"
+    },
+    {
+      "value": "liability",
+      "meaning": "state of being responsible for something, especially by law"
+    },
+    {
+      "value": "culpability",
+      "meaning": "responsibility for fault or wrong; deserving blame or censure"
+    },
+    {
+      "value": "indictment",
+      "meaning": "formal charge or accusation of serious crime by grand jury"
+    },
+    {
+      "value": "arraignment",
+      "meaning": "reading of criminal charge in court and asking for plea"
+    },
+    {
+      "value": "plea bargain",
+      "meaning": "agreement between defendant and prosecutor to plead guilty for reduced sentence"
+    },
+    {
+      "value": "testimony",
+      "meaning": "formal written or spoken statement given in court under oath"
+    },
+    {
+      "value": "affidavit",
+      "meaning": "written statement confirmed by oath for use as evidence in court"
+    },
+    {
+      "value": "perjury",
+      "meaning": "offense of willfully telling untruth after taking oath to tell truth"
+    },
+    {
+      "value": "contempt",
+      "meaning": "offense of being disobedient to or disrespectful of court of law"
+    },
+    {
+      "value": "appellant",
+      "meaning": "person who applies to higher court for reversal of lower court decision"
+    },
+    {
+      "value": "respondent",
+      "meaning": "party against whom petition is filed, especially in appeals court"
+    },
+    {
+      "value": "plaintiff",
+      "meaning": "person who brings case against another in court of law"
+    },
+    {
+      "value": "defendant",
+      "meaning": "individual, company, or institution sued or accused in court of law"
+    },
+    {
+      "value": "solicitor",
+      "meaning": "lawyer qualified to deal with conveyancing, wills, and other legal matters"
+    },
+    {
+      "value": "barrister",
+      "meaning": "lawyer entitled to practice as advocate in higher courts"
+    },
+    {
+      "value": "advocate",
+      "meaning": "person who publicly supports or recommends particular cause or policy"
+    },
+    {
+      "value": "jurisprudential",
+      "meaning": "relating to or involving study and theory of legal principles"
+    },
+    {
+      "value": "prosecutorial",
+      "meaning": "relating to or characteristic of legal prosecution and criminal proceedings"
+    }
+  ]
+}

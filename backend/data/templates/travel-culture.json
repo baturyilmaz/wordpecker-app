@@ -1,0 +1,71 @@
+{
+  "name": "World Travel & Cultural Exploration",
+  "description": "Essential vocabulary for international travel, cultural experiences, and global communication.",
+  "context": "international travel, cultural experiences, and tourism",
+  "category": "Travel",
+  "difficulty": "beginner",
+  "tags": ["travel", "culture", "international", "tourism", "exploration"],
+  "featured": false,
+  "words": [
+    {
+      "value": "itinerary",
+      "meaning": "a planned route or journey; detailed travel schedule"
+    },
+    {
+      "value": "destination",
+      "meaning": "the place to which someone is going or being sent"
+    },
+    {
+      "value": "accommodation",
+      "meaning": "lodging; a place where someone may live or stay"
+    },
+    {
+      "value": "reservation",
+      "meaning": "the action of booking something in advance"
+    },
+    {
+      "value": "cuisine",
+      "meaning": "a style of cooking characteristic of a particular region"
+    },
+    {
+      "value": "heritage",
+      "meaning": "valued cultural traditions and historic buildings"
+    },
+    {
+      "value": "landmark",
+      "meaning": "a recognizable feature used for navigation or tourism"
+    },
+    {
+      "value": "expedition",
+      "meaning": "a journey undertaken for a specific purpose"
+    },
+    {
+      "value": "excursion",
+      "meaning": "a short journey or trip for pleasure"
+    },
+    {
+      "value": "souvenir",
+      "meaning": "a memento of a visit to a place"
+    },
+    {
+      "value": "customs",
+      "meaning": "traditional practices or the border control department"
+    },
+    {
+      "value": "embassy",
+      "meaning": "the official residence or office of an ambassador"
+    },
+    {
+      "value": "currency",
+      "meaning": "the money used in a particular country"
+    },
+    {
+      "value": "passport",
+      "meaning": "official document for international travel"
+    },
+    {
+      "value": "visa",
+      "meaning": "official permission to enter, leave, or stay in a country"
+    }
+  ]
+}

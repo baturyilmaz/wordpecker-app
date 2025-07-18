@@ -1,0 +1,71 @@
+{
+  "name": "Sports & Fitness Vocabulary",
+  "description": "Essential terms for sports, exercise, fitness training, and athletic activities.",
+  "context": "sports, fitness, exercise, and athletic performance",
+  "category": "Sports",
+  "difficulty": "beginner",
+  "tags": ["sports", "fitness", "exercise", "athletic", "health"],
+  "featured": false,
+  "words": [
+    {
+      "value": "endurance",
+      "meaning": "the ability to sustain prolonged physical effort"
+    },
+    {
+      "value": "stamina",
+      "meaning": "physical strength and energy for sustained activity"
+    },
+    {
+      "value": "agility",
+      "meaning": "ability to move quickly and easily"
+    },
+    {
+      "value": "coordination",
+      "meaning": "the organization of different elements working together effectively"
+    },
+    {
+      "value": "flexibility",
+      "meaning": "the quality of bending easily without breaking"
+    },
+    {
+      "value": "athlete",
+      "meaning": "a person who competes in sports"
+    },
+    {
+      "value": "tournament",
+      "meaning": "a series of contests between competitors"
+    },
+    {
+      "value": "competition",
+      "meaning": "the activity of competing against others"
+    },
+    {
+      "value": "championship",
+      "meaning": "a contest to determine the best competitor"
+    },
+    {
+      "value": "training",
+      "meaning": "the process of preparing for sports or fitness"
+    },
+    {
+      "value": "coach",
+      "meaning": "a person who trains athletes or teams"
+    },
+    {
+      "value": "referee",
+      "meaning": "an official who supervises a game or match"
+    },
+    {
+      "value": "equipment",
+      "meaning": "the tools and gear used in sports"
+    },
+    {
+      "value": "technique",
+      "meaning": "a way of carrying out a particular skill"
+    },
+    {
+      "value": "performance",
+      "meaning": "the action of accomplishing a task or activity"
+    }
+  ]
+}

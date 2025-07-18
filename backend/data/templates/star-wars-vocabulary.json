@@ -1,0 +1,91 @@
+{
+  "name": "Star Wars Vocabulary",
+  "description": "English vocabulary words learned from Star Wars",
+  "context": "Learn English words that viewers commonly encounter while watching Star Wars movies. These words help build vocabulary through the galactic adventure context.",
+  "category": "Movies & Cinema",
+  "difficulty": "intermediate",
+  "tags": ["sci-fi", "adventure", "space", "movies", "fantasy"],
+  "featured": true,
+  "words": [
+    {
+      "value": "destiny",
+      "meaning": "events that will necessarily happen to someone in the future"
+    },
+    {
+      "value": "apprentice",
+      "meaning": "a person learning a trade or skill from a master"
+    },
+    {
+      "value": "rebellion",
+      "meaning": "an act of violent resistance to an established government"
+    },
+    {
+      "value": "empire",
+      "meaning": "an extensive group of states under a single supreme authority"
+    },
+    {
+      "value": "alliance",
+      "meaning": "a union or association formed for mutual benefit"
+    },
+    {
+      "value": "republic",
+      "meaning": "a state where power is held by elected representatives"
+    },
+    {
+      "value": "senate",
+      "meaning": "a governing body of elected or appointed members"
+    },
+    {
+      "value": "chancellor",
+      "meaning": "a senior government official or head of government"
+    },
+    {
+      "value": "meditation",
+      "meaning": "thinking deeply or focusing one's mind for spiritual purposes"
+    },
+    {
+      "value": "serenity",
+      "meaning": "the state of being calm, peaceful, and untroubled"
+    },
+    {
+      "value": "temptation",
+      "meaning": "the desire to do something wrong or unwise"
+    },
+    {
+      "value": "wisdom",
+      "meaning": "the quality of having experience and good judgment"
+    },
+    {
+      "value": "courage",
+      "meaning": "the ability to do something frightening or difficult"
+    },
+    {
+      "value": "patience",
+      "meaning": "the capacity to accept delay or suffering without getting angry"
+    },
+    {
+      "value": "balance",
+      "meaning": "a condition in which different elements are equal or correct"
+    },
+    {
+      "value": "sacrifice",
+      "meaning": "giving up something valued for the sake of something else"
+    },
+    {
+      "value": "redemption",
+      "meaning": "the action of saving or being saved from sin or evil"
+    },
+    {
+      "value": "prophecy",
+      "meaning": "a prediction of what will happen in the future"
+    },
+    {
+      "value": "hope",
+      "meaning": "a feeling of expectation and desire for a positive outcome"
+    },
+    {
+      "value": "legacy",
+      "meaning": "something left or handed down by a predecessor"
+    }
+  ]
+}

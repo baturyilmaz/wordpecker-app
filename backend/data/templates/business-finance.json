@@ -1,0 +1,131 @@
+{
+  "name": "Advanced Business & Financial Terminology",
+  "description": "Sophisticated vocabulary for high-level business strategy, complex financial instruments, and corporate governance.",
+  "context": "advanced business strategy, financial markets, and corporate governance",
+  "category": "Business",
+  "difficulty": "intermediate",
+  "tags": ["business", "finance", "corporate", "strategy", "economics"],
+  "featured": true,
+  "words": [
+    {
+      "value": "amortization",
+      "meaning": "the gradual reduction of a debt through scheduled payments of principal and interest"
+    },
+    {
+      "value": "arbitrage",
+      "meaning": "the simultaneous buying and selling of securities in different markets to profit from price differentials"
+    },
+    {
+      "value": "capitalization",
+      "meaning": "the total value of a company's shares or the process of providing capital for a business"
+    },
+    {
+      "value": "depreciation",
+      "meaning": "the reduction in value of an asset over time due to wear, tear, or obsolescence"
+    },
+    {
+      "value": "diversification",
+      "meaning": "the practice of spreading investments across various financial instruments to reduce risk"
+    },
+    {
+      "value": "equity",
+      "meaning": "ownership interest in a corporation represented by shares of stock"
+    },
+    {
+      "value": "fiduciary",
+      "meaning": "involving trust, especially regarding financial management for another person"
+    },
+    {
+      "value": "hedging",
+      "meaning": "making investments to reduce the risk of adverse price movements in an asset"
+    },
+    {
+      "value": "liquidity",
+      "meaning": "the ease with which an asset can be converted into cash without affecting its market price"
+    },
+    {
+      "value": "leverage",
+      "meaning": "the use of borrowed capital to increase the potential return of an investment"
+    },
+    {
+      "value": "monetization",
+      "meaning": "the process of converting an asset, business, or activity into a source of income"
+    },
+    {
+      "value": "oligopoly",
+      "meaning": "a market structure where a small number of firms control the majority of market share"
+    },
+    {
+      "value": "procurement",
+      "meaning": "the strategic acquisition of goods and services for business operations"
+    },
+    {
+      "value": "recession",
+      "meaning": "a significant decline in economic activity lasting more than a few months"
+    },
+    {
+      "value": "syndication",
+      "meaning": "the process of multiple parties joining together to provide large amounts of capital"
+    },
+    {
+      "value": "valuation",
+      "meaning": "the analytical process of determining the current worth of an asset or company"
+    },
+    {
+      "value": "volatility",
+      "meaning": "the degree of variation in a trading price series over time"
+    },
+    {
+      "value": "merger",
+      "meaning": "the combination of two companies into one larger entity through negotiation"
+    },
+    {
+      "value": "acquisition",
+      "meaning": "the purchase of one company by another, often involving a controlling interest"
+    },
+    {
+      "value": "conglomerate",
+      "meaning": "a large corporation consisting of a number of different companies operating in various industries"
+    },
+    {
+      "value": "subsidiary",
+      "meaning": "a company controlled by another company through ownership of more than 50% of its voting stock"
+    },
+    {
+      "value": "stakeholder",
+      "meaning": "any individual or group that can affect or is affected by the achievement of corporate objectives"
+    },
+    {
+      "value": "bureaucracy",
+      "meaning": "a system of administration marked by hierarchical authority and rigid procedures"
+    },
+    {
+      "value": "entrepreneur",
+      "meaning": "an individual who organizes and operates a business, taking on financial risks for profit"
+    },
+    {
+      "value": "infrastructure",
+      "meaning": "the fundamental facilities and systems serving a country, city, or business organization"
+    },
+    {
+      "value": "intellectual property",
+      "meaning": "creations of the mind protected by law, including patents, trademarks, and copyrights"
+    },
+    {
+      "value": "venture capital",
+      "meaning": "financing provided to startup companies with high growth potential in exchange for equity"
+    },
+    {
+      "value": "due diligence",
+      "meaning": "comprehensive investigation of a business undertaken before a financial transaction"
+    },
+    {
+      "value": "portfolio",
+      "meaning": "a collection of financial investments like stocks, bonds, and other securities"
+    },
+    {
+      "value": "securities",
+      "meaning": "tradable financial instruments used to raise capital in public and private markets"
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "name": "Harry Potter Vocabulary",
+  "description": "English vocabulary words learned from the Harry Potter series",
+  "context": "Learn English words that readers commonly encounter while reading J.K. Rowling's Harry Potter series. These words help build vocabulary through the magical context of the stories.",
+  "category": "Books & Literature",
+  "difficulty": "intermediate",
+  "tags": ["fantasy", "literature", "british", "reading", "adventure"],
+  "featured": true,
+  "words": [
+    {
+      "value": "magnificent",
+      "meaning": "extremely beautiful, impressive, or grand in appearance"
+    },
+    {
+      "value": "bewildered",
+      "meaning": "confused and uncertain about what to do"
+    },
+    {
+      "value": "loathe",
+      "meaning": "to hate or dislike someone or something very much"
+    },
+    {
+      "value": "reluctant",
+      "meaning": "unwilling or hesitant to do something"
+    },
+    {
+      "value": "treacherous",
+      "meaning": "dangerous and untrustworthy; likely to betray"
+    },
+    {
+      "value": "cunning",
+      "meaning": "clever in achieving goals, often by deceit"
+    },
+    {
+      "value": "notorious",
+      "meaning": "famous for something bad or unpleasant"
+    },
+    {
+      "value": "peculiar",
+      "meaning": "strange or unusual in a way that is surprising"
+    },
+    {
+      "value": "suspicious",
+      "meaning": "having doubts about someone or something"
+    },
+    {
+      "value": "distinguished",
+      "meaning": "successful, respected, and admired"
+    },
+    {
+      "value": "menacing",
+      "meaning": "threatening and suggesting danger"
+    },
+    {
+      "value": "triumph",
+      "meaning": "a great success or victory"
+    },
+    {
+      "value": "despair",
+      "meaning": "complete loss of hope"
+    },
+    {
+      "value": "prophecy",
+      "meaning": "a prediction of what will happen in the future"
+    },
+    {
+      "value": "destiny",
+      "meaning": "events that will happen to someone in the future"
+    },
+    {
+      "value": "loyalty",
+      "meaning": "faithfulness to commitments or obligations"
+    },
+    {
+      "value": "courage",
+      "meaning": "the ability to do something frightening or difficult"
+    },
+    {
+      "value": "sacrifice",
+      "meaning": "giving up something important for the sake of others"
+    },
+    {
+      "value": "mischief",
+      "meaning": "playful behavior that causes minor trouble"
+    },
+    {
+      "value": "enchanted",
+      "meaning": "filled with delight or wonder; magical"
+    }
+  ]
+}
