@@ -9,7 +9,7 @@ import {
 } from './contracts';
 import { LessonError } from './errors';
 
-export const LESSON_PROMPT_VERSION = 'v2';
+export const LESSON_PROMPT_VERSION = 'v3';
 export const MAX_ARTICLE_CHARACTERS = 30_000;
 export const MIN_USABLE_ITEMS = 5;
 export const PREFERRED_VALID_ITEMS = 8;
@@ -248,7 +248,10 @@ const buildInitialPrompt = (
   history: PersonalizationHistory,
 ) => `Create a personalized Langsift lesson with 12 to 15 candidate items; aim for 14.
 
+Target learner: an English learner with an existing foundation who actively reads English content.
+Instruction language: English-first, Chinese-assisted. English definitions and explanations are primary; Chinese is only a short supporting gloss.
 Selected level: ${level}
+Level calibration: basic uses simple English definitions; intermediate uses natural learner English; upper_intermediate adds nuance and collocation; advanced emphasizes nuance, register, collocation, and sophisticated usage.
 Recent known terms (avoid unless a valuable new phrase/meaning): ${history.knownTerms.join(', ') || 'none'}
 Recent unknown terms (use only as a compressed signal of learner boundary): ${history.unknownTerms.join(', ') || 'none'}
 
@@ -268,7 +271,10 @@ const buildRefillPrompt = (
   needed: number,
 ) => `Add ${needed} new learning-item candidates to this Langsift lesson.
 
+Target learner: an English learner with an existing foundation who actively reads English content.
+Instruction language: English-first, Chinese-assisted. English definitions and explanations are primary; Chinese is only a short supporting gloss.
 Selected level: ${level}
+Level calibration: basic uses simple English definitions; intermediate uses natural learner English; upper_intermediate adds nuance and collocation; advanced emphasizes nuance, register, collocation, and sophisticated usage.
 Already accepted terms: ${JSON.stringify(acceptedTerms)}
 Rejected terms: ${JSON.stringify(rejected)}
 

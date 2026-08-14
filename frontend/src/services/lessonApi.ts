@@ -13,6 +13,7 @@ export const lessonApi = {
     itemId: string,
     update: { knowledgeStatus?: KnowledgeStatus; saved?: boolean },
   ): Promise<LessonInteraction> => api.put(`/api/lessons/${lessonId}/items/${itemId}/interaction`, update),
+  save: (lessonId: string): Promise<Lesson> => api.put(`/api/lessons/${lessonId}/save`, {}),
 };
 
 export const getLessonError = (error: unknown): LessonApiError => {

@@ -19,6 +19,7 @@ const lesson = (status: 'ready' | 'generating' = 'ready', count = 12) => new Les
   items: Array.from({ length: count }, (_, index) => ({
     type: index % 2 ? 'word' : 'phrase',
     term: index % 2 ? `term${index}` : `use term${index}`,
+    meaningEn: `English meaning ${index}`,
     meaningZh: `含义${index}`,
     contextSentence: `The article can use term${index} in this context.`,
     explanation: `Explanation ${index}.`,
@@ -40,6 +41,20 @@ describe('LessonQuizService', () => {
 
   it('uses the Lesson item count when fewer than ten', () => {
     expect(buildQuizQuestions(lesson('ready', 5))).toHaveLength(5);
+  });
+
+  it('builds new multiple-choice answers from English meanings', () => {
+    const questions = buildQuizQuestions(lesson('ready', 8));
+    const multipleChoice = questions.find((question) => question.type === 'multiple_choice');
+    expect(multipleChoice?.options).toContain('English meaning 1');
+    expect(multipleChoice?.options.some((option) => option.startsWith('含义'))).toBe(false);
+  });
+
+  it('falls back to Chinese meanings for legacy lessons without meaningEn', () => {
+    const legacy = lesson('ready', 8);
+    legacy.items.forEach((item) => { item.meaningEn = undefined; });
+    expect(() => buildQuizQuestions(legacy)).not.toThrow();
+    expect(buildQuizQuestions(legacy).some((question) => question.options.some((option) => option.startsWith('含义')))).toBe(true);
   });
 
   it('creates and resumes one active attempt', async () => {

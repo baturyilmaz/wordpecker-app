@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { body, query, param, validationResult } from 'express-validator';
 import rateLimit from 'express-rate-limit';
 import { elevenLabsService, AudioGenerationRequest } from '../../services/elevenlabs';
+import { getLegacyRequestUserId } from '../../utils/owner';
 
 const router = Router();
 
@@ -65,7 +66,7 @@ router.post('/generate',
       }
 
       const { text, voice, language, speed } = req.body as AudioGenerationRequest;
-      const userId = req.headers['user-id'] as string;
+      const userId = getLegacyRequestUserId(req) || '';
 
       // Generate audio with user preference integration
       const result = await elevenLabsService.generateAudio({
@@ -232,7 +233,7 @@ router.post('/word-pronunciation',
       }
 
       const { word, language, context } = req.body;
-      const userId = req.headers['user-id'] as string;
+      const userId = getLegacyRequestUserId(req) || '';
 
       // Create text for pronunciation (add context if provided)
       let text = word;
@@ -302,7 +303,7 @@ router.post('/sentence-pronunciation',
       }
 
       const { sentence, language, speed = 1.0 } = req.body;
-      const userId = req.headers['user-id'] as string;
+      const userId = getLegacyRequestUserId(req) || '';
 
       // Generate audio with user language preferences
       const result = await elevenLabsService.generateAudio({

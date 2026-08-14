@@ -7,6 +7,7 @@ import { QuestionType } from '../../types';
 import { quizAgentService } from './agent-service';
 import { shuffleArray } from '../../utils/arrayUtils';
 import { listIdSchema, updatePointsSchema } from './schemas';
+import { getLegacyRequestUserId } from '../../utils/owner';
 
 const router = Router();
 
@@ -41,7 +42,7 @@ router.post('/:listId/start', validate(listIdSchema), async (req, res) => {
 
     const transformed = transformWords(words, listId);
     const shuffled = transformed.sort(() => Math.random() - 0.5);
-    const questionTypes = await getQuestionTypes(req.headers['user-id'] as string);
+    const questionTypes = await getQuestionTypes(getLegacyRequestUserId(req) || '');
     const questions = await quizAgentService.generateQuestions(shuffled.slice(0, 5), list.context || 'General', questionTypes);
 
     res.json({ 
@@ -68,7 +69,7 @@ router.post('/:listId/more', validate(listIdSchema), async (req, res) => {
 
     const transformed = transformWords(words, listId);
     const selected = shuffleArray(transformed).slice(0, 5);
-    const questionTypes = await getQuestionTypes(req.headers['user-id'] as string);
+    const questionTypes = await getQuestionTypes(getLegacyRequestUserId(req) || '');
     const questions = await quizAgentService.generateQuestions(selected, list.context || 'General', questionTypes);
 
     res.json({ questions });
@@ -118,4 +119,4 @@ router.put('/:listId/learned-points', validate(updatePointsSchema), async (req, 
   }
 });
 
-export default router; 
+export default router;

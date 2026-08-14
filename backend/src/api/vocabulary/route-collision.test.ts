@@ -22,11 +22,11 @@ const guestId = 'guest_12345678-abcd-4000-8000-123456789abc';
 describe('Vocabulary route namespaces', () => {
   afterEach(() => jest.restoreAllMocks());
 
-  it('serves the Langsift Vocabulary domain at /api/vocabulary', async () => {
+  it('keeps the Langsift Vocabulary namespace protected for authenticated users', async () => {
     jest.spyOn(vocabularyService, 'list').mockResolvedValue([]);
     const response = await request(app).get('/api/vocabulary').set('user-id', guestId);
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({ items: [] });
+    expect(response.status).toBe(401);
+    expect(response.body.code).toBe('AUTH_REQUIRED');
   });
 
   it('serves legacy generate-words at /api/legacy/vocabulary', async () => {

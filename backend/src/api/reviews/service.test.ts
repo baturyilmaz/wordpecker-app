@@ -9,7 +9,8 @@ const entry = (saved = false, knowledgeStatus: 'unknown' | 'known' = 'unknown'):
   normalizedTerm: 'take off', term: 'Take Off', knowledgeStatus, saved,
   occurrences: [{
     articleId: 'article', articleTitle: 'Article', sourceUrl: 'https://example.com', sourceName: 'Example',
-    lessonId: 'lesson', lessonItemId: 'item', contextSentence: 'The plane will take off.', meaningAtOccurrence: '起飞',
+    lessonId: 'lesson', lessonItemId: 'item', contextSentence: 'The plane will take off.',
+    meaningEnAtOccurrence: 'to begin flying', meaningZhAtOccurrence: '起飞', meaningAtOccurrence: 'to begin flying',
     explanation: 'A phrasal verb.', exampleSentence: 'Sales took off.', firstSeenAt: now,
   }],
   review: { nextReviewAt: now, reviewCount: 0, rememberedCount: 0, unsureCount: 0, forgotCount: 0 },

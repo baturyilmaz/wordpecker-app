@@ -19,7 +19,7 @@ const interaction = (overrides: Record<string, unknown> = {}) => ({
 });
 const lesson = (id = lessonId, article = articleId, item = itemId, term = 'Take Off') => ({
   _id: id, ownerId, articleId: article,
-  items: [{ _id: item, term, meaningZh: '起飞', contextSentence: 'The plane will take off soon.', explanation: 'A phrasal verb.', exampleSentence: 'Sales may take off soon.' }],
+  items: [{ _id: item, term, meaningEn: 'to begin flying or become successful quickly', meaningZh: '起飞；迅速成功', contextSentence: 'The plane will take off soon.', explanation: 'A phrasal verb.', exampleSentence: 'Sales may take off soon.' }],
 });
 const article = (id = articleId, title = 'First article') => ({ _id: id, ownerId, title, source: 'Example', canonicalUrl: 'https://example.com/article' });
 const review = (term = 'take off', nextReviewAt = now) => ({ ownerId, normalizedTerm: term, nextReviewAt, reviewCount: 0, rememberedCount: 0, unsureCount: 0, forgotCount: 0 });
@@ -76,6 +76,10 @@ describe('VocabularyService', () => {
     expect(entries).toHaveLength(1);
     expect(entries[0].normalizedTerm).toBe('take off');
     expect(entries[0].occurrences).toHaveLength(2);
+    expect(entries[0].occurrences[0]).toMatchObject({
+      meaningEnAtOccurrence: 'to begin flying or become successful quickly',
+      meaningZhAtOccurrence: '起飞；迅速成功',
+    });
   });
 
   it('filters unknown, saved, and due while preserving owner-scoped queries', async () => {

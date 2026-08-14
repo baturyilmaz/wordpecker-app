@@ -18,6 +18,8 @@ export interface VocabularyOccurrence {
   lessonId: string;
   lessonItemId: string;
   contextSentence: string;
+  meaningEnAtOccurrence?: string;
+  meaningZhAtOccurrence: string;
   meaningAtOccurrence: string;
   explanation: string;
   exampleSentence: string;
@@ -95,7 +97,9 @@ export class VocabularyService {
           lessonId: lesson._id.toString(),
           lessonItemId: item._id.toString(),
           contextSentence: item.contextSentence,
-          meaningAtOccurrence: item.meaningZh,
+          meaningEnAtOccurrence: item.meaningEn,
+          meaningZhAtOccurrence: item.meaningZh,
+          meaningAtOccurrence: item.meaningEn || item.meaningZh,
           explanation: item.explanation,
           exampleSentence: item.exampleSentence,
           firstSeenAt: interaction.createdAt,

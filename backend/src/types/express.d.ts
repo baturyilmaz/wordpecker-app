@@ -1,7 +1,7 @@
 declare namespace Express {
   export interface Request {
-    user?: {
-      id: string;
-    };
+    requestId: string;
+    identity?: import('../utils/owner').RequestIdentity;
+    authSessionId?: string;
   }
-} 
+}

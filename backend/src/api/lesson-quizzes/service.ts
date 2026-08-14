@@ -24,10 +24,12 @@ const rotate = <T>(items: T[], amount: number): T[] => [...items.slice(amount), 
 
 export const buildQuizQuestions = (lesson: ILesson): Array<Omit<IQuizQuestion, '_id'>> => {
   const selected = lesson.items.slice(0, 10);
-  const meanings = [...new Set(lesson.items.map((item) => item.meaningZh))];
+  const meaningFor = (item: ILessonItem) => item.meaningEn || item.meaningZh;
+  const meanings = [...new Set(lesson.items.map(meaningFor))];
   return selected.map((item, index) => {
+    const correctMeaning = meaningFor(item);
     const blank = blankTerm(item.contextSentence, item.term) || blankTerm(item.exampleSentence, item.term);
-    const canBuildMcq = meanings.filter((meaning) => meaning !== item.meaningZh).length >= 3;
+    const canBuildMcq = meanings.filter((meaning) => meaning !== correctMeaning).length >= 3;
     if (index % 2 === 0 && blank) {
       return {
         lessonId: lesson._id,
@@ -41,16 +43,16 @@ export const buildQuizQuestions = (lesson: ILesson): Array<Omit<IQuizQuestion, '
     }
     if (canBuildMcq) {
       const distractors = meanings
-        .filter((meaning) => meaning !== item.meaningZh)
-        .sort((left, right) => Math.abs(left.length - item.meaningZh.length) - Math.abs(right.length - item.meaningZh.length))
+        .filter((meaning) => meaning !== correctMeaning)
+        .sort((left, right) => Math.abs(left.length - correctMeaning.length) - Math.abs(right.length - correctMeaning.length))
         .slice(0, 3);
       return {
         lessonId: lesson._id,
         lessonItemId: item._id,
         type: 'multiple_choice',
         prompt: `What does “${item.term}” mean in this lesson?`,
-        options: rotate([item.meaningZh, ...distractors], index % 4),
-        correctAnswer: item.meaningZh,
+        options: rotate([correctMeaning, ...distractors], index % 4),
+        correctAnswer: correctMeaning,
         explanation: item.explanation,
       };
     }
@@ -58,7 +60,7 @@ export const buildQuizQuestions = (lesson: ILesson): Array<Omit<IQuizQuestion, '
       lessonId: lesson._id,
       lessonItemId: item._id,
       type: 'fill_in_the_blank',
-      prompt: blank || `Type the expression meaning “${item.meaningZh}”.`,
+      prompt: blank || `Type the expression meaning “${correctMeaning}”.`,
       options: [],
       correctAnswer: item.term,
       explanation: item.explanation,

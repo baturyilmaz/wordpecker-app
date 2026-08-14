@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { environment } from './config/environment';
 import { errorHandler } from './middleware/errorHandler';
@@ -24,13 +25,24 @@ import articleRoutes from './api/articles/routes';
 import lessonRoutes from './api/lessons/routes';
 import lessonQuizRoutes from './api/lesson-quizzes/routes';
 import reviewRoutes from './api/reviews/routes';
+import authRoutes from './api/auth/routes';
+import dashboardRoutes from './api/dashboard/routes';
+import { optionalAuth, protectAuthenticatedMutation } from './middleware/auth';
+import { requestContext } from './middleware/request-context';
 
 const app = express();
 
 // Global middleware
 app.use(helmet());
-app.use(cors());
+app.use(requestContext);
+app.use(cors({
+  origin: (origin, callback) => callback(null, !origin || origin === environment.frontendUrl),
+  credentials: true,
+}));
 app.use(express.json());
+app.use(cookieParser());
+app.use(optionalAuth);
+app.use(protectAuthenticatedMutation);
 
 // Apply rate limiter only to OpenAI-powered routes
 app.use('/api/learn', openaiRateLimiter);
@@ -58,6 +70,8 @@ app.use('/api/articles', articleRoutes);
 app.use('/api/lessons', lessonRoutes);
 app.use('/api/lesson-quizzes', lessonQuizRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // Error handling
 app.use(errorHandler);

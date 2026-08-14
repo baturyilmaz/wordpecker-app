@@ -4,6 +4,7 @@ import { CreateLessonBodySchema, LessonGenerationOutputSchema } from './contract
 const item = (index: number) => ({
   type: index % 3 === 0 ? 'phrase' as const : 'word' as const,
   term: `useful term ${index}`,
+  meaningEn: `A useful contextual meaning ${index}`,
   meaningZh: `有用含义${index}`,
   contextSentence: `This is original context sentence number ${index}.`,
   explanation: 'A concise contextual explanation.',
@@ -37,6 +38,13 @@ describe('Lesson contracts', () => {
     invalid.items[1].term = invalid.items[0].term;
     invalid.items[2].meaningZh = '';
     expect(LessonGenerationOutputSchema.safeParse(invalid).success).toBe(false);
+  });
+
+  it('requires both English and Chinese meanings for newly generated lessons', () => {
+    const missingEnglish = output(8);
+    missingEnglish.items[0].meaningEn = '';
+    expect(LessonGenerationOutputSchema.safeParse(missingEnglish).success).toBe(false);
+    expect(output(8).items[0]).toMatchObject({ meaningEn: expect.any(String), meaningZh: expect.any(String) });
   });
 
   it.each(['basic', 'intermediate', 'upper_intermediate', 'advanced'])('accepts level %s', (level) => {

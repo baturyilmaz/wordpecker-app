@@ -5,6 +5,7 @@ import request from 'supertest';
 import { ArticleError, articleErrorMessages } from './errors';
 import { createArticleRouter } from './routes';
 import { Article, IArticle } from './model';
+import { ProductEventService } from '../product-events/service';
 
 const ownerId = 'guest_12345678-abcd-4000-8000-123456789abc';
 
@@ -27,7 +28,14 @@ const makeArticle = (): IArticle => ({
 const createApp = (extractor?: Parameters<typeof createArticleRouter>[0]) => {
   const app = express();
   app.use(express.json());
-  app.use('/api/articles', createArticleRouter(extractor));
+  app.use('/api/articles', createArticleRouter(extractor, new ProductEventService(async () => undefined)));
+  return app;
+};
+
+const createUserApp = (userId: string) => {
+  const app = express();
+  app.use((req, _res, next) => { req.identity = { type: 'user', id: userId, ownerId: `user_${userId}` }; next(); });
+  app.use('/api/articles', createArticleRouter(undefined, new ProductEventService(async () => undefined)));
   return app;
 };
 
@@ -71,5 +79,13 @@ describe('article routes', () => {
     expect(allowed.status).toBe(200);
     expect(forbidden.status).toBe(403);
     expect(forbidden.body.code).toBe('ARTICLE_FORBIDDEN');
+  });
+
+  it('does not let an authenticated user switch owner with a forged guest header', async () => {
+    const userId = new mongoose.Types.ObjectId().toString();
+    const article = { ...makeArticle(), ownerId: `user_${userId}` } as IArticle;
+    jest.spyOn(Article, 'findById').mockResolvedValue(article);
+    const response = await request(createUserApp(userId)).get(`/api/articles/${article._id}`).set('user-id', ownerId);
+    expect(response.status).toBe(200);
   });
 });

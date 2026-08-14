@@ -6,6 +6,7 @@ import { LessonQuiz } from './model';
 import { createLessonQuizRouter } from './routes';
 import { LessonQuizService } from './service';
 import { QuizError } from './errors';
+import { ProductEventService } from '../product-events/service';
 
 const ownerId = 'guest_12345678-abcd-4000-8000-123456789abc';
 const lessonId = new mongoose.Types.ObjectId();
@@ -15,7 +16,7 @@ const quiz = () => new LessonQuiz({
   questions: [{ lessonId, lessonItemId: new mongoose.Types.ObjectId(), type: 'fill_in_the_blank', prompt: 'Use _____.', options: [], correctAnswer: 'it' }],
 });
 const appWith = (service: Partial<LessonQuizService>) => {
-  const app = express(); app.use(express.json()); app.use('/api/lesson-quizzes', createLessonQuizRouter(service as LessonQuizService)); return app;
+  const app = express(); app.use(express.json()); app.use('/api/lesson-quizzes', createLessonQuizRouter(service as LessonQuizService, new ProductEventService(async () => undefined))); return app;
 };
 
 describe('Lesson Quiz API', () => {

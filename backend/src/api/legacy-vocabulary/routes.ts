@@ -5,11 +5,12 @@ import { vocabularyAgentService } from '../vocabulary/agent-service';
 import { Word } from '../words/model';
 import { getUserLanguages } from '../../utils/getUserLanguages';
 import { generateWordsSchema, getWordDetailsSchema } from '../vocabulary/schemas';
+import { getLegacyRequestUserId } from '../../utils/owner';
 
 const router = Router();
 
-const validateRequest = <T extends { headers: Record<string, unknown> }>(req: T) => {
-  const userId = req.headers['user-id'] as string;
+const validateRequest = (req: Parameters<typeof getLegacyRequestUserId>[0]) => {
+  const userId = getLegacyRequestUserId(req);
   if (!userId) return { error: 'User ID is required' };
   return { userId };
 };

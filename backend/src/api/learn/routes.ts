@@ -7,6 +7,7 @@ import { QuestionType } from '../../types';
 import { learnAgentService } from './agent-service';
 import { getUserLanguages } from '../../utils/getUserLanguages';
 import { listIdSchema } from './schemas';
+import { getLegacyRequestUserId } from '../../utils/owner';
 
 const router = Router();
 
@@ -47,7 +48,7 @@ router.post('/:listId/start', validate(listIdSchema), async (req, res) => {
     if (!list) return res.status(404).json({ message: 'List not found' });
     if (!words.length) return res.status(400).json({ message: 'List has no words' });
 
-    const userId = req.headers['user-id'] as string;
+    const userId = getLegacyRequestUserId(req) || '';
     const [selectedWords, exerciseTypes, { baseLanguage, targetLanguage }] = await Promise.all([
       selectSmartWords(words, listId),
       getExerciseTypes(userId),
@@ -82,7 +83,7 @@ router.post('/:listId/more', validate(listIdSchema), async (req, res) => {
     if (!list) return res.status(404).json({ message: 'List not found' });
     if (!words.length) return res.status(400).json({ message: 'List has no words' });
 
-    const userId = req.headers['user-id'] as string;
+    const userId = getLegacyRequestUserId(req) || '';
     const [selectedWords, exerciseTypes, { baseLanguage, targetLanguage }] = await Promise.all([
       selectSmartWords(words, listId),
       getExerciseTypes(userId),
@@ -103,4 +104,4 @@ router.post('/:listId/more', validate(listIdSchema), async (req, res) => {
   }
 });
 
-export default router; 
+export default router;

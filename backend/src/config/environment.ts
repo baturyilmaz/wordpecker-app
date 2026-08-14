@@ -16,5 +16,9 @@ export const environment = {
   openaiApiKey: process.env.OPENAI_API_KEY!,
   openaiBaseUrl: process.env.OPENAI_BASE_URL || undefined,
   openaiModel: process.env.OPENAI_MODEL!,
-  mongodbUrl: process.env.MONGODB_URL!
+  mongodbUrl: process.env.MONGODB_URL!,
+  googleClientId: process.env.GOOGLE_CLIENT_ID || '',
+  frontendUrl: (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/$/, ''),
+  sessionCookieName: process.env.SESSION_COOKIE_NAME || 'langsift_session',
+  sessionDays: Number(process.env.SESSION_DAYS || 30),
 } as const;

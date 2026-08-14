@@ -4,6 +4,7 @@ import rateLimit from 'express-rate-limit';
 import { openai } from '../../config/openai';
 import { getUserLanguages } from '../../utils/getUserLanguages';
 import { WordList } from '../lists/model';
+import { getLegacyRequestUserId } from '../../utils/owner';
 
 const router = Router();
 
@@ -42,7 +43,7 @@ router.post('/session',
       }
 
       const { listId } = req.body;
-      const userId = req.headers['user-id'] as string;
+      const userId = getLegacyRequestUserId(req) || '';
 
       if (!userId) {
         return res.status(401).json({

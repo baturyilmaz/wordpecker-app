@@ -6,6 +6,7 @@ export interface ILessonItem {
   _id: Types.ObjectId;
   type: 'word' | 'phrase';
   term: string;
+  meaningEn?: string;
   meaningZh: string;
   contextSentence: string;
   explanation: string;
@@ -24,6 +25,7 @@ export interface ILesson extends Document {
   difficulty?: LessonLevel;
   learningFocus?: string;
   contentDensity: 'low' | 'normal';
+  savedAt?: Date;
   items: Types.DocumentArray<ILessonItem>;
   generationMeta: {
     provider?: string;
@@ -48,6 +50,7 @@ export interface ILesson extends Document {
 const LessonItemSchema = new Schema<ILessonItem>({
   type: { type: String, required: true, enum: ['word', 'phrase'] },
   term: { type: String, required: true, trim: true },
+  meaningEn: { type: String, trim: true },
   meaningZh: { type: String, required: true, trim: true },
   contextSentence: { type: String, required: true, trim: true },
   explanation: { type: String, required: true, trim: true },
@@ -79,6 +82,7 @@ const LessonSchema = new Schema<ILesson>({
     },
   },
   contentDensity: { type: String, required: true, enum: ['low', 'normal'], default: 'normal' },
+  savedAt: Date,
   generationMeta: {
     provider: String,
     model: String,

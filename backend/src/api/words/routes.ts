@@ -6,6 +6,7 @@ import { Word, IWord } from './model';
 import { wordAgentService } from './agent-service';
 import mongoose from 'mongoose';
 import { getUserLanguages } from '../../utils/getUserLanguages';
+import { getLegacyRequestUserId } from '../../utils/owner';
 import { 
   listIdSchema, 
   addWordSchema, 
@@ -38,7 +39,7 @@ router.post('/:listId/words', validate(addWordSchema), async (req, res) => {
     if (!list) return res.status(404).json({ message: 'List not found' });
 
     const definition = providedMeaning?.trim() || await (async () => {
-      const userId = req.headers['user-id'] as string;
+      const userId = getLegacyRequestUserId(req) || '';
       if (!userId) throw new Error('User ID is required');
       const { baseLanguage, targetLanguage } = await getUserLanguages(userId);
       return wordAgentService.generateDefinition(value, list.context || '', baseLanguage, targetLanguage);
@@ -102,7 +103,7 @@ router.delete('/:listId/words/:wordId', validate(deleteWordSchema), async (req, 
 router.post('/validate-answer', validate(validateAnswerSchema), async (req: any, res) => {
   try {
     const { userAnswer, correctAnswer, context } = req.body;
-    const userId = req.headers['user-id'] as string;
+    const userId = getLegacyRequestUserId(req) || '';
     if (!userId) return res.status(400).json({ message: 'User ID is required' });
     const { baseLanguage, targetLanguage } = await getUserLanguages(userId);
     const result = await wordAgentService.validateAnswer(userAnswer, correctAnswer, context, baseLanguage, targetLanguage);
@@ -157,7 +158,7 @@ router.post('/word/:wordId/sentences', validate(wordContextSchema), async (req, 
     const list = await WordList.findById(wordContext.listId).lean();
     const context = list?.context || 'General';
 
-    const userId = req.headers['user-id'] as string;
+    const userId = getLegacyRequestUserId(req) || '';
     const { baseLanguage, targetLanguage } = await getUserLanguages(userId);
     const sentences = await wordAgentService.generateExamples(word.value, wordContext.meaning, context, baseLanguage, targetLanguage);
 
@@ -181,7 +182,7 @@ router.post('/word/:wordId/similar', openaiRateLimiter, validate(wordContextSche
     const list = await WordList.findById(wordContext.listId).lean();
     const context = list?.context || 'General';
 
-    const userId = req.headers['user-id'] as string;
+    const userId = getLegacyRequestUserId(req) || '';
     const { baseLanguage, targetLanguage } = await getUserLanguages(userId);
     const similarWords = await wordAgentService.generateSimilarWords(word.value, wordContext.meaning, context, baseLanguage, targetLanguage);
 
@@ -209,7 +210,7 @@ router.post('/:listId/light-reading', openaiRateLimiter, validate(listIdSchema),
       return res.status(400).json({ message: 'No words found in this list' });
     }
 
-    const userId = req.headers['user-id'] as string;
+    const userId = getLegacyRequestUserId(req) || '';
     if (!userId) return res.status(400).json({ message: 'User ID is required' });
     const { baseLanguage, targetLanguage } = await getUserLanguages(userId);
 
@@ -225,4 +226,4 @@ router.post('/:listId/light-reading', openaiRateLimiter, validate(listIdSchema),
   }
 });
 
-export default router; 
+export default router;

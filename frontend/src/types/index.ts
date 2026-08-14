@@ -1,7 +1,12 @@
 export interface User {
   id: string;
   email: string;
-  name?: string;
+  emailVerified: boolean;
+  displayName?: string;
+  avatarUrl?: string;
+  levelPreference?: LessonLevel;
+  createdAt: string;
+  lastLoginAt: string;
 }
 
 export interface Article {
@@ -43,6 +48,7 @@ export interface LessonItem {
   id: string;
   type: 'word' | 'phrase';
   term: string;
+  meaningEn?: string;
   meaningZh: string;
   contextSentence: string;
   explanation: string;
@@ -61,6 +67,7 @@ export interface Lesson {
   difficulty?: LessonLevel;
   learningFocus?: string;
   contentDensity: 'low' | 'normal';
+  savedAt?: string;
   items: LessonItem[];
   generationMeta: {
     provider?: string;
@@ -78,6 +85,21 @@ export interface Lesson {
   failureMessage?: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface DashboardData {
+  continueLearning: null | { type: 'quiz'; id: string; lessonId: string };
+  reviewDueCount: number;
+  vocabularyCounts: { totalEligible: number; unknown: number; saved: number };
+  recentLessons: Array<{
+    id: string;
+    articleTitle: string;
+    source: string;
+    level: LessonLevel;
+    createdAt: string;
+    savedAt?: string;
+    quizState: 'not_started' | 'active' | 'completed';
+  }>;
 }
 
 export interface LessonApiError {
@@ -120,6 +142,8 @@ export interface VocabularyOccurrence {
   lessonId: string;
   lessonItemId: string;
   contextSentence: string;
+  meaningEnAtOccurrence?: string;
+  meaningZhAtOccurrence: string;
   meaningAtOccurrence: string;
   explanation: string;
   exampleSentence: string;

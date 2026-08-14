@@ -20,6 +20,9 @@ import { LessonPage } from './pages/LessonPage';
 import { LessonQuizPage } from './pages/LessonQuizPage';
 import { VocabularyPage } from './pages/VocabularyPage';
 import { ReviewPage } from './pages/ReviewPage';
+import { DashboardPage } from './pages/DashboardPage';
+import { AccountSettingsPage } from './pages/AccountSettingsPage';
+import { AuthProvider } from './auth/AuthContext';
 
 const LegacyLayout = () => (
   <Box bg="slate.900" minH="100vh" color="white">
@@ -32,6 +35,7 @@ function App() {
   return (
     <ChakraProvider theme={theme}>
       <Router>
+        <AuthProvider>
         <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/articles/:id" element={<ArticlePreview />} />
@@ -39,6 +43,8 @@ function App() {
             <Route path="/lesson-quizzes/:id" element={<LessonQuizPage />} />
             <Route path="/vocabulary" element={<VocabularyPage />} />
             <Route path="/review" element={<ReviewPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/account/settings" element={<AccountSettingsPage />} />
             <Route element={<LegacyLayout />}>
             <Route path="/lists" element={<Lists />} />
             <Route path="/lists/:id" element={<ListDetail />} />
@@ -54,6 +60,7 @@ function App() {
             <Route path="/voice-chat/:listId" element={<VoiceChat />} />
             </Route>
           </Routes>
+        </AuthProvider>
       </Router>
     </ChakraProvider>
   );

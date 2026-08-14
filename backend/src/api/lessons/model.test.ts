@@ -5,6 +5,7 @@ import { Lesson } from './model';
 const item = (index: number) => ({
   type: index % 3 === 0 ? 'phrase' : 'word',
   term: `useful term ${index}`,
+  meaningEn: `A useful contextual meaning ${index}`,
   meaningZh: `有用含义${index}`,
   contextSentence: `This is original context sentence number ${index}.`,
   explanation: 'A concise contextual explanation.',
@@ -51,6 +52,12 @@ describe('Lesson model', () => {
     const invalid = lesson(8);
     invalid.items[0].meaningZh = '';
     expect(invalid.validateSync()?.errors['items.0.meaningZh']).toBeDefined();
+  });
+
+  it('keeps legacy Lessons without meaningEn valid', () => {
+    const legacy = lesson(8);
+    legacy.items[0].meaningEn = undefined;
+    expect(legacy.validateSync()).toBeUndefined();
   });
 
   it('allows an empty Lesson while generation is in progress', () => {

@@ -18,6 +18,7 @@ const validOutput: LessonGenerationOutput = {
   items: Array.from({ length: 8 }, (_, index) => ({
     type: index === 0 ? 'phrase' : 'word',
     term: index === 0 ? 'pave the way' : `term${index}`,
+    meaningEn: 'A concise contextual English meaning.',
     meaningZh: '语境含义',
     contextSentence: index === 0 ? 'The discovery could pave the way for better treatments.' : `The article uses term${index} in this sentence.`,
     explanation: 'A short explanation.',
@@ -106,6 +107,7 @@ function makeCandidate(term: string, contextSentence = `A context hint for ${ter
   return {
     type: term.includes(' ') ? 'phrase' : 'word',
     term,
+    meaningEn: 'A concise contextual English meaning.',
     meaningZh: '语境含义',
     contextSentence,
     explanation: 'A concise explanation.',
@@ -140,7 +142,7 @@ describe('Lesson generator orchestration', () => {
     expect(result.initialRawCount).toBe(14);
     expect(result.refillCount).toBe(0);
     expect(refill).not.toHaveBeenCalled();
-    expect(LESSON_PROMPT_VERSION).toBe('v2');
+    expect(LESSON_PROMPT_VERSION).toBe('v3');
   });
 
   it('salvages initial 8 → 7 and refills only missing items with dedupe', async () => {

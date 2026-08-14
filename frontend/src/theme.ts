@@ -16,6 +16,26 @@ const theme = extendTheme({
     },
   },
   colors: {
+    langsift: {
+      background: '#F4F7F8',
+      surface: '#FBFCFD',
+      surfaceMuted: '#E8EFF1',
+      textPrimary: '#102F33',
+      textSecondary: '#486269',
+      textMuted: '#526C72',
+      border: '#B9C9CE',
+      brand: '#0F766E',
+      brandHover: '#0B5F59',
+      brandSubtle: '#DCEFEB',
+      accent: '#2563EB',
+      danger: '#A62B21',
+      dangerSurface: '#FBE9E7',
+      success: '#137A4A',
+      successSurface: '#DFF3E7',
+      warning: '#8A5A00',
+      warningSurface: '#F6EBCF',
+      disabled: '#D5E0E3',
+    },
     slate: {
       900: '#0f172a', // background
       800: '#1e293b', // cards/containers
@@ -114,4 +134,4 @@ const theme = extendTheme({
   },
 });
 
-export default theme; 
+export default theme;

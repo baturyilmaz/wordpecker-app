@@ -51,6 +51,7 @@ const generated = {
     items: Array.from({ length: 8 }, (_, index) => ({
       type: 'word' as const,
       term: `term${index}`,
+      meaningEn: 'A concise English meaning',
       meaningZh: '含义',
       contextSentence: `Context ${index}`,
       explanation: 'Explanation',
@@ -92,7 +93,7 @@ describe('LessonService', () => {
     expect(Lesson.findByIdAndUpdate).toHaveBeenCalledWith(pending._id, expect.objectContaining({
       $set: expect.objectContaining({
         generationMeta: expect.objectContaining({
-          promptVersion: 'v2',
+          promptVersion: 'v3',
           initialRawCount: 14,
           finalValidCount: 10,
           refillCount: 0,

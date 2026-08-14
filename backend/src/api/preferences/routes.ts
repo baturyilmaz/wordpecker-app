@@ -2,11 +2,12 @@ import { Router, Request, Response } from 'express';
 import { validate } from 'echt';
 import { UserPreferences } from './model';
 import { updatePreferencesSchema } from './schemas';
+import { getLegacyRequestUserId } from '../../utils/owner';
 
 const router = Router();
 
-const getUserId = <T extends { headers: Record<string, any> }>(req: T) => {
-  const userId = req.headers['user-id'] as string;
+const getUserId = (req: Parameters<typeof getLegacyRequestUserId>[0]) => {
+  const userId = getLegacyRequestUserId(req);
   if (!userId) throw new Error('User ID is required');
   return userId;
 };

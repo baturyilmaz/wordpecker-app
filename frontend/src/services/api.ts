@@ -1,20 +1,22 @@
 import axios from 'axios';
 import { WordList, Word, Exercise, Question, Template, WordDetail, SentenceExample, UserPreferences, ExerciseTypePreferences, ImageDescriptionAnalysis, DescriptionExercise, VocabularyWordsResponse, WordDetailsResponse } from '../types';
-import { getGuestId } from './identity';
+import { getGuestId, hasSessionHint } from './identity';
 
 export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3100';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Add request interceptor to include user-id header
+// The backend ignores this anonymous namespace whenever a valid session exists.
 api.interceptors.request.use(
   (config) => {
-    config.headers['user-id'] = getGuestId();
+    if (!hasSessionHint() || config.url === '/api/auth/google') config.headers['user-id'] = getGuestId();
+    else delete config.headers['user-id'];
     return config;
   },
   (error) => {

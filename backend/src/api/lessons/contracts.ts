@@ -7,6 +7,7 @@ export type LessonLevel = z.infer<typeof LessonLevelSchema>;
 export const LessonItemOutputSchema = z.object({
   type: z.enum(['word', 'phrase']),
   term: z.string().trim().min(1),
+  meaningEn: z.string().trim().min(1),
   meaningZh: z.string().trim().min(1),
   contextSentence: z.string().trim().min(1),
   explanation: z.string().trim().min(1),

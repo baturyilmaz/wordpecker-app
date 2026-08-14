@@ -6,6 +6,7 @@ import { Word } from '../words/model';
 import { imageDescriptionAgentService } from './agent-service';
 import { stockPhotoService } from './stock-photo-service';
 import { getUserLanguages } from '../../utils/getUserLanguages';
+import { getLegacyRequestUserId } from '../../utils/owner';
 import { 
   startExerciseSchema, 
   submitDescriptionSchema, 
@@ -15,8 +16,8 @@ import {
 
 const router = Router();
 
-const getUserId = <T extends { headers: Record<string, any> }>(req: T) => {
-  const userId = req.headers['user-id'] as string;
+const getUserId = (req: Parameters<typeof getLegacyRequestUserId>[0]) => {
+  const userId = getLegacyRequestUserId(req);
   if (!userId) throw new Error('User ID is required');
   return userId;
 };
