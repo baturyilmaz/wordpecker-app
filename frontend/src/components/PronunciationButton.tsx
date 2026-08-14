@@ -7,7 +7,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { FaVolumeUp, FaPause } from 'react-icons/fa';
-import { apiService } from '../services/api';
+import { API_BASE_URL, apiService } from '../services/api';
 import AudioPlayer from './AudioPlayer';
 
 export interface PronunciationButtonProps {
@@ -108,7 +108,7 @@ export const PronunciationButton: React.FC<PronunciationButtonProps> = ({
       }
 
       if (response.data?.audioUrl) {
-        setAudioUrl(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${response.data.audioUrl}`);
+        setAudioUrl(`${API_BASE_URL}${response.data.audioUrl}`);
       } else {
         throw new Error('No audio URL received');
       }

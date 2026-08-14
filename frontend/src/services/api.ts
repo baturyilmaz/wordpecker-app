@@ -1,18 +1,11 @@
 import axios from 'axios';
 import { WordList, Word, Exercise, Question, Template, WordDetail, SentenceExample, UserPreferences, ExerciseTypePreferences, ImageDescriptionAnalysis, DescriptionExercise, VocabularyWordsResponse, WordDetailsResponse } from '../types';
+import { getGuestId } from './identity';
 
-// Generate or retrieve user ID
-const getUserId = () => {
-  let userId = localStorage.getItem('wordpecker-user-id');
-  if (!userId) {
-    userId = 'user_' + Math.random().toString(36).substr(2, 9);
-    localStorage.setItem('wordpecker-user-id', userId);
-  }
-  return userId;
-};
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3100';
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+export const api = axios.create({
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -21,7 +14,7 @@ const api = axios.create({
 // Add request interceptor to include user-id header
 api.interceptors.request.use(
   (config) => {
-    config.headers['user-id'] = getUserId();
+    config.headers['user-id'] = getGuestId();
     return config;
   },
   (error) => {
@@ -33,7 +26,6 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
-    console.error('API Error:', error);
     return Promise.reject(error);
   }
 );
@@ -180,10 +172,10 @@ export const apiService = {
 
   // Vocabulary learning methods
   generateVocabularyWords: (context: string, difficulty: 'basic' | 'intermediate' | 'advanced' = 'intermediate', count?: number): ApiResponse<VocabularyWordsResponse> => 
-    api.post('/api/vocabulary/generate-words', { context, difficulty, count }),
+    api.post('/api/legacy/vocabulary/generate-words', { context, difficulty, count }),
   
   getVocabularyWordDetails: (word: string, context: string): ApiResponse<WordDetailsResponse> => 
-    api.post('/api/vocabulary/get-word-details', { word, context }),
+    api.post('/api/legacy/vocabulary/get-word-details', { word, context }),
 
   // Audio & Pronunciation
   generateAudio: (text: string, language?: string, voice?: string, speed?: number): ApiResponse<{
@@ -262,4 +254,4 @@ export const apiService = {
       };
     };
   }> => api.post('/api/voice/session', { listId })
-}; 
+};

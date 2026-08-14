@@ -15,10 +15,15 @@ import quizRoutes from './api/quiz/routes';
 import templateRoutes from './api/templates/routes';
 import preferencesRoutes from './api/preferences/routes';
 import imageDescriptionRoutes from './api/image-description/routes';
-import vocabularyRoutes from './api/vocabulary/routes';
+import langsiftVocabularyRoutes from './api/vocabulary/routes';
+import legacyVocabularyRoutes from './api/legacy-vocabulary/routes';
 import languageValidationRoutes from './api/language-validation/routes';
 import audioRoutes from './api/audio/routes';
 import voiceRoutes from './api/voice/routes';
+import articleRoutes from './api/articles/routes';
+import lessonRoutes from './api/lessons/routes';
+import lessonQuizRoutes from './api/lesson-quizzes/routes';
+import reviewRoutes from './api/reviews/routes';
 
 const app = express();
 
@@ -31,7 +36,7 @@ app.use(express.json());
 app.use('/api/learn', openaiRateLimiter);
 app.use('/api/quiz', openaiRateLimiter);
 app.use('/api/describe', openaiRateLimiter);
-app.use('/api/vocabulary', openaiRateLimiter);
+app.use('/api/legacy/vocabulary', openaiRateLimiter);
 app.use('/api/language-validation', openaiRateLimiter);
 app.use('/api/audio', openaiRateLimiter); // Audio routes use ElevenLabs API
 app.use('/api/voice', openaiRateLimiter); // Voice routes use OpenAI Realtime API
@@ -44,10 +49,15 @@ app.use('/api/quiz', quizRoutes);
 app.use('/api/templates', templateRoutes);
 app.use('/api/preferences', preferencesRoutes);
 app.use('/api/describe', imageDescriptionRoutes);
-app.use('/api/vocabulary', vocabularyRoutes);
+app.use('/api/vocabulary', langsiftVocabularyRoutes);
+app.use('/api/legacy/vocabulary', legacyVocabularyRoutes);
 app.use('/api/language-validation', languageValidationRoutes);
 app.use('/api/audio', audioRoutes);
 app.use('/api/voice', voiceRoutes);
+app.use('/api/articles', articleRoutes);
+app.use('/api/lessons', lessonRoutes);
+app.use('/api/lesson-quizzes', lessonQuizRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // Error handling
 app.use(errorHandler);
@@ -70,4 +80,4 @@ if (process.env.NODE_ENV !== 'test') {
   });
 }
 
-export default app; 
+export default app;

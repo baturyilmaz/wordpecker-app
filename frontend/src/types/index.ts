@@ -4,6 +4,144 @@ export interface User {
   name?: string;
 }
 
+export interface Article {
+  id: string;
+  originalUrl: string;
+  canonicalUrl: string;
+  title: string;
+  source: string;
+  author?: string;
+  publishedAt?: string;
+  language: 'en';
+  wordCount: number;
+  excerpt?: string;
+  content: string;
+  status: 'extracted';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ArticleApiError {
+  code: string;
+  message: string;
+}
+
+export type LessonLevel = 'basic' | 'intermediate' | 'upper_intermediate' | 'advanced';
+export type KnowledgeStatus = 'unset' | 'known' | 'unknown';
+
+export interface LessonInteraction {
+  id?: string;
+  lessonItemId: string;
+  term: string;
+  knowledgeStatus: KnowledgeStatus;
+  saved: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface LessonItem {
+  id: string;
+  type: 'word' | 'phrase';
+  term: string;
+  meaningZh: string;
+  contextSentence: string;
+  explanation: string;
+  exampleSentence: string;
+  importanceReason?: string;
+  difficulty?: LessonLevel;
+  interaction: LessonInteraction;
+}
+
+export interface Lesson {
+  id: string;
+  articleId: string;
+  levelAtGeneration: LessonLevel;
+  status: 'generating' | 'ready' | 'failed';
+  summary?: string;
+  difficulty?: LessonLevel;
+  learningFocus?: string;
+  contentDensity: 'low' | 'normal';
+  items: LessonItem[];
+  generationMeta: {
+    provider?: string;
+    model?: string;
+    generatedAt?: string;
+    promptVersion: string;
+    durationMs?: number;
+    initialRawCount?: number;
+    finalValidCount?: number;
+    refillCount?: number;
+    articleWordCount: number;
+    truncated: boolean;
+  };
+  failureCode?: string;
+  failureMessage?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface LessonApiError {
+  code: string;
+  message: string;
+}
+
+export interface LessonQuizQuestion {
+  id: string;
+  lessonId: string;
+  lessonItemId: string;
+  type: 'multiple_choice' | 'fill_in_the_blank';
+  prompt: string;
+  options: string[];
+  explanation?: string;
+  userAnswer?: string;
+  isCorrect?: boolean;
+  correctAnswer?: string;
+  answeredAt?: string;
+}
+
+export interface LessonQuiz {
+  id: string;
+  lessonId: string;
+  status: 'active' | 'completed';
+  questionCount: number;
+  correctCount: number;
+  totalCount: number;
+  score: number;
+  questions: LessonQuizQuestion[];
+  startedAt: string;
+  completedAt?: string;
+}
+
+export interface VocabularyOccurrence {
+  articleId: string;
+  articleTitle: string;
+  sourceUrl: string;
+  sourceName: string;
+  lessonId: string;
+  lessonItemId: string;
+  contextSentence: string;
+  meaningAtOccurrence: string;
+  explanation: string;
+  exampleSentence: string;
+  firstSeenAt: string;
+}
+
+export interface VocabularyEntry {
+  normalizedTerm: string;
+  term: string;
+  knowledgeStatus: KnowledgeStatus;
+  saved: boolean;
+  occurrences: VocabularyOccurrence[];
+  review: {
+    nextReviewAt: string;
+    lastReviewedAt?: string;
+    reviewCount: number;
+    rememberedCount: number;
+    unsureCount: number;
+    forgotCount: number;
+  };
+}
+
 export interface WordList {
   id: string;
   user_id: string;

@@ -1,17 +1,55 @@
-export { configureOpenAIAgents } from './config';
+import { configureOpenAIAgents as configureProvider } from './config';
+import { environment } from '../config/environment';
+import { definitionAgent } from './definition-agent';
+import { vocabularyAgent } from './vocabulary-agent';
+import { exerciseAgent } from './exercise-agent';
+import { quizAgent } from './quiz-agent';
+import { validationAgent } from './validation-agent';
+import { examplesAgent } from './examples-agent';
+import { similarWordsAgent } from './similar-words-agent';
+import { readingAgent } from './reading-agent';
+import { languageValidationAgent } from './language-validation-agent';
+import { imageAnalysisAgent } from './image-analysis-agent';
+import { imageGenerationAgent } from './image-generation-agent';
+import { contextualImageAgent } from './contextual-image-agent';
+import { lessonAgent } from './lesson-agent';
+import { lessonRefillAgent } from './lesson-refill-agent';
 
-// Core vocabulary learning agents
-export { definitionAgent } from './definition-agent';
-export { vocabularyAgent } from './vocabulary-agent';
-export { exerciseAgent } from './exercise-agent';
-export { quizAgent } from './quiz-agent';
-export { validationAgent } from './validation-agent';
-export { examplesAgent } from './examples-agent';
-export { similarWordsAgent } from './similar-words-agent';
-export { readingAgent } from './reading-agent';
-export { languageValidationAgent } from './language-validation-agent';
+const agents = [
+  definitionAgent,
+  vocabularyAgent,
+  exerciseAgent,
+  quizAgent,
+  validationAgent,
+  examplesAgent,
+  similarWordsAgent,
+  readingAgent,
+  languageValidationAgent,
+  imageAnalysisAgent,
+  imageGenerationAgent,
+  contextualImageAgent,
+  lessonAgent,
+  lessonRefillAgent,
+];
 
-// Image-related agents
-export { imageAnalysisAgent } from './image-analysis-agent';
-export { imageGenerationAgent } from './image-generation-agent';
-export { contextualImageAgent } from './contextual-image-agent';
+export const configureOpenAIAgents = async (): Promise<void> => {
+  for (const agent of agents) agent.model = environment.openaiModel;
+  await configureProvider();
+};
+
+export {
+  definitionAgent,
+  vocabularyAgent,
+  exerciseAgent,
+  quizAgent,
+  validationAgent,
+  examplesAgent,
+  similarWordsAgent,
+  readingAgent,
+  languageValidationAgent,
+  imageAnalysisAgent,
+  imageGenerationAgent,
+  contextualImageAgent,
+  lessonAgent,
+  lessonRefillAgent,
+};

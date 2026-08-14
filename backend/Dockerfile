@@ -13,7 +13,7 @@ COPY package*.json ./
 RUN npm ci
 
 # Expose port
-EXPOSE 3000
+EXPOSE 3100
 
 # Start the development server
 CMD ["npm", "run", "dev"]

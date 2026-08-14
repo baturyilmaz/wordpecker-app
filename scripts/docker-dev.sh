@@ -35,5 +35,5 @@ docker-compose up
 
 echo "🎉 WordPecker App should be running at:"
 echo "   Frontend: http://localhost:5173"
-echo "   Backend:  http://localhost:3000"
+echo "   Backend:  http://localhost:3100"
 echo "   MongoDB:  localhost:27017"

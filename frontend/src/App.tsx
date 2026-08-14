@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import { ChakraProvider, Box } from '@chakra-ui/react';
 import theme from './theme';
 import { Lists } from './pages/Lists';
@@ -14,15 +14,32 @@ import { WordLearningSession } from './pages/WordLearningSession';
 import { ReadingPage } from './pages/ReadingPage';
 import { VoiceChat } from './pages/VoiceChat';
 import { Header } from './components/Header';
+import { Landing } from './pages/Landing';
+import { ArticlePreview } from './pages/ArticlePreview';
+import { LessonPage } from './pages/LessonPage';
+import { LessonQuizPage } from './pages/LessonQuizPage';
+import { VocabularyPage } from './pages/VocabularyPage';
+import { ReviewPage } from './pages/ReviewPage';
+
+const LegacyLayout = () => (
+  <Box bg="slate.900" minH="100vh" color="white">
+    <Header />
+    <Outlet />
+  </Box>
+);
 
 function App() {
   return (
     <ChakraProvider theme={theme}>
       <Router>
-        <Box bg="slate.900" minH="100vh" color="white">
-          <Header />
-          <Routes>
-            <Route path="/" element={<Navigate to="/lists" replace />} />
+        <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/articles/:id" element={<ArticlePreview />} />
+            <Route path="/lessons/:id" element={<LessonPage />} />
+            <Route path="/lesson-quizzes/:id" element={<LessonQuizPage />} />
+            <Route path="/vocabulary" element={<VocabularyPage />} />
+            <Route path="/review" element={<ReviewPage />} />
+            <Route element={<LegacyLayout />}>
             <Route path="/lists" element={<Lists />} />
             <Route path="/lists/:id" element={<ListDetail />} />
             <Route path="/learn/:id" element={<Learn />} />
@@ -35,8 +52,8 @@ function App() {
             <Route path="/learn-new-words/session" element={<WordLearningSession />} />
             <Route path="/reading/:listId" element={<ReadingPage />} />
             <Route path="/voice-chat/:listId" element={<VoiceChat />} />
+            </Route>
           </Routes>
-        </Box>
       </Router>
     </ChakraProvider>
   );

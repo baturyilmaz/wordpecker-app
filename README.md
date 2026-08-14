@@ -336,10 +336,11 @@ Create `.env` files:
 
 Backend `.env`:
 ```
-PORT=3000
+PORT=3100
 NODE_ENV=development
 OPENAI_API_KEY=your_openai_api_key_here
-OPENAI_BASE_URL=https://api.openai.com/v1
+OPENAI_BASE_URL=  # Optional; omit to use the OpenAI SDK default endpoint
+OPENAI_MODEL=gpt-4o-mini
 PEXELS_API_KEY=your_pexels_api_key_here  # Optional for Vision Garden stock photos
 ELEVENLABS_API_KEY=your_elevenlabs_api_key_here  # Optional for audio features
 MONGODB_URL=mongodb://localhost:27017/wordpecker
@@ -347,7 +348,7 @@ MONGODB_URL=mongodb://localhost:27017/wordpecker
 
 Frontend `.env`:
 ```
-VITE_API_URL=http://localhost:3000
+VITE_API_URL=http://localhost:3100
 ```
 
 **Note:** For MongoDB Atlas, use your connection string for `MONGODB_URL`:
@@ -405,7 +406,7 @@ docker-compose up --build
 
 4. **Access the application:**
    - Frontend: http://localhost:5173 (Vite dev server with hot reload)
-   - Backend API: http://localhost:3000 (with hot reload)
+   - Backend API: http://localhost:3100 (with hot reload)
    - MongoDB: localhost:27017 (username: admin, password: password)
 
 ### Docker Commands
@@ -488,7 +489,7 @@ This script will:
 - The backend has retry logic and will attempt to connect 5 times
 
 **Port conflicts:**
-- Docker setup uses ports 5173 (frontend), 3000 (backend), 27017 (mongodb)
+- Docker setup uses ports 5173 (frontend), 3100 (backend), 27017 (mongodb)
 - Change ports in docker-compose.yml if needed
 
 **Container build issues:**

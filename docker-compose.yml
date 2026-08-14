@@ -31,14 +31,15 @@ services:
     restart: unless-stopped
     environment:
       - NODE_ENV=development
-      - PORT=3000
+      - PORT=3100
       - MONGODB_URL=mongodb://admin:password@mongodb:27017/wordpecker?authSource=admin
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-https://api.openai.com/v1}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
       - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY}
       - PEXELS_API_KEY=${PEXELS_API_KEY}
     ports:
-      - "3000:3000"
+      - "3100:3100"
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -48,7 +49,7 @@ services:
     networks:
       - wordpecker-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/api/lists"]
+      test: ["CMD", "curl", "-f", "http://localhost:3100/api/lists"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -61,7 +62,7 @@ services:
     container_name: wordpecker-frontend-dev
     restart: unless-stopped
     environment:
-      - VITE_API_URL=http://localhost:3000
+      - VITE_API_URL=http://localhost:3100
     ports:
       - "5173:5173"
     volumes:

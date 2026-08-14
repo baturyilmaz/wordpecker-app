@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node dist/app.js",
     "dev": "nodemon src/app.ts",
-    "build": "npx tsc",
+    "build": "npx tsc && node scripts/copy-agent-prompts.js",
     "lint": "eslint . --ext .ts",
     "test": "jest",
     "seed:templates": "ts-node src/scripts/seedTemplatesFromFiles.ts",
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@elevenlabs/elevenlabs-js": "^2.6.0",
+    "@mozilla/readability": "^0.6.0",
     "@openai/agents": "^0.0.11",
     "axios": "^1.7.9",
     "cors": "^2.8.5",
@@ -22,6 +23,7 @@
     "express-rate-limit": "^7.1.5",
     "express-validator": "^7.0.1",
     "helmet": "^7.1.0",
+    "jsdom": "^26.1.0",
     "mongoose": "^8.0.0",
     "openai": "^4.24.1",
     "zod": "<=3.25.67"
@@ -30,6 +32,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.14",
+    "@types/jsdom": "^21.1.7",
     "@types/node": "^20.19.7",
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^6.15.0",

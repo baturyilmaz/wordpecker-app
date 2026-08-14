@@ -17,7 +17,7 @@ package "Docker Compose Environment" {
         component [Express Server] as express
         component [Node.js Runtime] as node
         component [Mongoose ODM] as mongoose
-        note top: Port 3000
+        note top: Port 3100
         note bottom: Volume ./backend:/app
     }
     
@@ -67,12 +67,12 @@ note right of backend
   Environment
   MONGODB_URL
   OPENAI_API_KEY
-  PORT=3000
+  PORT=3100
 end note
 
 note right of frontend
   Environment
-  VITE_API_URL=http://localhost:3000
+  VITE_API_URL=http://localhost:3100
 end note
 
 note bottom

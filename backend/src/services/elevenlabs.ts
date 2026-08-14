@@ -27,7 +27,7 @@ export interface AudioGenerationResponse {
 }
 
 export class ElevenLabsService {
-  private client: ElevenLabsClient;
+  private client: ElevenLabsClient | null = null;
   private cacheDir: string;
   private defaultVoices: Record<string, string> = {
     // High-quality multilingual voices - these work well across languages
@@ -56,19 +56,23 @@ export class ElevenLabsService {
 
   constructor() {
     const apiKey = process.env.ELEVENLABS_API_KEY;
-    if (!apiKey) {
-      throw new Error('ELEVENLABS_API_KEY environment variable is required');
+    if (apiKey) {
+      this.client = new ElevenLabsClient({ apiKey });
     }
-
-    this.client = new ElevenLabsClient({
-      apiKey: apiKey,
-    });
 
     // Create cache directory
     this.cacheDir = path.join(process.cwd(), 'audio-cache');
     if (!fs.existsSync(this.cacheDir)) {
       fs.mkdirSync(this.cacheDir, { recursive: true });
     }
+  }
+
+  private getClient(): ElevenLabsClient {
+    if (!this.client) {
+      throw new Error('ELEVENLABS_API_KEY environment variable is required for audio features');
+    }
+
+    return this.client;
   }
 
   /**
@@ -108,7 +112,7 @@ export class ElevenLabsService {
 
     try {
       // Fetch voices from ElevenLabs API
-      const voicesResponse = await this.client.voices.getAll();
+      const voicesResponse = await this.getClient().voices.getAll();
       const nativeVoices = voicesResponse.voices
         .filter(voice => {
           const voiceLanguage = voice.labels?.language?.toLowerCase();
@@ -271,7 +275,7 @@ export class ElevenLabsService {
       console.log(`Generating ${language} audio: "${text.substring(0, 50)}..." with voice ${voice}`);
       
       // Generate audio using ElevenLabs with language-optimized settings
-      const audioResponse = await this.client.textToSpeech.convert(voice, {
+      const audioResponse = await this.getClient().textToSpeech.convert(voice, {
         text: text,
         modelId: 'eleven_multilingual_v2', // Supports multiple languages with high quality
         voiceSettings: {
@@ -325,7 +329,7 @@ export class ElevenLabsService {
    */
   async getAvailableVoices(language?: string): Promise<VoiceConfig[]> {
     try {
-      const voicesResponse = await this.client.voices.getAll();
+      const voicesResponse = await this.getClient().voices.getAll();
       
       return voicesResponse.voices
         .filter((voice) => {
