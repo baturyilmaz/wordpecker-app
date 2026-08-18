@@ -3,7 +3,7 @@ import { getRequestOwnerId } from '../../utils/owner';
 import { VocabularyError } from './errors';
 import { VocabularyEntry, VocabularyService, vocabularyService } from './service';
 import { requireAuth } from '../../middleware/auth';
-import { eventDedupeKey, ProductEventService, productEventService, utcDay } from '../product-events/service';
+import { eventDedupeKey, ProductEventService, productEventService } from '../product-events/service';
 import { logRequestError } from '../../utils/request-log';
 
 const serialize = (entry: VocabularyEntry) => ({
@@ -40,7 +40,7 @@ export const createVocabularyRouter = (
           identity: req.identity!,
           eventName: 'vocabulary_opened',
           metadata: { itemCount: items.length },
-          dedupeKey: eventDedupeKey(req.identity!, 'vocabulary_opened', utcDay()),
+          dedupeKey: eventDedupeKey(req.identity!, 'vocabulary_opened', events.utcDay()),
           requestId: req.requestId,
         });
       }

@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import { eventDedupeKey, ProductEventService, utcDay } from './service';
+import { eventDedupeKey, ProductEventDocument, ProductEventService, utcDay } from './service';
 
 describe('ProductEventService', () => {
   const guest = { type: 'guest' as const, id: 'guest_12345678-abcd-4000-8000-123456789abc', ownerId: 'guest_12345678-abcd-4000-8000-123456789abc' };
@@ -47,5 +47,14 @@ describe('ProductEventService', () => {
   it('builds stable resource and UTC-day dedupe keys', () => {
     expect(eventDedupeKey(user, 'quiz_started', 'quiz-1')).toBe(`${user.ownerId}:quiz_started:quiz-1`);
     expect(utcDay(new Date('2026-08-14T23:59:59Z'))).toBe('2026-08-14');
+  });
+
+  it('uses an injected UTC clock for event time and daily dedupe periods', async () => {
+    const documents: ProductEventDocument[] = [];
+    const now = new Date('2026-08-19T23:30:00.000Z');
+    const service = new ProductEventService(async (document) => { documents.push(document); }, () => now);
+    await service.record({ identity: guest, eventName: 'review_started' });
+    expect(service.utcDay()).toBe('2026-08-19');
+    expect(documents[0].createdAt).toBe(now);
   });
 });

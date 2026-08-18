@@ -402,7 +402,10 @@ export const generateLessonWithRunners = async (
       throw new LessonError('LESSON_GENERATION_FAILED', 'Lesson generation timed out.');
     }
     if (error instanceof LessonError) throw error;
-    console.error('Lesson generation failed:', error, { model: environment.openaiModel });
+    console.error('Lesson generation failed.', {
+      errorName: error instanceof Error ? error.name : 'UnknownError',
+      model: environment.openaiModel,
+    });
     throw new LessonError('LESSON_GENERATION_FAILED', "We couldn't create this lesson. Please try again.");
   } finally {
     clearTimeout(timeout);

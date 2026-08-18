@@ -1,15 +1,69 @@
+import http from 'node:http';
+import https from 'node:https';
+import { LookupFunction } from 'node:net';
+import { Readable } from 'node:stream';
 import { ArticleError, articleErrorMessages } from './errors';
-import { validatePublicUrl } from './url-validator';
+import { ResolvedPublicUrl, resolvePublicUrl } from './url-validator';
 
 export interface FetchedArticlePage {
   html: string;
   finalUrl: string;
 }
 
-const MAX_REDIRECTS = 5;
-const MAX_RESPONSE_BYTES = 5 * 1024 * 1024;
-const FETCH_TIMEOUT_MS = 12_000;
+export const MAX_REDIRECTS = 5;
+export const MAX_RESPONSE_BYTES = 5 * 1024 * 1024;
+export const FETCH_TIMEOUT_MS = 12_000;
 const USER_AGENT = 'LangsiftArticleReader/1.0 (+public HTML article extraction)';
+
+export type ArticlePageFetcher = (
+  target: ResolvedPublicUrl,
+  init: { headers: Record<string, string>; signal: AbortSignal },
+) => Promise<Response>;
+
+export interface ArticleFetchDependencies {
+  fetcher?: ArticlePageFetcher;
+  resolveUrl?: typeof resolvePublicUrl;
+}
+
+const responseHeaders = (message: http.IncomingMessage): Headers => {
+  const headers = new Headers();
+  Object.entries(message.headers).forEach(([name, value]) => {
+    if (Array.isArray(value)) value.forEach((item) => headers.append(name, item));
+    else if (value !== undefined) headers.set(name, value);
+  });
+  return headers;
+};
+
+export const fetchPinnedPage: ArticlePageFetcher = async (target, init) => {
+  const selectedAddress = target.addresses.find(({ family }) => family === 4) || target.addresses[0];
+  if (!selectedAddress) throw new ArticleError('ARTICLE_UNAVAILABLE', articleErrorMessages.ARTICLE_UNAVAILABLE);
+  const lookup: LookupFunction = (_hostname, options, callback) => {
+    if (options.all) {
+      callback(null, [{ address: selectedAddress.address, family: selectedAddress.family }]);
+      return;
+    }
+    callback(null, selectedAddress.address, selectedAddress.family);
+  };
+  const transport = target.url.protocol === 'https:' ? https : http;
+
+  return new Promise<Response>((resolve, reject) => {
+    const request = transport.request(target.url, {
+      method: 'GET',
+      headers: init.headers,
+      lookup,
+      signal: init.signal,
+    }, (message) => {
+      const status = message.statusCode || 502;
+      const bodyless = status === 204 || status === 205 || status === 304;
+      const body = bodyless
+        ? null
+        : Readable.toWeb(message) as unknown as ConstructorParameters<typeof Response>[0];
+      resolve(new Response(body, { status, headers: responseHeaders(message) }));
+    });
+    request.once('error', reject);
+    request.end();
+  });
+};
 
 const readLimitedText = async (response: Response): Promise<string> => {
   const declaredLength = Number(response.headers.get('content-length') || 0);
@@ -47,22 +101,26 @@ const readLimitedText = async (response: Response): Promise<string> => {
   return new TextDecoder().decode(bytes);
 };
 
-export const fetchArticlePage = async (inputUrl: string): Promise<FetchedArticlePage> => {
+export const fetchArticlePage = async (
+  inputUrl: string,
+  dependencies: ArticleFetchDependencies = {},
+): Promise<FetchedArticlePage> => {
+  const fetcher = dependencies.fetcher || fetchPinnedPage;
+  const resolveUrl = dependencies.resolveUrl || resolvePublicUrl;
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
   try {
-    let currentUrl = await validatePublicUrl(inputUrl);
+    let currentTarget = await resolveUrl(inputUrl);
 
     for (let redirectCount = 0; redirectCount <= MAX_REDIRECTS; redirectCount += 1) {
       let response: Response;
       try {
-        response = await fetch(currentUrl, {
+        response = await fetcher(currentTarget, {
           headers: {
             'User-Agent': USER_AGENT,
             Accept: 'text/html,application/xhtml+xml;q=0.9',
           },
-          redirect: 'manual',
           signal: controller.signal,
         });
       } catch (error) {
@@ -78,7 +136,7 @@ export const fetchArticlePage = async (inputUrl: string): Promise<FetchedArticle
         if (!location || redirectCount === MAX_REDIRECTS) {
           throw new ArticleError('ARTICLE_UNAVAILABLE', articleErrorMessages.ARTICLE_UNAVAILABLE);
         }
-        currentUrl = await validatePublicUrl(new URL(location, currentUrl).toString());
+        currentTarget = await resolveUrl(new URL(location, currentTarget.url).toString());
         continue;
       }
 
@@ -94,7 +152,7 @@ export const fetchArticlePage = async (inputUrl: string): Promise<FetchedArticle
         throw new ArticleError('UNSUPPORTED_CONTENT', articleErrorMessages.UNSUPPORTED_CONTENT);
       }
 
-      return { html: await readLimitedText(response), finalUrl: currentUrl.toString() };
+      return { html: await readLimitedText(response), finalUrl: currentTarget.url.toString() };
     }
 
     throw new ArticleError('ARTICLE_UNAVAILABLE', articleErrorMessages.ARTICLE_UNAVAILABLE);

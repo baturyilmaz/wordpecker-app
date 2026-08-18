@@ -6,10 +6,38 @@ import { LessonQuiz } from '../lesson-quizzes/model';
 import { ReviewState } from '../reviews/model';
 import { GuestMigration, MigrationCounts } from './migration-model';
 import { GUEST_ID_PATTERN, userOwnerId } from '../../utils/owner';
-import { ProductEvent } from '../product-events/model';
+import { IProductEvent, ProductEvent, ProductEventName } from '../product-events/model';
 
 const emptyCounts = (): MigrationCounts => ({ articles: 0, lessons: 0, interactions: 0, quizzes: 0, reviews: 0, events: 0 });
 const normalize = (value: string) => value.normalize('NFKC').toLocaleLowerCase().replace(/\s+/g, ' ').trim();
+
+const dedupeResource = (dedupeKey: string | undefined, eventName: ProductEventName): string | undefined => {
+  if (!dedupeKey) return undefined;
+  const marker = `:${eventName}:`;
+  const markerIndex = dedupeKey.indexOf(marker);
+  return markerIndex >= 0 ? dedupeKey.slice(markerIndex + marker.length) : undefined;
+};
+
+const migratedDedupeKey = (
+  event: IProductEvent,
+  ownerId: string,
+  articleMap: Map<string, Types.ObjectId>,
+  lessonMap: Map<string, Types.ObjectId>,
+  itemMap: Map<string, Types.ObjectId>,
+  quizMap: Map<string, Types.ObjectId>,
+): string | undefined => {
+  if (!event.dedupeKey) return undefined;
+  const previousResource = dedupeResource(event.dedupeKey, event.eventName);
+  if (!previousResource) return event.dedupeKey;
+  let resource = previousResource;
+  if (event.eventName === 'article_extracted') resource = (articleMap.get(previousResource) || event.articleId)?.toString() || previousResource;
+  if (event.eventName === 'lesson_created') resource = (lessonMap.get(previousResource) || event.lessonId)?.toString() || previousResource;
+  if (event.eventName === 'term_saved') resource = (itemMap.get(previousResource) || event.lessonItemId)?.toString() || previousResource;
+  if (event.eventName === 'quiz_started' || event.eventName === 'quiz_completed') {
+    resource = (quizMap.get(previousResource) || event.quizId)?.toString() || previousResource;
+  }
+  return `${ownerId}:${event.eventName}:${resource}`;
+};
 
 export class GuestMigrationService {
   async migrate(guestId: string | undefined, userId: string): Promise<MigrationCounts> {
@@ -162,11 +190,9 @@ export class GuestMigrationService {
     const productEvents = await ProductEvent.find({ ownerId: guestId }, null, { session });
     counts.events = productEvents.length;
     for (const event of productEvents) {
-      const dedupeKey = event.dedupeKey?.startsWith(`${guestId}:`)
-        ? `${ownerId}:${event.dedupeKey.slice(guestId.length + 1)}`
-        : event.dedupeKey;
+      const dedupeKey = migratedDedupeKey(event, ownerId, articleMap, lessonMap, itemMap, quizMap);
       const duplicate = dedupeKey
-        ? await ProductEvent.findOne({ ownerId, dedupeKey }, null, { session })
+        ? await ProductEvent.findOne({ dedupeKey }, null, { session })
         : null;
       if (duplicate) {
         await event.deleteOne({ session });
@@ -178,6 +204,7 @@ export class GuestMigrationService {
       event.dedupeKey = dedupeKey;
       if (event.articleId) event.articleId = articleMap.get(event.articleId.toString()) || event.articleId;
       if (event.lessonId) event.lessonId = lessonMap.get(event.lessonId.toString()) || event.lessonId;
+      if (event.lessonItemId) event.lessonItemId = itemMap.get(event.lessonItemId.toString()) || event.lessonItemId;
       if (event.quizId) event.quizId = quizMap.get(event.quizId.toString()) || event.quizId;
       await event.save({ session });
     }

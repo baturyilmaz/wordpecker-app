@@ -56,6 +56,17 @@ describe('ProductEvent route hooks', () => {
     expect(documents[0].metadata).toBeUndefined();
   });
 
+  it('keeps a successful business response when analytics persistence fails', async () => {
+    jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const article = { _id: articleId, ownerId, originalUrl: 'https://example.com', canonicalUrl: 'https://example.com', title: 'Title', source: 'Example', language: 'en', content: 'private article content', wordCount: 400, status: 'extracted', createdAt: new Date(), updatedAt: new Date() } as IArticle;
+    const failingEvents = new ProductEventService(jest.fn().mockRejectedValue(new Error('analytics unavailable')));
+    const response = await request(appFor(createArticleRouter(jest.fn().mockResolvedValue(article), failingEvents)))
+      .post('/extract')
+      .send({ url: 'https://example.com' });
+    expect(response.status).toBe(201);
+    expect(response.body.id).toBe(articleId.toString());
+  });
+
   it('records created/opened lessons and saved terms with dedupe metadata', async () => {
     const lesson = readyLesson();
     const interactions = {
@@ -71,6 +82,7 @@ describe('ProductEvent route hooks', () => {
     expect(documents[0].metadata).toMatchObject({ contentDensity: 'normal', itemCount: 1, level: 'advanced', promptVersion: 'v3' });
     expect(documents[0].dedupeKey).toContain('lesson_created');
     expect(documents[2].metadata).toBeUndefined();
+    expect(documents[2].lessonItemId).toBe(itemId.toString());
   });
 
   it('records quiz start and completion exactly at successful backend mutations', async () => {

@@ -142,6 +142,7 @@ export const createLessonRouter = (
           eventName: 'term_saved',
           articleId: interaction.articleId.toString(),
           lessonId: interaction.lessonId.toString(),
+          lessonItemId: interaction.lessonItemId.toString(),
           dedupeKey: eventDedupeKey(req.identity!, 'term_saved', interaction.lessonItemId.toString()),
           requestId: req.requestId,
         });

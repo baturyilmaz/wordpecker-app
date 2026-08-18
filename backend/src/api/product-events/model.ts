@@ -22,6 +22,7 @@ export interface IProductEvent extends Document {
   eventName: ProductEventName;
   articleId?: Types.ObjectId;
   lessonId?: Types.ObjectId;
+  lessonItemId?: Types.ObjectId;
   quizId?: Types.ObjectId;
   metadata?: ProductEventMetadata;
   dedupeKey?: string;
@@ -35,6 +36,7 @@ const ProductEventSchema = new Schema<IProductEvent>({
   eventName: { type: String, required: true, enum: productEventNames },
   articleId: { type: Schema.Types.ObjectId, ref: 'Article' },
   lessonId: { type: Schema.Types.ObjectId, ref: 'Lesson' },
+  lessonItemId: { type: Schema.Types.ObjectId },
   quizId: { type: Schema.Types.ObjectId, ref: 'LessonQuiz' },
   metadata: { type: Schema.Types.Mixed },
   dedupeKey: { type: String, trim: true },

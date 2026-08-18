@@ -13,8 +13,11 @@ export const errorHandler = (
   next: NextFunction
 ) => {
   const statusCode = err.statusCode || 500;
-  const message = err.message || 'Internal Server Error';
-  const code = err.code || 'SERVER_ERROR';
+  const isPayloadTooLarge = statusCode === 413;
+  const message = statusCode >= 500
+    ? 'Something went wrong. Please try again.'
+    : isPayloadTooLarge ? 'The request is too large.' : err.message || 'Request failed.';
+  const code = isPayloadTooLarge ? 'REQUEST_TOO_LARGE' : err.code || 'SERVER_ERROR';
 
   logRequestError(req, statusCode, code, err);
 

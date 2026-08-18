@@ -6,6 +6,7 @@ export interface RecordProductEventInput {
   eventName: ProductEventName;
   articleId?: string;
   lessonId?: string;
+  lessonItemId?: string;
   quizId?: string;
   metadata?: ProductEventMetadata;
   dedupeKey?: string;
@@ -19,6 +20,7 @@ export interface ProductEventDocument {
   eventName: ProductEventName;
   articleId?: string;
   lessonId?: string;
+  lessonItemId?: string;
   quizId?: string;
   metadata?: ProductEventMetadata;
   dedupeKey?: string;
@@ -55,7 +57,14 @@ const safeMetadata = (eventName: ProductEventName, metadata?: ProductEventMetada
 };
 
 export class ProductEventService {
-  constructor(private readonly writer: ProductEventWriter = mongooseWriter) {}
+  constructor(
+    private readonly writer: ProductEventWriter = mongooseWriter,
+    private readonly clock: () => Date = () => new Date(),
+  ) {}
+
+  utcDay(): string {
+    return utcDay(this.clock());
+  }
 
   async record(input: RecordProductEventInput): Promise<void> {
     const document: ProductEventDocument = {
@@ -65,10 +74,11 @@ export class ProductEventService {
       eventName: input.eventName,
       articleId: input.articleId,
       lessonId: input.lessonId,
+      lessonItemId: input.lessonItemId,
       quizId: input.quizId,
       metadata: safeMetadata(input.eventName, input.metadata),
       dedupeKey: input.dedupeKey,
-      createdAt: new Date(),
+      createdAt: this.clock(),
     };
     try {
       await this.writer(document);

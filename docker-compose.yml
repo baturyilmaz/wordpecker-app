@@ -42,6 +42,7 @@ services:
       - FRONTEND_URL=${FRONTEND_URL:-http://localhost:5173}
       - SESSION_COOKIE_NAME=${SESSION_COOKIE_NAME:-langsift_session}
       - SESSION_DAYS=${SESSION_DAYS:-30}
+      - TRUST_PROXY_HOPS=${TRUST_PROXY_HOPS:-0}
     ports:
       - "3100:3100"
     volumes:

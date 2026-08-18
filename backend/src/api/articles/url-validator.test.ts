@@ -23,6 +23,9 @@ describe('validatePublicUrl', () => {
     'http://[::1]/story',
     'http://[fc00::1]/story',
     'http://[fe80::1]/story',
+    'http://[::ffff:127.0.0.1]/story',
+    'http://[::ffff:7f00:1]/story',
+    'http://[ff02::1]/story',
   ])('blocks private or metadata address %s', async (url) => expectInvalidUrl(url));
 
   it('blocks a hostname that resolves to a private address', async () => {
@@ -31,5 +34,11 @@ describe('validatePublicUrl', () => {
 
   it.each(['file:///etc/passwd', 'ftp://example.com/file', 'not a url'])('rejects invalid input %s', async (url) => {
     await expectInvalidUrl(url);
+  });
+
+  it('rejects an excessively long URL before DNS resolution', async () => {
+    const resolver = jest.fn(publicResolver);
+    await expectInvalidUrl(`https://example.com/${'x'.repeat(5000)}`, resolver);
+    expect(resolver).not.toHaveBeenCalled();
   });
 });

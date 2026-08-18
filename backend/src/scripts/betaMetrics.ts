@@ -9,7 +9,10 @@ const run = async () => {
   const mongodbUrl = process.env.MONGODB_URL;
   if (!mongodbUrl) throw new Error('MONGODB_URL is required.');
   await mongoose.connect(mongodbUrl);
-  const events = await ProductEvent.find({}).select('ownerId userId eventName metadata createdAt').sort({ createdAt: 1 }).lean();
+  const events = await ProductEvent.find({})
+    .select('ownerId userId eventName articleId lessonId lessonItemId quizId dedupeKey metadata createdAt')
+    .sort({ createdAt: 1 })
+    .lean();
   const result = calculateBetaMetrics(events);
   console.log(JSON.stringify(result, null, 2));
 };

@@ -4,7 +4,13 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { environment } from './config/environment';
 import { errorHandler } from './middleware/errorHandler';
-import { openaiRateLimiter } from './middleware/rateLimiter';
+import {
+  articleFetchRateLimiter,
+  authRateLimiter,
+  lessonGenerationConcurrencyLimiter,
+  lessonGenerationRateLimiter,
+  openaiRateLimiter,
+} from './middleware/rateLimiter';
 import { connectDB } from './config/mongodb';
 import { configureOpenAIAgents } from './agents';
 
@@ -32,6 +38,8 @@ import { requestContext } from './middleware/request-context';
 
 const app = express();
 
+if (environment.trustProxyHops > 0) app.set('trust proxy', environment.trustProxyHops);
+
 // Global middleware
 app.use(helmet());
 app.use(requestContext);
@@ -39,7 +47,7 @@ app.use(cors({
   origin: (origin, callback) => callback(null, !origin || origin === environment.frontendUrl),
   credentials: true,
 }));
-app.use(express.json());
+app.use(express.json({ limit: '32kb' }));
 app.use(cookieParser());
 app.use(optionalAuth);
 app.use(protectAuthenticatedMutation);
@@ -52,6 +60,12 @@ app.use('/api/legacy/vocabulary', openaiRateLimiter);
 app.use('/api/language-validation', openaiRateLimiter);
 app.use('/api/audio', openaiRateLimiter); // Audio routes use ElevenLabs API
 app.use('/api/voice', openaiRateLimiter); // Voice routes use OpenAI Realtime API
+app.post('/api/lists/:listId/words', openaiRateLimiter);
+app.post('/api/lists/validate-answer', openaiRateLimiter);
+app.post('/api/lists/word/:wordId/sentences', openaiRateLimiter);
+app.post('/api/articles/extract', articleFetchRateLimiter);
+app.post('/api/lessons', lessonGenerationRateLimiter, lessonGenerationConcurrencyLimiter);
+app.post('/api/auth/google', authRateLimiter);
 
 // Routes
 app.use('/api/lists', listRoutes);
@@ -89,7 +103,9 @@ if (process.env.NODE_ENV !== 'test') {
       console.log(`Server running on port ${PORT} in ${environment.nodeEnv} mode`);
     });
   }).catch(error => {
-    console.error('Failed to initialize application:', error);
+    console.error('Failed to initialize application.', {
+      errorName: error instanceof Error ? error.name : 'UnknownError',
+    });
     process.exit(1);
   });
 }

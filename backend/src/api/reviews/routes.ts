@@ -3,7 +3,7 @@ import { getRequestOwnerId } from '../../utils/owner';
 import { ReviewError } from './errors';
 import { ReviewService, reviewService } from './service';
 import { requireAuth } from '../../middleware/auth';
-import { eventDedupeKey, ProductEventService, productEventService, utcDay } from '../product-events/service';
+import { eventDedupeKey, ProductEventService, productEventService } from '../product-events/service';
 import { logRequestError } from '../../utils/request-log';
 
 const sendError = (request: Request, response: Response, error: unknown) => {
@@ -27,7 +27,7 @@ export const createReviewRouter = (
         identity: req.identity!,
         eventName: 'review_started',
         metadata: { dueCount: items.length },
-        dedupeKey: eventDedupeKey(req.identity!, 'review_started', utcDay()),
+        dedupeKey: eventDedupeKey(req.identity!, 'review_started', events.utcDay()),
         requestId: req.requestId,
       });
       return res.json({ items, count: items.length });
@@ -46,7 +46,7 @@ export const createReviewRouter = (
           await events.record({
             identity: req.identity!,
             eventName: 'review_completed',
-            dedupeKey: eventDedupeKey(req.identity!, 'review_completed', utcDay()),
+            dedupeKey: eventDedupeKey(req.identity!, 'review_completed', events.utcDay()),
             requestId: req.requestId,
           });
         }
