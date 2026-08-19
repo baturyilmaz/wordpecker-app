@@ -2,14 +2,14 @@
 
 ## Architecture
 
-Vercel serves the Vite build from `frontend/dist` and sends `/api/*` to one Node 20 Express Function. The Function and local `server.ts` both use the same Express app and routes. MongoDB Atlas is the production database; a warm Function reuses a module-level connection promise. The browser uses same-origin `/api` requests by default, while a future Android client can call the same HTTPS REST API directly.
+Vercel serves the Vite build from `frontend/dist` and sends `/api/*` to one Node 24 Express Function. The Function and local `server.ts` both use the same Express app and routes. MongoDB Atlas is the production database; a warm Function reuses a module-level connection promise. The browser uses same-origin `/api` requests by default, while a future Android client can call the same HTTPS REST API directly.
 
 The in-memory rate and lesson-concurrency limiters are best-effort per Function instance. They are not distributed limits.
 
 ## Vercel setup
 
 1. Import the repository with its root as the project root and select the Vite preset if it is not detected.
-2. Keep Node.js at `20.x`. `vercel.json` installs both existing packages, runs the root production build, publishes `frontend/dist`, preserves `/api/*`, and falls back other paths to `index.html` for React Router.
+2. Keep the production runtime at Node.js `24.x`. `vercel.json` installs both existing packages, runs the root production build, publishes `frontend/dist`, preserves `/api/*`, and falls back other paths to `index.html` for React Router.
 3. Add the environment variables below for Production and the appropriate Preview values. Do not commit their values.
 4. Keep Fluid Compute enabled. The single API Function has a 60-second maximum duration, which covers the measured roughly 19-second lesson request while bounding runaway calls.
 

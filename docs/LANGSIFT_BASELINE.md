@@ -2,13 +2,13 @@
 
 ## Environment
 
-- Recommended Node.js: 20 LTS (`v20.20.2` verified via fnm)
-- npm: `10.8.2` under Node 20
+- Recommended Node.js: 24 (`v24.19.0` verified via fnm)
+- npm: `11.x` under Node 24
 - Docker: `29.7.2`
 - Docker Compose: `v5.3.1`
 - MongoDB: `mongo:7.0`, healthy on `localhost:27017`
 
-Node 20 is recommended because both project Dockerfiles use `node:20-alpine`. The lockfile versions also support Node 20.
+Node 24 is recommended because both project Dockerfiles use `node:24-alpine`, matching the Vercel production runtime. The existing lockfiles remain in use.
 
 ## Local startup
 

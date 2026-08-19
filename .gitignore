@@ -19,3 +19,4 @@ yarn-error.log*
 *.sw?
 
 */audio-cache
+.vercel
