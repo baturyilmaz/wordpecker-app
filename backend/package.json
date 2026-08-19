@@ -18,7 +18,7 @@
   "dependencies": {
     "@elevenlabs/elevenlabs-js": "^2.6.0",
     "@mozilla/readability": "^0.6.0",
-    "@openai/agents": "^0.0.11",
+    "@openai/agents": "0.0.17",
     "axios": "^1.7.9",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
