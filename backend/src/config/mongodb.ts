@@ -27,7 +27,10 @@ const registerConnectionListeners = () => {
       errorName: error instanceof Error ? error.name : 'UnknownError',
     });
   });
-  mongoose.connection.on('disconnected', () => console.warn('MongoDB disconnected.'));
+  mongoose.connection.on('disconnected', () => {
+    connectionPromise = null;
+    console.warn('MongoDB disconnected.');
+  });
   mongoose.connection.on('reconnected', () => console.log('MongoDB reconnected.'));
 };
 

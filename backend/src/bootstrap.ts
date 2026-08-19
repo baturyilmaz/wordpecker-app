@@ -1,20 +1,18 @@
 import { configureOpenAIAgents } from './agents';
 import { connectDB } from './config/mongodb';
 
-let initializationPromise: Promise<void> | null = null;
+let agentConfigurationPromise: Promise<void> | null = null;
 
-export const initializeApplication = async (): Promise<void> => {
-  if (!initializationPromise) {
-    initializationPromise = Promise.all([
-      configureOpenAIAgents(),
-      connectDB(),
-    ]).then(() => undefined);
-  }
-
+const configureAgentsOnce = async (): Promise<void> => {
+  if (!agentConfigurationPromise) agentConfigurationPromise = configureOpenAIAgents();
   try {
-    await initializationPromise;
+    await agentConfigurationPromise;
   } catch (error) {
-    initializationPromise = null;
+    agentConfigurationPromise = null;
     throw error;
   }
+};
+
+export const initializeApplication = async (): Promise<void> => {
+  await Promise.all([configureAgentsOnce(), connectDB()]);
 };
