@@ -23,6 +23,6 @@ export async function configureOpenAIAgents(): Promise<void> {
     // Relay credentials cannot export traces to OpenAI's tracing endpoint.
     setTracingDisabled(true);
   } catch (error) {
-    throw new Error('Failed to configure OpenAI Agents.', { cause: error });
+    throw Object.assign(new Error('Failed to configure OpenAI Agents.'), { cause: error });
   }
 }

@@ -52,7 +52,7 @@ export const connectDB = async (retries = 1, delay = 5000): Promise<typeof mongo
         });
 
         if (i === retries - 1) {
-          throw new Error('Failed to connect to MongoDB.', { cause: error });
+          throw Object.assign(new Error('Failed to connect to MongoDB.'), { cause: error });
         }
 
         console.log(`Retrying MongoDB connection in ${delay / 1000} seconds.`);

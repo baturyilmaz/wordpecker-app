@@ -2,7 +2,9 @@ import axios from 'axios';
 import { WordList, Word, Exercise, Question, Template, WordDetail, SentenceExample, UserPreferences, ExerciseTypePreferences, ImageDescriptionAnalysis, DescriptionExercise, VocabularyWordsResponse, WordDetailsResponse } from '../types';
 import { getGuestId, hasSessionHint } from './identity';
 
-export const API_BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:3100');
+export const API_BASE_URL = import.meta.env.PROD
+  ? ''
+  : import.meta.env.VITE_API_URL || 'http://localhost:3100';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,

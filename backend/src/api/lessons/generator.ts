@@ -102,7 +102,10 @@ const normalizeWithOffsets = (value: string): { text: string; offsets: number[] 
 
 const exampleDemonstratesTerm = (term: string, example: string): boolean => {
   const stopWords = new Set(['a', 'an', 'the', 'of', 'to', 'for', 'with', 'and', 'or', 'in', 'on']);
-  const originalTokens = term.match(/[A-Za-z0-9]+/g) || [];
+  const originalTokens = Array.from(
+    term.matchAll(/[A-Za-z0-9]+/g),
+    (match): string => match[0],
+  );
   const acronymTokens = originalTokens.filter((token) => token.length === 1 && token === token.toUpperCase());
   const meaningfulTokens = originalTokens
     .filter((token) => token.length >= 2 || token === token.toUpperCase())
@@ -413,11 +416,9 @@ export const generateLessonWithRunners = async (
 };
 
 export const generateLessonWithAgent: GenerateLesson = async (article, level, history) => {
-  const [{ run }, { lessonAgent }, { lessonRefillAgent }] = await Promise.all([
-    import('@openai/agents'),
-    import('../../agents/lesson-agent'),
-    import('../../agents/lesson-refill-agent'),
-  ]);
+  const { run } = await import('@openai/agents');
+  const { lessonAgent } = require('../../agents/lesson-agent');
+  const { lessonRefillAgent } = require('../../agents/lesson-refill-agent');
   return generateLessonWithRunners(
     article,
     level,

@@ -29,10 +29,12 @@ export const createAuthRouter = (
   router.post('/google', async (request, response) => {
     const credential = typeof request.body?.credential === 'string' ? request.body.credential : '';
     if (!credential) return response.status(400).json({ code: 'GOOGLE_CREDENTIAL_REQUIRED', message: 'Google credential is required.' });
+    let stage = 'google_verification';
     try {
       const allowedLevels = ['basic', 'intermediate', 'upper_intermediate', 'advanced'];
       const levelPreference = allowedLevels.includes(request.body?.levelPreference) ? request.body.levelPreference as LessonLevel : undefined;
       const user = await auth.login(credential, levelPreference);
+      stage = 'guest_migration';
       const guestId = request.identity?.type === 'user' ? undefined : getGuestIdHeader(request) || undefined;
       let counts;
       try {
@@ -44,11 +46,36 @@ export const createAuthRouter = (
           message: 'Your learning data could not be attached to this account yet.',
         });
       }
+      stage = 'session_creation';
       const created = await sessions.create(user._id.toString(), guestId);
       response.cookie(environment.sessionCookieName, created.token, getSessionCookieOptions());
+      if (environment.nodeEnv === 'production') {
+        console.info('Google authentication completed.', {
+          requestId: request.requestId,
+          googleVerification: 'passed',
+          guestMigration: 'passed',
+          sessionCreation: 'passed',
+        });
+      }
       return response.json({ user: serializeUser(user), migration: { guestId, counts } });
     } catch (error) {
-      if (error instanceof AuthError) return response.status(error.statusCode).json({ code: error.code, message: error.message });
+      if (error instanceof AuthError) {
+        if (environment.nodeEnv === 'production') {
+          console.warn('Google authentication rejected.', {
+            requestId: request.requestId,
+            stage,
+            category: error.code,
+          });
+        }
+        return response.status(error.statusCode).json({ code: error.code, message: error.message });
+      }
+      if (environment.nodeEnv === 'production') {
+        console.error('Google authentication failed.', {
+          requestId: request.requestId,
+          stage,
+          category: 'UNEXPECTED_ERROR',
+        });
+      }
       logRequestError(request, 500, 'AUTH_FAILED', error);
       return response.status(500).json({ code: 'AUTH_FAILED', message: 'Sign-in could not be completed.' });
     }
