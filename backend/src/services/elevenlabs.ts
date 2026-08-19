@@ -1,6 +1,7 @@
 import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 import crypto from 'crypto';
 import { getUserLanguages } from '../utils/getUserLanguages';
 
@@ -61,7 +62,8 @@ export class ElevenLabsService {
     }
 
     // Create cache directory
-    this.cacheDir = path.join(process.cwd(), 'audio-cache');
+    const cacheRoot = process.env.VERCEL ? os.tmpdir() : process.cwd();
+    this.cacheDir = path.join(cacheRoot, 'audio-cache');
     if (!fs.existsSync(this.cacheDir)) {
       fs.mkdirSync(this.cacheDir, { recursive: true });
     }
