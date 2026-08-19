@@ -1,10 +1,13 @@
 {
   "name": "language-learning-backend",
   "version": "1.0.0",
-  "main": "dist/app.js",
+  "main": "dist/server.js",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
-    "start": "node dist/app.js",
-    "dev": "nodemon src/app.ts",
+    "start": "node dist/server.js",
+    "dev": "nodemon src/server.ts",
     "build": "npx tsc && node scripts/copy-agent-prompts.js",
     "lint": "eslint . --ext .ts",
     "test": "jest",

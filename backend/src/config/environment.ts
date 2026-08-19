@@ -42,5 +42,5 @@ export const environment = {
   frontendUrl,
   sessionCookieName: process.env.SESSION_COOKIE_NAME || 'langsift_session',
   sessionDays,
-  trustProxyHops: Math.max(0, Number(process.env.TRUST_PROXY_HOPS || 0)),
+  trustProxyHops: Math.max(0, Number(process.env.TRUST_PROXY_HOPS || (nodeEnv === 'production' ? 1 : 0))),
 } as const;

@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "lint:api": "eslint src/services/api.ts",
     "preview": "vite preview"
   },
   "dependencies": {

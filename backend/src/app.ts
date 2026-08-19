@@ -11,8 +11,7 @@ import {
   lessonGenerationRateLimiter,
   openaiRateLimiter,
 } from './middleware/rateLimiter';
-import { connectDB } from './config/mongodb';
-import { configureOpenAIAgents } from './agents';
+import mongoose from 'mongoose';
 
 // Import routes
 import listRoutes from './api/lists/routes';
@@ -52,6 +51,11 @@ app.use(cookieParser());
 app.use(optionalAuth);
 app.use(protectAuthenticatedMutation);
 
+app.get('/api/health', (_request, response) => {
+  if (mongoose.connection.readyState !== 1) return response.status(503).json({ status: 'unavailable' });
+  return response.json({ status: 'ok' });
+});
+
 // Apply rate limiter only to OpenAI-powered routes
 app.use('/api/learn', openaiRateLimiter);
 app.use('/api/quiz', openaiRateLimiter);
@@ -89,25 +93,5 @@ app.use('/api/dashboard', dashboardRoutes);
 
 // Error handling
 app.use(errorHandler);
-
-// Only start server if not in test environment
-if (process.env.NODE_ENV !== 'test') {
-  const PORT = environment.port;
-  
-  // Configure OpenAI agents and connect to MongoDB
-  Promise.all([
-    configureOpenAIAgents(),
-    connectDB()
-  ]).then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT} in ${environment.nodeEnv} mode`);
-    });
-  }).catch(error => {
-    console.error('Failed to initialize application.', {
-      errorName: error instanceof Error ? error.name : 'UnknownError',
-    });
-    process.exit(1);
-  });
-}
 
 export default app;

@@ -1,0 +1,14 @@
+{
+  "name": "langsift",
+  "private": true,
+  "version": "1.0.0",
+  "engines": {
+    "node": "20.x"
+  },
+  "scripts": {
+    "build": "npm --prefix backend run build && npm --prefix frontend run build",
+    "test": "npm --prefix backend test",
+    "lint:backend": "npm --prefix backend run lint",
+    "lint:frontend:changed": "npm --prefix frontend run lint:api"
+  }
+}

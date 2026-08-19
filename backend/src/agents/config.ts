@@ -5,8 +5,7 @@ export async function configureOpenAIAgents(): Promise<void> {
   const apiKey = process.env.OPENAI_API_KEY;
 
   if (!apiKey) {
-    console.error('Error: OPENAI_API_KEY environment variable is required');
-    process.exit(1);
+    throw new Error('OPENAI_API_KEY environment variable is required.');
   }
 
   try {
@@ -24,9 +23,6 @@ export async function configureOpenAIAgents(): Promise<void> {
     // Relay credentials cannot export traces to OpenAI's tracing endpoint.
     setTracingDisabled(true);
   } catch (error) {
-    console.error('Error loading @openai/agents.', {
-      errorName: error instanceof Error ? error.name : 'UnknownError',
-    });
-    process.exit(1);
+    throw new Error('Failed to configure OpenAI Agents.', { cause: error });
   }
 }
