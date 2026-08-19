@@ -22,6 +22,7 @@ import { VocabularyPage } from './pages/VocabularyPage';
 import { ReviewPage } from './pages/ReviewPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { AccountSettingsPage } from './pages/AccountSettingsPage';
+import { PrivacyPage } from './pages/PrivacyPage';
 import { AuthProvider } from './auth/AuthContext';
 
 const LegacyLayout = () => (
@@ -45,6 +46,7 @@ function App() {
             <Route path="/review" element={<ReviewPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/account/settings" element={<AccountSettingsPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
             <Route element={<LegacyLayout />}>
             <Route path="/lists" element={<Lists />} />
             <Route path="/lists/:id" element={<ListDetail />} />

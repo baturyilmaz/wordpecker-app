@@ -31,7 +31,7 @@ The partial unique MongoDB index on `dedupeKey` is the durability boundary. Even
 | Quiz Start | Distinct Quiz IDs started; also reports distinct owners | Not applicable (count metric) | `quiz_started` | One per resolved owner + Quiz ID |
 | Vocabulary Save | Distinct LessonItem IDs saved; also reports distinct owners | Not applicable (count metric) | `term_saved` | One per resolved owner + LessonItem ID |
 | Second Lesson | Activated owners with at least two distinct `lesson_created.lessonId` values | Activated owners | second distinct `lesson_created` | Refresh, retry, and duplicate Lesson IDs do not count |
-| Review Return | Owners with `review_started` on at least two distinct UTC calendar dates | Owners with at least one `review_started` date | later-day `review_started` | One event per owner + UTC date |
+| Review Return | Activated owners with `review_started` on a UTC date after their first Lesson date | Activated owners | later-day `review_started` | One event per owner + UTC date; same-day Review does not count |
 
 The current Lesson engagement proxy deliberately uses `quiz_started`: it is a real post-generation learning action, not a page open. It does not claim that Langsift has a formal “Lesson completed” workflow. `lesson_opened` is retained as a repeatable diagnostic event and is excluded from the six canonical metrics.
 
@@ -50,7 +50,7 @@ The current Lesson engagement proxy deliberately uses `quiz_started`: it is a re
 - ProductEvent timestamps and day boundaries use UTC.
 - Activation, Lesson engagement, Quiz Start, Vocabulary Save, and Second Lesson are all-time within the queried event dataset.
 - Second Lesson does not require a different day; it requires a different durable Lesson ID.
-- Review Return requires two different UTC dates. Multiple opens in one session/day produce one `review_started` event and cannot count as return behavior.
+- Review Return requires Review activity on a UTC date after the owner’s first Lesson date. Multiple opens on the Lesson date or repeated opens on one day cannot manufacture return behavior.
 - Tests inject a deterministic clock. Production data is not edited and historical events are not backfilled.
 
 ## Security gate

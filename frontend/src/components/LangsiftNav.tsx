@@ -23,6 +23,7 @@ export const LangsiftNav = () => {
               {user && <NavText to="/dashboard">Dashboard</NavText>}
               <Button variant="link" minW="auto" color={ls.textSecondary} fontSize="sm" fontWeight="700" onClick={() => openProtected('vocabulary')}>Vocabulary</Button>
               <Button variant="link" minW="auto" color={ls.textSecondary} fontSize="sm" fontWeight="700" onClick={() => openProtected('review')}>Review</Button>
+              <NavText to="/privacy">Privacy</NavText>
             </Flex>
             {!loading && user && (
               <Menu>
@@ -35,6 +36,7 @@ export const LangsiftNav = () => {
                   <MenuItem {...menuItemStyle} onClick={() => openProtected('vocabulary')} display={{ md: 'none' }}>Vocabulary</MenuItem>
                   <MenuItem {...menuItemStyle} onClick={() => openProtected('review')} display={{ md: 'none' }}>Review</MenuItem>
                   <MenuItem {...menuItemStyle} as={Link} to="/account/settings">Settings</MenuItem>
+                  <MenuItem {...menuItemStyle} as={Link} to="/privacy">Privacy</MenuItem>
                   <MenuItem {...menuItemStyle} onClick={() => void logout()}>Sign out</MenuItem>
                 </MenuList>
               </Menu>
@@ -46,6 +48,7 @@ export const LangsiftNav = () => {
                   <MenuItem {...menuItemStyle} as={Link} to="/">New Lesson</MenuItem>
                   <MenuItem {...menuItemStyle} onClick={() => openProtected('vocabulary')}>Vocabulary</MenuItem>
                   <MenuItem {...menuItemStyle} onClick={() => openProtected('review')}>Review</MenuItem>
+                  <MenuItem {...menuItemStyle} as={Link} to="/privacy">Privacy</MenuItem>
                 </MenuList>
               </Menu>
             )}

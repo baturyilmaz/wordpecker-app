@@ -19,6 +19,30 @@ export interface MetricRatio {
   rate: number | null;
 }
 
+export interface LessonQualityRecord {
+  status: 'generating' | 'ready' | 'failed';
+  contentDensity?: 'low' | 'normal';
+  itemCount: number;
+  durationMs?: number;
+}
+
+export const parseBetaWindowStart = (args: string[], now = Date.now()): Date | undefined => {
+  const daysIndex = args.indexOf('--days');
+  const sinceIndex = args.indexOf('--since');
+  if (daysIndex >= 0 && sinceIndex >= 0) throw new Error('Use either --days or --since, not both.');
+  if (daysIndex >= 0) {
+    const days = Number(args[daysIndex + 1]);
+    if (!Number.isInteger(days) || days <= 0) throw new Error('--days must be a positive integer.');
+    return new Date(now - days * 24 * 60 * 60 * 1000);
+  }
+  if (sinceIndex >= 0) {
+    const since = new Date(args[sinceIndex + 1]);
+    if (Number.isNaN(since.getTime())) throw new Error('--since must be a valid ISO date or timestamp.');
+    return since;
+  }
+  return undefined;
+};
+
 const ratio = (numerator: number, denominator: number): MetricRatio => ({
   numerator,
   denominator,
@@ -76,11 +100,17 @@ export const calculateBetaMetrics = (events: MetricEvent[]) => {
       if (id) savedItemResources.add(`${ownerId}:${id}`);
     });
 
+    const firstLesson = ownerEvents
+      .filter((event) => event.eventName === 'lesson_created')
+      .sort((left, right) => left.createdAt.getTime() - right.createdAt.getTime())[0];
     const reviewDays = new Set(ownerEvents
       .filter((event) => event.eventName === 'review_started')
       .map((event) => event.createdAt.toISOString().slice(0, 10)));
-    if (reviewDays.size) reviewStarterOwners.add(ownerId);
-    if (reviewDays.size >= 2) reviewReturnOwners.add(ownerId);
+    if (firstLesson) {
+      reviewStarterOwners.add(ownerId);
+      const firstLessonDay = firstLesson.createdAt.toISOString().slice(0, 10);
+      if ([...reviewDays].some((day) => day > firstLessonDay)) reviewReturnOwners.add(ownerId);
+    }
   });
 
   const activatedInFunnel = new Set([...eligibleActivatedOwners]);
@@ -90,6 +120,14 @@ export const calculateBetaMetrics = (events: MetricEvent[]) => {
   return {
     uniqueOwners: byOwner.size,
     uniqueUsers: new Set(events.flatMap((event) => event.userId ? [event.userId.toString()] : [])).size,
+    uniqueActivatedUsers: new Set(events.flatMap((event) => (
+      event.eventName === 'lesson_created' && event.userId ? [event.userId.toString()] : []
+    ))).size,
+    lessonCreators: activatedOwners.size,
+    secondLessonUsers: secondLessonOwners.size,
+    quizStarters: engagedOwners.size,
+    termSavers: savedOwners.size,
+    reviewReturnUsers: reviewReturnOwners.size,
     activation: ratio(eligibleActivatedOwners.size, extractedOwners.size),
     lessonEngagementProxy: ratio(engagedInFunnel, activatedInFunnel.size),
     quizStart: { count: quizResources.size, owners: engagedOwners.size },
@@ -99,5 +137,22 @@ export const calculateBetaMetrics = (events: MetricEvent[]) => {
     eventCounts,
     lowDensityLessons: events.filter((event) => event.eventName === 'lesson_created'
       && event.metadata?.contentDensity === 'low').length,
+  };
+};
+
+export const calculateLessonQualityMetrics = (lessons: LessonQualityRecord[]) => {
+  const ready = lessons.filter((lesson) => lesson.status === 'ready');
+  const durations = ready.flatMap((lesson) => typeof lesson.durationMs === 'number' ? [lesson.durationMs] : []);
+  const average = (values: number[]) => values.length
+    ? Number((values.reduce((total, value) => total + value, 0) / values.length).toFixed(2))
+    : null;
+
+  return {
+    lessonGenerationCount: lessons.length,
+    normalLessonCount: ready.filter((lesson) => lesson.itemCount >= 8 && lesson.itemCount <= 15).length,
+    lowDensityLessonCount: ready.filter((lesson) => lesson.itemCount >= 5 && lesson.itemCount <= 7).length,
+    averageItemCount: average(ready.map((lesson) => lesson.itemCount)),
+    averageGenerationDurationMs: average(durations),
+    lessonGenerationFailures: lessons.filter((lesson) => lesson.status === 'failed').length,
   };
 };

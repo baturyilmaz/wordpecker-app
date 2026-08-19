@@ -9,6 +9,7 @@
     "build": "npm --prefix backend run build && npm --prefix frontend run build",
     "test": "npm --prefix backend test",
     "lint:backend": "npm --prefix backend run lint",
-    "lint:frontend:changed": "npm --prefix frontend run lint:api"
+    "lint:frontend:changed": "npm --prefix frontend run lint:api",
+    "metrics:beta": "npm --prefix backend run metrics:beta --"
   }
 }
