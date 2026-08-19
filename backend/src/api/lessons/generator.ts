@@ -16,7 +16,7 @@ export const PREFERRED_VALID_ITEMS = 8;
 export const MAX_FINAL_ITEMS = 15;
 export const MAX_REFILL_ROUNDS = 2;
 export const MAX_CONTEXT_CHARACTERS = 360;
-const GENERATION_TIMEOUT_MS = 60_000;
+export const GENERATION_TIMEOUT_MS = 60_000;
 
 export interface PersonalizationHistory {
   knownTerms: string[];

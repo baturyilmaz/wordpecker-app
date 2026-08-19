@@ -1,6 +1,7 @@
 import { Box, Container, Heading, ListItem, Text, UnorderedList } from '@chakra-ui/react';
 import { LangsiftNav } from '../components/LangsiftNav';
 import { ls } from '../theme/langsift';
+import { CONTACT_EMAIL } from '../config/contact';
 
 export const PrivacyPage = () => (
   <Box minH="100vh" bg={ls.background} color={ls.textPrimary} fontFamily={ls.bodyFont}>
@@ -35,7 +36,10 @@ export const PrivacyPage = () => (
 
       <Heading as="h2" mt={10} fontFamily={ls.editorialFont} fontSize="2xl">Contact</Heading>
       <Text mt={4} color={ls.textSecondary} lineHeight="1.8">
-        Contact email: [to be provided by the Langsift operator before wider sharing]
+        Privacy, feedback, and deletion requests:{' '}
+        <Text as="a" href={`mailto:${CONTACT_EMAIL}`} color={ls.brand} textDecoration="underline">
+          {CONTACT_EMAIL}
+        </Text>
       </Text>
       <Text mt={10} color={ls.textMuted} fontSize="sm">Last updated: August 19, 2026</Text>
     </Container>

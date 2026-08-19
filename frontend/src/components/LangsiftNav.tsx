@@ -2,6 +2,7 @@ import { Avatar, Box, Button, Container, Flex, Menu, MenuButton, MenuItem, MenuL
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/useAuth';
 import { ls } from '../theme/langsift';
+import { FEEDBACK_MAILTO } from '../config/contact';
 
 export const LangsiftNav = () => {
   const { user, loading, requestAuth, logout } = useAuth();
@@ -23,6 +24,7 @@ export const LangsiftNav = () => {
               {user && <NavText to="/dashboard">Dashboard</NavText>}
               <Button variant="link" minW="auto" color={ls.textSecondary} fontSize="sm" fontWeight="700" onClick={() => openProtected('vocabulary')}>Vocabulary</Button>
               <Button variant="link" minW="auto" color={ls.textSecondary} fontSize="sm" fontWeight="700" onClick={() => openProtected('review')}>Review</Button>
+              <NavExternal href={FEEDBACK_MAILTO}>Send feedback</NavExternal>
               <NavText to="/privacy">Privacy</NavText>
             </Flex>
             {!loading && user && (
@@ -37,6 +39,7 @@ export const LangsiftNav = () => {
                   <MenuItem {...menuItemStyle} onClick={() => openProtected('review')} display={{ md: 'none' }}>Review</MenuItem>
                   <MenuItem {...menuItemStyle} as={Link} to="/account/settings">Settings</MenuItem>
                   <MenuItem {...menuItemStyle} as={Link} to="/privacy">Privacy</MenuItem>
+                  <MenuItem {...menuItemStyle} as="a" href={FEEDBACK_MAILTO}>Send feedback</MenuItem>
                   <MenuItem {...menuItemStyle} onClick={() => void logout()}>Sign out</MenuItem>
                 </MenuList>
               </Menu>
@@ -49,6 +52,7 @@ export const LangsiftNav = () => {
                   <MenuItem {...menuItemStyle} onClick={() => openProtected('vocabulary')}>Vocabulary</MenuItem>
                   <MenuItem {...menuItemStyle} onClick={() => openProtected('review')}>Review</MenuItem>
                   <MenuItem {...menuItemStyle} as={Link} to="/privacy">Privacy</MenuItem>
+                  <MenuItem {...menuItemStyle} as="a" href={FEEDBACK_MAILTO}>Send feedback</MenuItem>
                 </MenuList>
               </Menu>
             )}
@@ -61,6 +65,12 @@ export const LangsiftNav = () => {
 
 const NavText = ({ to, children }: { to: string; children: React.ReactNode }) => (
   <Text as={NavLink} to={to} fontSize="sm" fontWeight="700" color={ls.textSecondary} _activeLink={{ color: ls.brand }} _hover={{ color: ls.textPrimary }} _focusVisible={{ boxShadow: ls.focusRing }}>
+    {children}
+  </Text>
+);
+
+const NavExternal = ({ href, children }: { href: string; children: React.ReactNode }) => (
+  <Text as="a" href={href} fontSize="sm" fontWeight="700" color={ls.textSecondary} _hover={{ color: ls.textPrimary }} _focusVisible={{ boxShadow: ls.focusRing }}>
     {children}
   </Text>
 );

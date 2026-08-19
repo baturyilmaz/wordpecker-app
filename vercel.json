@@ -6,7 +6,7 @@
   "functions": {
     "api/[...path].ts": {
       "includeFiles": "backend/src/agents/**/prompt.md",
-      "maxDuration": 60
+      "maxDuration": 90
     }
   },
   "rewrites": [

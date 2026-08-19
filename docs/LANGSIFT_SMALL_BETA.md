@@ -109,7 +109,7 @@ Use only these four short prompts:
 3. Did anything feel confusing or slow?
 4. Would you use Langsift again for another article?
 
-A dedicated feedback email has not yet been provided. Until the operator supplies one, collect feedback through the same private channel used to invite each participant. Add a visible `Send feedback` mail link only after a real dedicated address is confirmed; do not guess or expose a personal address in source.
+The header provides a `Send feedback` link to `hi@langsift.app`, prefilled with these four prompts. Participants may also respond through the private channel used for their invitation.
 
 ## Error and health response
 
@@ -131,7 +131,7 @@ No paid uptime, Sentry, PostHog, or other new monitoring service is required for
 
 ## Privacy and data deletion
 
-The public `/privacy` page describes Google identity data, submitted/extracted Article content, learning records, AI-provider processing, product improvement, and the no-sale commitment. The operator must provide a real privacy/feedback contact before sharing beyond the private cohort.
+The public `/privacy` page describes Google identity data, submitted/extracted Article content, learning records, AI-provider processing, product improvement, and the no-sale commitment. Privacy, feedback, and deletion requests use `hi@langsift.app`.
 
 Logout is available in the profile menu. Account deletion is a maintainer-operated process during the Beta:
 
@@ -165,7 +165,7 @@ After Beta validation, a possible next major stage is an Android client. It must
 - Auth: real Google login and session persistence remain healthy.
 - Analytics: all six metrics and Lesson quality aggregates are measurable for an explicit time window.
 - Quality: first 1–2 Lessons per participant have an 80% usefulness sampling process.
-- Feedback: private-channel method is available; dedicated in-product email link awaits an operator address.
-- Privacy: `/privacy` is public; the operator contact placeholder is disclosed.
+- Feedback: the header mail link and private-channel method are available.
+- Privacy: `/privacy` is public and provides the operator contact.
 - Rollback: commit, deployment ID, stable tag, and non-destructive recovery commands are known.
 - Cost: Vercel Hobby and Atlas Free remain in use.
