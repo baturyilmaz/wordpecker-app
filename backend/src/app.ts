@@ -91,6 +91,10 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
+app.use('/api', (_request, response) => {
+  return response.status(404).json({ code: 'NOT_FOUND', message: 'API route not found.' });
+});
+
 // Error handling
 app.use(errorHandler);
 
