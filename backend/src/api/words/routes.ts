@@ -144,6 +144,10 @@ router.get('/word/:wordId', validate(wordIdSchema), async (req, res) => {
 });
 
 router.post('/word/:wordId/sentences', validate(wordContextSchema), async (req, res) => {
+  const controller = new AbortController();
+  const cancel = () => controller.abort();
+  req.on('aborted', cancel);
+  res.on('close', cancel);
   try {
     const { wordId } = req.params;
     const { contextIndex } = req.body;
@@ -159,11 +163,14 @@ router.post('/word/:wordId/sentences', validate(wordContextSchema), async (req, 
 
     const userId = req.headers['user-id'] as string;
     const { baseLanguage, targetLanguage } = await getUserLanguages(userId);
-    const sentences = await wordAgentService.generateExamples(word.value, wordContext.meaning, context, baseLanguage, targetLanguage);
+    const sentences = await wordAgentService.generateExamples(word.value, wordContext.meaning, context, baseLanguage, targetLanguage, controller.signal);
 
     res.json({ examples: sentences });
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    if (!controller.signal.aborted) res.status(500).json({ message: 'Internal server error' });
+  } finally {
+    req.off('aborted', cancel);
+    res.off('close', cancel);
   }
 });
 
@@ -225,4 +232,4 @@ router.post('/:listId/light-reading', openaiRateLimiter, validate(listIdSchema),
   }
 });
 
-export default router; 
+export default router;

@@ -2,17 +2,22 @@
   "name": "language-learning-backend",
   "version": "1.0.0",
   "main": "dist/app.js",
+  "engines": {
+    "node": ">=20.19"
+  },
   "scripts": {
     "start": "node dist/app.js",
     "dev": "nodemon src/app.ts",
     "build": "npx tsc",
     "lint": "eslint . --ext .ts",
     "test": "jest",
+    "test:search": "node --require ts-node/register --test src/agents/examples-agent/search.integration.ts",
     "seed:templates": "ts-node src/scripts/seedTemplatesFromFiles.ts",
     "seed:templates:legacy": "ts-node src/scripts/seedTemplates.ts"
   },
   "dependencies": {
     "@elevenlabs/elevenlabs-js": "^2.6.0",
+    "@modelcontextprotocol/sdk": "1.15.1",
     "@openai/agents": "^0.0.11",
     "axios": "^1.7.9",
     "cors": "^2.8.5",

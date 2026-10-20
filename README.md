@@ -281,7 +281,7 @@ Both paths lead to the same comprehensive learning experience—you can even com
 
 ### Prerequisites
 
-- Node.js >= 16
+- Node.js >= 20.19 (also used by the backend Docker image)
 - npm or yarn
 - MongoDB (local or cloud instance)
 - An OpenAI API key
@@ -510,6 +510,35 @@ This script will:
 - **Images**: LLM-generated (DALL-E) and stock photos (Pexels integration)
 - **Deployment**: Docker support for development with hot reload
 - **Single User**: No authentication required - localStorage-based user identification
+
+## Web sources for sentence examples
+
+The word detail page's Example Generator uses
+[Parallel Search MCP](https://docs.parallel.ai/integrations/mcp/search-mcp) to
+consult real usage before writing teaching sentences. Search uses Fast mode with
+no Parallel account or API key. Source URLs appear in the examples' context notes
+when the agent uses retrieved material; the sentences themselves are original.
+
+`WEB_SEARCH_PROVIDER` in the backend environment defaults to `parallel`. Set it to
+`none` to generate examples without web access. Other values are rejected. This
+setting only affects sentence examples; your existing OpenAI configuration still
+supplies the language model. With search enabled, vocabulary and context used in
+search queries are sent to Parallel. Disable search for private contexts.
+
+The backend uses the MCP Streamable HTTP transport with a 15-second request
+timeout and a 60-second limit for sentence generation. Disconnecting the browser
+cancels the request. Search errors, including free-service quota limits, fail the
+request instead of silently generating unverified examples. You can retry or
+explicitly select `none`.
+
+To run the backend checks for this integration:
+
+```bash
+cd backend
+npm ci
+npm run test:search
+npm run build
+```
 
 ## Contributing
 

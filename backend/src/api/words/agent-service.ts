@@ -2,7 +2,6 @@ import { run } from '@openai/agents';
 import { 
   definitionAgent, 
   validationAgent, 
-  examplesAgent, 
   similarWordsAgent, 
   readingAgent 
 } from '../../agents';
@@ -11,6 +10,8 @@ import { ValidationResultType } from '../../agents/validation-agent/schemas';
 import { ExamplesResultType, SentenceExampleType } from '../../agents/examples-agent/schemas';
 import { SimilarWordsResultType } from '../../agents/similar-words-agent/schemas';
 import { ReadingResultType } from '../../agents/reading-agent/schemas';
+import { createExamplesAgent } from '../../agents/examples-agent';
+import { createExampleSearch } from '../../agents/examples-agent/search';
 
 export class WordAgentService {
   async generateDefinition(word: string, context: string, baseLanguage: string, targetLanguage: string): Promise<string> {
@@ -26,11 +27,22 @@ export class WordAgentService {
     return result.finalOutput as ValidationResultType;
   }
 
-  async generateExamples(word: string, meaning: string, context: string, baseLanguage: string, targetLanguage: string): Promise<SentenceExampleType[]> {
+  async generateExamples(word: string, meaning: string, context: string, baseLanguage: string, targetLanguage: string, signal?: AbortSignal): Promise<SentenceExampleType[]> {
     const prompt = `Generate 3-5 sentence examples for the word "${word}" with meaning "${meaning}" in the context of "${context}". Examples should be in ${targetLanguage} with explanations in ${baseLanguage}.`;
-    const response = await run(examplesAgent, prompt);
-    const result = response.finalOutput as ExamplesResultType;
-    return result.examples;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(new Error('Sentence generation timed out')), 60000);
+    const runSignal = signal ? AbortSignal.any([signal, controller.signal]) : controller.signal;
+    let search: Awaited<ReturnType<typeof createExampleSearch>> | undefined;
+    try {
+      runSignal.throwIfAborted();
+      search = await createExampleSearch(runSignal);
+      const response = await run(createExamplesAgent(search.tools), prompt, { signal: runSignal });
+      const result = response.finalOutput as ExamplesResultType;
+      return result.examples;
+    } finally {
+      clearTimeout(timer);
+      await search?.close();
+    }
   }
 
   async generateSimilarWords(word: string, meaning: string, context: string, baseLanguage: string, targetLanguage: string): Promise<SimilarWordsResultType> {
